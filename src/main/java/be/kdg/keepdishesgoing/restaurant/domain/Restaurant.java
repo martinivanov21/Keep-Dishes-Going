@@ -21,9 +21,8 @@ public class Restaurant {
     private OpeningStatus openingStatus;
     private String contactEmail;
     private String picture;
-    private ;
-//    private Address address;
-//    private Person owner;
+    private Address address;
+    private Person owner;
     private List<Dish> dishes;
 
     private final List<Object> domainEvents = new ArrayList<>();
