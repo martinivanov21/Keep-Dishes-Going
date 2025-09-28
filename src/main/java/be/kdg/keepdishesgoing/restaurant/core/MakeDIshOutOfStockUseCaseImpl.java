@@ -11,6 +11,7 @@ import be.kdg.keepdishesgoing.restaurant.port.out.LoadDishPort;
 import be.kdg.keepdishesgoing.restaurant.port.out.LoadRestaurantPort;
 import be.kdg.keepdishesgoing.restaurant.port.out.UpdateDishPort;
 import be.kdg.keepdishesgoing.restaurant.port.out.UpdateRestaurantPort;
+import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -54,9 +55,6 @@ public class MakeDIshOutOfStockUseCaseImpl implements MakeDishOutOfStockUseCase 
         logger.info("Dish {} has been marked out of stock", dish.getDishId());
 
         updateDishPorts.forEach(port -> port.updateDish(dish.getDishId()));
-
-
-
 
     }
 }

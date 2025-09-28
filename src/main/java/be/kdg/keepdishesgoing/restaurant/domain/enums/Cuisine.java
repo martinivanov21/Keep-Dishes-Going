@@ -1,5 +1,5 @@
 package be.kdg.keepdishesgoing.restaurant.domain.enums;
 
-public enum Cusine {
+public enum Cuisine {
     ITALIAN, FRENCH, JAPANESE, MEXICAN;
 }

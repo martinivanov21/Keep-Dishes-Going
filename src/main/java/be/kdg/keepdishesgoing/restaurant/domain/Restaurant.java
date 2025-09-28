@@ -2,14 +2,12 @@ package be.kdg.keepdishesgoing.restaurant.domain;
 
 import be.kdg.keepdishesgoing.common.domain.Address;
 import be.kdg.keepdishesgoing.common.domain.Person;
-import be.kdg.keepdishesgoing.restaurant.domain.enums.Cusine;
+import be.kdg.keepdishesgoing.restaurant.domain.enums.Cuisine;
 import be.kdg.keepdishesgoing.restaurant.domain.enums.OpeningStatus;
 
-import javax.swing.text.html.Option;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 public class Restaurant {
 
@@ -17,8 +15,9 @@ public class Restaurant {
     private String nameOfRestaurant;
     private ScheduleHour openingHours;
     private ScheduleHour closingHours;
-    private Cusine cusine;
+    private Cuisine cuisine;
     private OpeningStatus openingStatus;
+    private int defaultPreparationTime;
     private String contactEmail;
     private String picture;
     private Address address;
@@ -51,12 +50,12 @@ public class Restaurant {
         this.closingHours = closingHours;
     }
 
-    public Cusine getCusine() {
-        return cusine;
+    public Cuisine getCuisine() {
+        return cuisine;
     }
 
-    public void setCusine(Cusine cusine) {
-        this.cusine = cusine;
+    public void setCuisine(Cuisine cuisine) {
+        this.cuisine = cuisine;
     }
 
     public OpeningStatus getOpeningStatus() {

@@ -1,10 +1,9 @@
 package be.kdg.keepdishesgoing.restaurant.adapter.in;
 
+import be.kdg.keepdishesgoing.restaurant.adapter.in.response.CreateRestaurantRequest;
 import be.kdg.keepdishesgoing.restaurant.adapter.in.response.RestaurantDto;
 import be.kdg.keepdishesgoing.restaurant.domain.Restaurant;
-import be.kdg.keepdishesgoing.restaurant.port.in.FindAllRestaurantPort;
-import be.kdg.keepdishesgoing.restaurant.port.in.MakeDishOutOfStockCommand;
-import be.kdg.keepdishesgoing.restaurant.port.in.MakeDishOutOfStockUseCase;
+import be.kdg.keepdishesgoing.restaurant.port.in.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,11 +16,13 @@ public class RestaurantController {
 
     private final FindAllRestaurantPort findAllRestaurantPort;
     private final MakeDishOutOfStockUseCase makeDishOutOfStockUseCase;
+    private final CreateRestaurantUseCase createRestaurantUseCase;
 
     public RestaurantController(FindAllRestaurantPort findAllRestaurantPort,
-                                MakeDishOutOfStockUseCase makeDishOutOfStockUseCase) {
+                                MakeDishOutOfStockUseCase makeDishOutOfStockUseCase, CreateRestaurantUseCase createRestaurantUseCase) {
         this.findAllRestaurantPort = findAllRestaurantPort;
         this.makeDishOutOfStockUseCase = makeDishOutOfStockUseCase;
+        this.createRestaurantUseCase = createRestaurantUseCase;
     }
 
 //    MAP LATER THE ROWS
@@ -41,6 +42,42 @@ public class RestaurantController {
         makeDishOutOfStockUseCase.makeDishOutOfStock(command);
 
         return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/create")
+    public ResponseEntity<RestaurantDto> saveRestaurant(@RequestBody CreateRestaurantRequest request) {
+
+        var command = new CreateRestaurantCommand(
+                request.name(),
+                request.contactEmail(),
+                request.picture(),
+                request.street(),
+                request.city(),
+                request.postalCode(),
+                request.number(),
+                request.country(),
+                request.defaultPreparationTime(),
+                request.cuisine(),
+                request.openingHours(),
+                request.closingHours(),
+                request.ownerId()
+        );
+
+        Restaurant restaurant = createRestaurantUseCase.createRestaurant(command);
+
+        RestaurantDto restaurantDto = null;
+//        = new RestaurantDto(
+//                restaurant.getRestaurantId().toString(),
+//                restaurant.getNameOfRestaurant(),
+//                restaurant.getOwner().getUsername(),
+//                restaurant.getContactEmail(),
+//                restaurant.getPicture(),
+//                restaurant.getCuisine().name(),
+//                restaurant.getOpeningHours().toString(),
+//                restaurant.getClosingHours().toString()
+//        );
+
+        return ResponseEntity.ok(restaurantDto);
     }
 
 }
