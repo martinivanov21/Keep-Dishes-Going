@@ -4,16 +4,13 @@ import java.util.UUID;
 
 public class Address {
 
-    private UUID addressId;
+    private AddressId addressId;
     private String street;
     private int number;
     private String postalCode;
     private String city;
     private String country;
 
-    public UUID getAddressId() {
-        return addressId;
-    }
 
     public String getStreet() {
         return street;

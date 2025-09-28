@@ -13,7 +13,7 @@ import java.util.UUID;
 
 public class Restaurant {
 
-    private UUID restaurantId;
+    private RestaurantId restaurantId;
     private String nameOfRestaurant;
     private ScheduleHour openingHours;
     private ScheduleHour closingHours;

@@ -10,7 +10,7 @@ import java.util.UUID;
 
 public class Dish {
 
-    private UUID dishId;
+    private DishId dishId;
     private DishVersion liveVersion;
     private DishVersion draftVersion;
     private DishStatus status;

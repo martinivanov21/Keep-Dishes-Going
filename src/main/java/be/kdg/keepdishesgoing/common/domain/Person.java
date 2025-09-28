@@ -3,19 +3,11 @@ package be.kdg.keepdishesgoing.common.domain;
 import java.util.UUID;
 
 public class Person {
-    private UUID personId;
+    private PersonId personId;
     private String username;
     private String password;
     private String email;
     private Role role;
-
-    public UUID getPersonId() {
-        return personId;
-    }
-
-    public void setPersonId(UUID personId) {
-        this.personId = personId;
-    }
 
     public String getUsername() {
         return username;
