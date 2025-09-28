@@ -99,6 +99,22 @@ public class Restaurant {
         this.owner = owner;
     }
 
+    public List<Dish> getDishes() {
+        return dishes;
+    }
+
+    public void setDishes(List<Dish> dishes) {
+        this.dishes = dishes;
+    }
+
+    public RestaurantId getRestaurantId() {
+        return restaurantId;
+    }
+
+    public void setRestaurantId(RestaurantId restaurantId) {
+        this.restaurantId = restaurantId;
+    }
+
     public double getAveragePrice() {
         return dishes.stream()
                 .map(Dish::getCurrentPrice)

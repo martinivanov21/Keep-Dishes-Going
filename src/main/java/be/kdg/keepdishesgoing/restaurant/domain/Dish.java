@@ -16,6 +16,14 @@ public class Dish {
     private DishStatus status;
     private int quantity;
 
+    public DishId getDishId() {
+        return dishId;
+    }
+
+    public void setDishId(DishId dishId) {
+        this.dishId = dishId;
+    }
+
     private final List<Object> domainEvents = new ArrayList<>();
 
     public DishVersion getLiveVersion() {
@@ -70,6 +78,24 @@ public class Dish {
     public void unpublish() {
         this.liveVersion = null;
         this.status = DishStatus.UNPUBLISHED;
+    }
+
+    public void markOutOfStock() {
+        if (status != DishStatus.PUBLISHED) {
+            throw new IllegalStateException("Only published dishes can be marked out of stock");
+        }
+        this.status = DishStatus.OUT_OF_STOCK;
+    }
+
+    public void markBackInStock() {
+        if (status != DishStatus.OUT_OF_STOCK) {
+            throw new IllegalStateException("Dish is not currently out of stock");
+        }
+        this.status = DishStatus.PUBLISHED;
+    }
+
+    public boolean isAvailable() {
+        return status == DishStatus.PUBLISHED && quantity > 0;
     }
 
     public Optional<Double> getCurrentPrice() {

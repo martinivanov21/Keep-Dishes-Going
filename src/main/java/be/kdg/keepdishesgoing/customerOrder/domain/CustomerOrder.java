@@ -16,6 +16,13 @@ public class CustomerOrder {
     private Address deliveryAddress;
 
 
+    public CustomerOrderId getCustomerOrderId() {
+        return customerOrderId;
+    }
+
+    public void setCustomerOrderId(CustomerOrderId customerOrderId) {
+        this.customerOrderId = customerOrderId;
+    }
 
     public double getEstimateTime() {
         return estimateTime;

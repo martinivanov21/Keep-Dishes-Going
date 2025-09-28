@@ -9,6 +9,14 @@ public class Person {
     private String email;
     private Role role;
 
+    public PersonId getPersonId() {
+        return personId;
+    }
+
+    public void setPersonId(PersonId personId) {
+        this.personId = personId;
+    }
+
     public String getUsername() {
         return username;
     }
