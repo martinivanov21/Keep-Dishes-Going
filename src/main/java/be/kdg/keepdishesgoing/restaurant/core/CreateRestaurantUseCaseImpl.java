@@ -3,6 +3,7 @@ package be.kdg.keepdishesgoing.restaurant.core;
 import be.kdg.keepdishesgoing.common.domain.Address;
 import be.kdg.keepdishesgoing.common.domain.Person;
 import be.kdg.keepdishesgoing.common.domain.PersonId;
+import be.kdg.keepdishesgoing.common.domain.Role;
 import be.kdg.keepdishesgoing.restaurant.domain.Restaurant;
 import be.kdg.keepdishesgoing.restaurant.domain.ScheduleHour;
 import be.kdg.keepdishesgoing.restaurant.domain.enums.Cuisine;
@@ -35,9 +36,8 @@ public class CreateRestaurantUseCaseImpl implements CreateRestaurantUseCase {
         Person owner = loadOwnerPort.loadOwnerById(command.ownerId())
                 .orElseThrow(() -> new RuntimeException("Owner not found"));
 
-        boolean ownerHasRestaurant = loadRestaurantPort.loadOwner(owner).isPresent();
-        if (ownerHasRestaurant) {
-            throw new IllegalArgumentException("The owner is someone else");
+        if (owner.getRole() != Role.MANAGER) {
+            throw new IllegalArgumentException("Only MANAGER can own a restaurant");
         }
 
         Address address = new Address(
