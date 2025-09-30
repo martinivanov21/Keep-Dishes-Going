@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 public class DishVersion {
-    private UUID dishVersionId;
+    private DishVersionId dishVersionId;
     private String nameOfDish;
     private String description;
     private double price;

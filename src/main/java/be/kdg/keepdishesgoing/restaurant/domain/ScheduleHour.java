@@ -1,11 +1,18 @@
 package be.kdg.keepdishesgoing.restaurant.domain;
 
+import java.time.DayOfWeek;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.UUID;
 
 public class ScheduleHour {
+
     private UUID scheduleHourId;
-    private LocalDateTime time;
+
+    private DayOfWeek dayOfWeek;
+
+    private LocalTime openingTime;
+    private LocalTime closingTime;
 
     public UUID getScheduleHourId() {
         return scheduleHourId;
@@ -15,11 +22,27 @@ public class ScheduleHour {
         this.scheduleHourId = scheduleHourId;
     }
 
-    public LocalDateTime getTime() {
-        return time;
+    public DayOfWeek getDayOfWeek() {
+        return dayOfWeek;
     }
 
-    public void setTime(LocalDateTime time) {
-        this.time = time;
+    public void setDayOfWeek(DayOfWeek dayOfWeek) {
+        this.dayOfWeek = dayOfWeek;
+    }
+
+    public LocalTime getOpeningTime() {
+        return openingTime;
+    }
+
+    public void setOpeningTime(LocalTime openingTime) {
+        this.openingTime = openingTime;
+    }
+
+    public LocalTime getClosingTime() {
+        return closingTime;
+    }
+
+    public void setClosingTime(LocalTime closingTime) {
+        this.closingTime = closingTime;
     }
 }

@@ -7,16 +7,14 @@ import be.kdg.keepdishesgoing.restaurant.domain.RestaurantId;
 import be.kdg.keepdishesgoing.restaurant.domain.exceptions.UnauthorizedOwnerException;
 import be.kdg.keepdishesgoing.restaurant.port.in.MakeDishOutOfStockCommand;
 import be.kdg.keepdishesgoing.restaurant.port.in.MakeDishOutOfStockUseCase;
-import be.kdg.keepdishesgoing.restaurant.port.out.LoadDishPort;
-import be.kdg.keepdishesgoing.restaurant.port.out.LoadRestaurantPort;
-import be.kdg.keepdishesgoing.restaurant.port.out.UpdateDishPort;
-import be.kdg.keepdishesgoing.restaurant.port.out.UpdateRestaurantPort;
+import be.kdg.keepdishesgoing.restaurant.port.out.dish.LoadDishPort;
+import be.kdg.keepdishesgoing.restaurant.port.out.restaurant.LoadRestaurantPort;
+import be.kdg.keepdishesgoing.restaurant.port.out.dish.UpdateDishPort;
 import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import java.beans.Transient;
 import java.util.List;
 
 @Service

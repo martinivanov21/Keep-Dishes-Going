@@ -13,8 +13,6 @@ public class Restaurant {
 
     private RestaurantId restaurantId;
     private String nameOfRestaurant;
-    private ScheduleHour openingHours;
-    private ScheduleHour closingHours;
     private Cuisine cuisine;
     private OpeningStatus openingStatus;
     private int defaultPreparationTime;
@@ -22,7 +20,8 @@ public class Restaurant {
     private String picture;
     private Address address;
     private Person owner;
-    private List<Dish> dishes;
+    private Menu menu;
+    private List<ScheduleHour>  workingHours;
 
     private final List<Object> domainEvents = new ArrayList<>();
 
@@ -34,28 +33,36 @@ public class Restaurant {
         this.nameOfRestaurant = nameOfRestaurant;
     }
 
-    public ScheduleHour getOpeningHours() {
-        return openingHours;
-    }
-
-    public void setOpeningHours(ScheduleHour openingHours) {
-        this.openingHours = openingHours;
-    }
-
-    public ScheduleHour getClosingHours() {
-        return closingHours;
-    }
-
-    public void setClosingHours(ScheduleHour closingHours) {
-        this.closingHours = closingHours;
-    }
-
     public Cuisine getCuisine() {
         return cuisine;
     }
 
     public void setCuisine(Cuisine cuisine) {
         this.cuisine = cuisine;
+    }
+
+    public int getDefaultPreparationTime() {
+        return defaultPreparationTime;
+    }
+
+    public void setDefaultPreparationTime(int defaultPreparationTime) {
+        this.defaultPreparationTime = defaultPreparationTime;
+    }
+
+    public Menu getMenu() {
+        return menu;
+    }
+
+    public void setMenu(Menu menu) {
+        this.menu = menu;
+    }
+
+    public List<ScheduleHour> getWorkingHours() {
+        return workingHours;
+    }
+
+    public void setWorkingHours(List<ScheduleHour> workingHours) {
+        this.workingHours = workingHours;
     }
 
     public OpeningStatus getOpeningStatus() {
@@ -98,13 +105,6 @@ public class Restaurant {
         this.owner = owner;
     }
 
-    public List<Dish> getDishes() {
-        return dishes;
-    }
-
-    public void setDishes(List<Dish> dishes) {
-        this.dishes = dishes;
-    }
 
     public RestaurantId getRestaurantId() {
         return restaurantId;
@@ -115,7 +115,7 @@ public class Restaurant {
     }
 
     public double getAveragePrice() {
-        return dishes.stream()
+        return menu.getDishIds().stream()
                 .map(Dish::getCurrentPrice)
                 .flatMap(Optional::stream)
                 .mapToDouble(Double::doubleValue)

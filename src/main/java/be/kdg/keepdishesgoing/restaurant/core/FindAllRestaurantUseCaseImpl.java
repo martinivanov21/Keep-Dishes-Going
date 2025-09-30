@@ -2,7 +2,7 @@ package be.kdg.keepdishesgoing.restaurant.core;
 
 import be.kdg.keepdishesgoing.restaurant.domain.Restaurant;
 import be.kdg.keepdishesgoing.restaurant.port.in.FindAllRestaurantPort;
-import be.kdg.keepdishesgoing.restaurant.port.out.LoadRestaurantPort;
+import be.kdg.keepdishesgoing.restaurant.port.out.restaurant.LoadRestaurantPort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

@@ -1,10 +1,10 @@
-package be.kdg.keepdishesgoing.restaurant.adapter.out;
+package be.kdg.keepdishesgoing.restaurant.adapter.out.dish;
 
 import be.kdg.keepdishesgoing.restaurant.domain.Dish;
 import be.kdg.keepdishesgoing.restaurant.domain.DishId;
-import be.kdg.keepdishesgoing.restaurant.port.out.DeleteDishPort;
-import be.kdg.keepdishesgoing.restaurant.port.out.LoadDishPort;
-import be.kdg.keepdishesgoing.restaurant.port.out.UpdateDishPort;
+import be.kdg.keepdishesgoing.restaurant.port.out.dish.DeleteDishPort;
+import be.kdg.keepdishesgoing.restaurant.port.out.dish.LoadDishPort;
+import be.kdg.keepdishesgoing.restaurant.port.out.dish.UpdateDishPort;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;

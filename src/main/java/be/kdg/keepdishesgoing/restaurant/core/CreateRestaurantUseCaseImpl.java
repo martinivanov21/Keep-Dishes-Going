@@ -2,7 +2,6 @@ package be.kdg.keepdishesgoing.restaurant.core;
 
 import be.kdg.keepdishesgoing.common.domain.Address;
 import be.kdg.keepdishesgoing.common.domain.Person;
-import be.kdg.keepdishesgoing.common.domain.PersonId;
 import be.kdg.keepdishesgoing.common.domain.Role;
 import be.kdg.keepdishesgoing.restaurant.domain.Restaurant;
 import be.kdg.keepdishesgoing.restaurant.domain.ScheduleHour;
@@ -11,8 +10,8 @@ import be.kdg.keepdishesgoing.restaurant.domain.enums.OpeningStatus;
 import be.kdg.keepdishesgoing.restaurant.port.in.CreateRestaurantCommand;
 import be.kdg.keepdishesgoing.restaurant.port.in.CreateRestaurantUseCase;
 import be.kdg.keepdishesgoing.restaurant.port.out.LoadOwnerPort;
-import be.kdg.keepdishesgoing.restaurant.port.out.LoadRestaurantPort;
-import be.kdg.keepdishesgoing.restaurant.port.out.SaveRestaurantPort;
+import be.kdg.keepdishesgoing.restaurant.port.out.restaurant.LoadRestaurantPort;
+import be.kdg.keepdishesgoing.restaurant.port.out.restaurant.SaveRestaurantPort;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
