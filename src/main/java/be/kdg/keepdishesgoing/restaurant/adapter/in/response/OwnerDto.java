@@ -1,4 +1,7 @@
 package be.kdg.keepdishesgoing.restaurant.adapter.in.response;
 
-public record OwnerDto() {
+
+import java.util.UUID;
+
+public record OwnerDto(String firstName, String lastName, String email) {
 }

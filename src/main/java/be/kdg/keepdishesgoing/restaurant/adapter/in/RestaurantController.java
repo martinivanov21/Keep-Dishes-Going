@@ -16,13 +16,12 @@ public class RestaurantController {
 
     private final FindAllRestaurantPort findAllRestaurantPort;
     private final MakeDishOutOfStockUseCase makeDishOutOfStockUseCase;
-    private final CreateRestaurantUseCase createRestaurantUseCase;
+//    private final CreateRestaurantUseCase createRestaurantUseCase;
 
     public RestaurantController(FindAllRestaurantPort findAllRestaurantPort,
-                                MakeDishOutOfStockUseCase makeDishOutOfStockUseCase, CreateRestaurantUseCase createRestaurantUseCase) {
+                                MakeDishOutOfStockUseCase makeDishOutOfStockUseCase) {
         this.findAllRestaurantPort = findAllRestaurantPort;
         this.makeDishOutOfStockUseCase = makeDishOutOfStockUseCase;
-        this.createRestaurantUseCase = createRestaurantUseCase;
     }
 
 //    MAP LATER THE ROWS
@@ -63,7 +62,7 @@ public class RestaurantController {
                 request.ownerId()
         );
 
-        Restaurant restaurant = createRestaurantUseCase.createRestaurant(command);
+//        Restaurant restaurant = createRestaurantUseCase.createRestaurant(command);
 
         RestaurantDto restaurantDto = null;
 //        = new RestaurantDto(

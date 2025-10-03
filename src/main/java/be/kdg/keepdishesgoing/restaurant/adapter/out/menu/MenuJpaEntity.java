@@ -7,20 +7,29 @@ import java.util.List;
 import java.util.UUID;
 
 @Entity
-@Table(name = "menus")
+@Table(name = "menus", schema = "kdg_restaurant")
 public class MenuJpaEntity {
 
     @Id
     @Column(name = "menu_id", nullable = false)
     private UUID menuId;
 
-    // many dishes can participate in many menus
-    @ManyToMany
-    @JoinTable(
-            name = "menu_dishes",
-            joinColumns = @JoinColumn(name = "menu_id"),
-            inverseJoinColumns = @JoinColumn(name = "dish_id")
-    )
+    @OneToMany(mappedBy = "menu", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<DishJpaEntity> dishes;
 
+    public MenuJpaEntity() {
+    }
+
+    public UUID getMenuId() {
+        return menuId;
+    }
+
+    public void setMenuId(UUID menuId) {
+        this.menuId = menuId;
+    }
+
+
+    public void setDishes(List<DishJpaEntity> dishes) {
+        this.dishes = dishes;
+    }
 }

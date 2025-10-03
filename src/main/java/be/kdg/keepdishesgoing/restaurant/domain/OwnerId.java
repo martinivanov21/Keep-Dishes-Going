@@ -1,4 +1,13 @@
 package be.kdg.keepdishesgoing.restaurant.domain;
 
-public record OwnerId() {
+import java.util.UUID;
+
+public record OwnerId(UUID uuid) {
+
+    public OwnerId create() {
+        return new OwnerId(UUID.randomUUID());
+    }
+    public static OwnerId of(String uuid) {
+        return new OwnerId(UUID.fromString(uuid));
+    }
 }

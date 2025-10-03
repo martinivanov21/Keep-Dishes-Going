@@ -1,13 +1,13 @@
 package be.kdg.keepdishesgoing.restaurant.domain;
 
-import be.kdg.keepdishesgoing.common.domain.Address;
-import be.kdg.keepdishesgoing.common.domain.Person;
 import be.kdg.keepdishesgoing.restaurant.domain.enums.Cuisine;
 import be.kdg.keepdishesgoing.restaurant.domain.enums.OpeningStatus;
+import org.jmolecules.event.types.DomainEvent;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 public class Restaurant {
 
@@ -18,124 +18,114 @@ public class Restaurant {
     private int defaultPreparationTime;
     private String contactEmail;
     private String picture;
-    private Address address;
-    private Person owner;
+    private AddressId addressId;
+    private OwnerId ownerId;
     private Menu menu;
     private List<ScheduleHour>  workingHours;
 
-    private final List<Object> domainEvents = new ArrayList<>();
+    private final List<DomainEvent> eventStore = new ArrayList<>();
+    private final List<DomainEvent> uncommitedEvents = new ArrayList<>();
+
+
+
+
+    public Restaurant(RestaurantId restaurantId, String nameOfRestaurant, Cuisine cuisine, OpeningStatus openingStatus,
+                      int defaultPreparationTime, String contactEmail, String picture, AddressId addressId,
+                      OwnerId ownerId, Menu menu, List<ScheduleHour> workingHours) {
+        this.restaurantId = restaurantId;
+        this.nameOfRestaurant = nameOfRestaurant;
+        this.cuisine = cuisine;
+        this.openingStatus = openingStatus;
+        this.defaultPreparationTime = defaultPreparationTime;
+        this.contactEmail = contactEmail;
+        this.picture = picture;
+        this.addressId = addressId;
+        this.ownerId = ownerId;
+        this.menu = menu;
+        this.workingHours = workingHours;
+        this.eventStore.addAll(eventStore);
+    }
+
+    public RestaurantId getRestaurantId() {
+        return restaurantId;
+    }
 
     public String getNameOfRestaurant() {
         return nameOfRestaurant;
-    }
-
-    public void setNameOfRestaurant(String nameOfRestaurant) {
-        this.nameOfRestaurant = nameOfRestaurant;
     }
 
     public Cuisine getCuisine() {
         return cuisine;
     }
 
-    public void setCuisine(Cuisine cuisine) {
-        this.cuisine = cuisine;
+    public OpeningStatus getOpeningStatus() {
+        return openingStatus;
     }
 
     public int getDefaultPreparationTime() {
         return defaultPreparationTime;
     }
 
-    public void setDefaultPreparationTime(int defaultPreparationTime) {
-        this.defaultPreparationTime = defaultPreparationTime;
-    }
-
-    public Menu getMenu() {
-        return menu;
-    }
-
-    public void setMenu(Menu menu) {
-        this.menu = menu;
-    }
-
-    public List<ScheduleHour> getWorkingHours() {
-        return workingHours;
-    }
-
-    public void setWorkingHours(List<ScheduleHour> workingHours) {
-        this.workingHours = workingHours;
-    }
-
-    public OpeningStatus getOpeningStatus() {
-        return openingStatus;
-    }
-
-    public void setOpeningStatus(OpeningStatus openingStatus) {
-        this.openingStatus = openingStatus;
-    }
-
     public String getContactEmail() {
         return contactEmail;
-    }
-
-    public void setContactEmail(String contactEmail) {
-        this.contactEmail = contactEmail;
     }
 
     public String getPicture() {
         return picture;
     }
 
-    public void setPicture(String picture) {
-        this.picture = picture;
+    public AddressId getAddressId() {
+        return addressId;
     }
 
-    public Address getAddress() {
-        return address;
+    public OwnerId getOwnerId() {
+        return ownerId;
     }
 
-    public void setAddress(Address address) {
-        this.address = address;
+    public Menu getMenu() {
+        return menu;
     }
 
-    public Person getOwner() {
-        return owner;
+    public List<ScheduleHour> getWorkingHours() {
+        return workingHours;
     }
 
-    public void setOwner(Person owner) {
-        this.owner = owner;
-    }
-
-
-    public RestaurantId getRestaurantId() {
-        return restaurantId;
-    }
-
-    public void setRestaurantId(RestaurantId restaurantId) {
-        this.restaurantId = restaurantId;
-    }
-
-    public double getAveragePrice() {
-        return menu.getDishIds().stream()
-                .map(Dish::getCurrentPrice)
-                .flatMap(Optional::stream)
-                .mapToDouble(Double::doubleValue)
-                .average()
-                .orElse(0.0);
-
+    public void commitEvents() {
+        eventStore.addAll(uncommitedEvents);
+        uncommitedEvents.clear();
     }
 
 
-    public void assignOwner(Person newOwner) {
-        if (newOwner == null) {
-            throw new IllegalArgumentException("Owner cannot be null");
-        }
-        this.owner = newOwner;
-
-        domainEvents.add(newOwner);
+    public List<DomainEvent> getUncommitedEvents() {
+        return uncommitedEvents;
     }
 
-    public void clearDomainEvents() {
-        domainEvents.clear();
+    public List<DomainEvent> getEventStore() {
+        return eventStore;
     }
 
+    public List<DomainEvent> getDomainEvents() {
+        return new ArrayList<>(
+                Stream.concat(eventStore.stream(), uncommitedEvents.stream()).toList());
+    }
+
+
+    @Override
+    public String toString() {
+        return "Restaurant{" +
+                "restaurantId=" + restaurantId +
+                ", nameOfRestaurant='" + nameOfRestaurant + '\'' +
+                ", cuisine=" + cuisine +
+                ", openingStatus=" + openingStatus +
+                ", defaultPreparationTime=" + defaultPreparationTime +
+                ", contactEmail='" + contactEmail + '\'' +
+                ", picture='" + picture + '\'' +
+                ", addressId=" + addressId +
+                ", ownerId=" + ownerId +
+                ", menu=" + menu +
+                ", workingHours=" + workingHours +
+                ", eventStore=" + eventStore +
+                ", uncommitedEvents=" + uncommitedEvents +
+                '}';
+    }
 }

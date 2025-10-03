@@ -1,4 +1,8 @@
 package be.kdg.keepdishesgoing.restaurant.adapter.out.menu;
 
-public interface MenuJpaRepository {
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import java.util.UUID;
+
+public interface MenuJpaRepository extends JpaRepository<MenuJpaEntity, UUID> {
 }

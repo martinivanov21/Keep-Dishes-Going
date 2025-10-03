@@ -7,7 +7,7 @@ import jakarta.persistence.*;
 import java.util.UUID;
 
 @Entity
-@Table(name = "dish")
+@Table(name = "dish", schema = "kdg_restaurant")
 public class DishJpaEntity {
 
     @Id
@@ -29,9 +29,59 @@ public class DishJpaEntity {
     @Column(nullable = false)
     private int quantity;
 
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "menu_id")
     private MenuJpaEntity menu;
 
+    public DishJpaEntity() {
+    }
 
+    public UUID getDishId() {
+        return dishId;
+    }
+
+    public void setDishId(UUID dishId) {
+        this.dishId = dishId;
+    }
+
+    public DishVersionJpaEntity getLiveVersion() {
+        return liveVersion;
+    }
+
+    public void setLiveVersion(DishVersionJpaEntity liveVersion) {
+        this.liveVersion = liveVersion;
+    }
+
+    public DishVersionJpaEntity getDraftVersion() {
+        return draftVersion;
+    }
+
+    public void setDraftVersion(DishVersionJpaEntity draftVersion) {
+        this.draftVersion = draftVersion;
+    }
+
+    public DishStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(DishStatus status) {
+        this.status = status;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+
+    public MenuJpaEntity getMenu() {
+        return menu;
+    }
+
+    public void setMenu(MenuJpaEntity menu) {
+        this.menu = menu;
+    }
 }

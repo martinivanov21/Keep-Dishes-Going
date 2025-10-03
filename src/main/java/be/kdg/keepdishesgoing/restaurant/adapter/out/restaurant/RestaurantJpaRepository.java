@@ -1,8 +1,13 @@
 package be.kdg.keepdishesgoing.restaurant.adapter.out.restaurant;
 
+import be.kdg.keepdishesgoing.common.adapter.out.PersonJpaEntity;
+import be.kdg.keepdishesgoing.common.domain.PersonId;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.Optional;
 import java.util.UUID;
 
 public interface RestaurantJpaRepository extends JpaRepository<RestaurantJpaEntity, UUID> {
+
+    Optional<RestaurantJpaEntity> findByOwner(UUID ownerId);
 }

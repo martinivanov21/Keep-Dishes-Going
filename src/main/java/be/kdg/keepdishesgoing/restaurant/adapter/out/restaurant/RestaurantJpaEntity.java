@@ -1,18 +1,20 @@
 package be.kdg.keepdishesgoing.restaurant.adapter.out.restaurant;
 
-import be.kdg.keepdishesgoing.common.adapter.PersonJpaEntity;
-import be.kdg.keepdishesgoing.common.domain.Address;
-import be.kdg.keepdishesgoing.restaurant.adapter.out.dish.DishJpaEntity;
+import be.kdg.keepdishesgoing.restaurant.adapter.out.RestaurantEventJpaEntity;
+import be.kdg.keepdishesgoing.restaurant.adapter.out.address.AddressJpaEntity;
+import be.kdg.keepdishesgoing.restaurant.adapter.out.menu.MenuJpaEntity;
+import be.kdg.keepdishesgoing.restaurant.adapter.out.owner.OwnerJpaEntity;
 import be.kdg.keepdishesgoing.restaurant.domain.Menu;
-import be.kdg.keepdishesgoing.restaurant.domain.ScheduleHour;
 import be.kdg.keepdishesgoing.restaurant.domain.enums.Cuisine;
+import be.kdg.keepdishesgoing.restaurant.domain.enums.OpeningStatus;
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 @Entity
-@Table(name = "restaurant")
+@Table(name = "restaurant", schema = "kdg_restaurant")
 public class RestaurantJpaEntity {
 
     @Id
@@ -33,16 +35,26 @@ public class RestaurantJpaEntity {
 
     private String picture;
 
-    private List<ScheduleHour> scheduleHours;
+    @Enumerated(EnumType.STRING)
+    private OpeningStatus openingStatus;
 
-    @Embedded
-    private Address address;
+    @OneToMany(mappedBy = "restaurant")
+    private List<ScheduleHourJpaEntity> workingHours = new ArrayList<>();
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "address_id", nullable = false)
+    private AddressJpaEntity address;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "owner_id",nullable = false)
-    private PersonJpaEntity owner;
+    private OwnerJpaEntity owner;
 
-    private Menu menu;
+    @OneToMany(mappedBy = "restaurant", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<RestaurantEventJpaEntity> events = new ArrayList<>();
+
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "menu_id", referencedColumnName = "menu_id")
+    private MenuJpaEntity menu;
 
     public UUID getRestaurantId() {
         return restaurantId;
@@ -92,30 +104,55 @@ public class RestaurantJpaEntity {
         this.picture = picture;
     }
 
-    public Address getAddress() {
-        return address;
-    }
 
-    public void setAddress(Address address) {
-        this.address = address;
-    }
-
-    public PersonJpaEntity getOwner() {
+    public OwnerJpaEntity getOwner() {
         return owner;
     }
 
-    public void setOwner(PersonJpaEntity owner) {
+    public void setOwner(OwnerJpaEntity owner) {
         this.owner = owner;
     }
 
-    public List<ScheduleHour> getScheduleHours() {
-        return scheduleHours;
-    }
-
-    public void setScheduleHours(List<ScheduleHour> scheduleHours) {
-        this.scheduleHours = scheduleHours;
-    }
-
     public RestaurantJpaEntity() {
+    }
+
+    public OpeningStatus getOpeningStatus() {
+        return openingStatus;
+    }
+
+    public void setOpeningStatus(OpeningStatus openingStatus) {
+        this.openingStatus = openingStatus;
+    }
+
+    public List<ScheduleHourJpaEntity> getWorkingHours() {
+        return workingHours;
+    }
+
+    public void setWorkingHours(List<ScheduleHourJpaEntity> workingHours) {
+        this.workingHours = workingHours;
+    }
+
+    public AddressJpaEntity getAddress() {
+        return address;
+    }
+
+    public void setAddress(AddressJpaEntity address) {
+        this.address = address;
+    }
+
+    public List<RestaurantEventJpaEntity> getEvents() {
+        return events;
+    }
+
+    public void setEvents(List<RestaurantEventJpaEntity> events) {
+        this.events = events;
+    }
+
+    public MenuJpaEntity getMenu() {
+        return menu;
+    }
+
+    public void setMenu(MenuJpaEntity menu) {
+        this.menu = menu;
     }
 }

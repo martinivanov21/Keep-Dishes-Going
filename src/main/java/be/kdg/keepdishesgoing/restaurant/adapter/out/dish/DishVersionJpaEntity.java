@@ -7,11 +7,11 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
-@Table(name = "dish_versions")
+@Table(name = "dish_versions", schema = "kdg_restaurant")
 public class DishVersionJpaEntity {
 
     @Id
-    @Column(name = "dish_verison_id", nullable = false)
+    @Column(name = "dish_version_id", nullable = false)
     private UUID dishVersionId;
 
     @Column(nullable = false)

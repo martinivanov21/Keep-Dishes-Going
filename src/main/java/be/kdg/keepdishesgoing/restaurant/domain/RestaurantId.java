@@ -4,7 +4,7 @@ import java.util.UUID;
 
 public record RestaurantId(UUID uuid) {
 
-    public RestaurantId create() {
+    public static RestaurantId create() {
         return new RestaurantId(UUID.randomUUID());
     }
 

@@ -1,4 +1,10 @@
-package be.kdg.keepdishesgoing.restaurant.port.out.owner;
+package be.kdg.keepdishesgoing.restaurant.port.in;
 
-public class FindAllOwnerPort {
+import be.kdg.keepdishesgoing.restaurant.domain.Owner;
+
+import java.util.List;
+
+public interface FindAllOwnerPort {
+
+    List<Owner> findAllOwners();
 }
