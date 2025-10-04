@@ -42,7 +42,7 @@ public class RestaurantJpaEntity {
     private List<ScheduleHourJpaEntity> workingHours = new ArrayList<>();
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "address_id", nullable = false)
+    @JoinColumn(name = "address_id", nullable = true)
     private AddressJpaEntity address;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -55,6 +55,23 @@ public class RestaurantJpaEntity {
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "menu_id", referencedColumnName = "menu_id")
     private MenuJpaEntity menu;
+
+    public RestaurantJpaEntity(UUID restaurantId, String nameOfRestaurant, Cuisine cuisine,
+                               int defaultPreparationTime, String contactEmail, String picture,
+                               OpeningStatus openingStatus, List<ScheduleHourJpaEntity> workingHours,
+                               AddressJpaEntity address, OwnerJpaEntity owner, MenuJpaEntity menu) {
+        this.restaurantId = restaurantId;
+        this.nameOfRestaurant = nameOfRestaurant;
+        this.cuisine = cuisine;
+        this.defaultPreparationTime = defaultPreparationTime;
+        this.contactEmail = contactEmail;
+        this.picture = picture;
+        this.openingStatus = openingStatus;
+        this.workingHours = workingHours;
+        this.address = address;
+        this.owner = owner;
+        this.menu = menu;
+    }
 
     public UUID getRestaurantId() {
         return restaurantId;

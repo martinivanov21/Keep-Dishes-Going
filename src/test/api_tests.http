@@ -7,3 +7,19 @@ Content-Type: application/json
   "lastName": "Doe",
   "email": "john.doe@example.com"
 }
+
+###
+
+POST http://localhost:8080/restaurant/create
+Accept: application/json
+Content-Type: application/json
+
+{
+  "nameOfRestaurant": "Good Food",
+  "cuisine": "ITALIAN",
+  "openingStatus": "OPEN",
+  "defaultPreparationTime": 20,
+  "contactEmail": "contact@goodfood.com",
+  "picture": "goodfood.png",
+  "ownerId": "11c1eb37-2e2b-4080-843b-549e665826e9"
+}

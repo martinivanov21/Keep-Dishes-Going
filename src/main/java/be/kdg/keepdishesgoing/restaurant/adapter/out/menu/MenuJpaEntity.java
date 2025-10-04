@@ -32,4 +32,8 @@ public class MenuJpaEntity {
     public void setDishes(List<DishJpaEntity> dishes) {
         this.dishes = dishes;
     }
+
+    public List<DishJpaEntity> getDishes() {
+        return dishes;
+    }
 }
