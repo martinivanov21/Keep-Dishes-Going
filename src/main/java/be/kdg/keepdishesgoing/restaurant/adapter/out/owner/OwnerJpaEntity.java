@@ -13,7 +13,7 @@ public class OwnerJpaEntity {
 
     @Id
     @Column(name = "owner_id")
-    private UUID userId;
+    private UUID ownerId;
     @Column(name = "first_name")
     private String firstName;
     @Column(name = "last_name")
@@ -24,12 +24,19 @@ public class OwnerJpaEntity {
     public OwnerJpaEntity() {
     }
 
-    public UUID getUserId() {
-        return userId;
+    public OwnerJpaEntity(UUID ownerId, String firstName, String lastName, String email) {
+        this.ownerId = ownerId;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
     }
 
-    public void setUserId(UUID userId) {
-        this.userId = userId;
+    public UUID getOwnerId() {
+        return ownerId;
+    }
+
+    public void setOwnerId(UUID ownerId) {
+        this.ownerId = ownerId;
     }
 
     public String getFirstName() {

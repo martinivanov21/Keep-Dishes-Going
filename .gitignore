@@ -4,7 +4,6 @@ build/
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
 !**/src/test/**/build/
-!infrastructure/idp_mysql_data/**
 infrastructure/postgresql/**
 infrastructure/rabbitmq/**
 ### STS ###
@@ -37,3 +36,4 @@ out/
 
 ### VS Code ###
 .vscode/
+/infrastructure/idp_mysql_data/

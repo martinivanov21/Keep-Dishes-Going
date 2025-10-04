@@ -8,8 +8,22 @@ public class Owner {
         private String lastName;
         private String email;
 
+    public Owner(OwnerId ownerId, String firstName, String lastName, String email) {
+        this.ownerId = ownerId;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+    }
 
-        public String getFirstName() {
+    public OwnerId getOwnerId() {
+        return ownerId;
+    }
+
+    public void setOwnerId(OwnerId ownerId) {
+        this.ownerId = ownerId;
+    }
+
+    public String getFirstName() {
             return firstName;
         }
 

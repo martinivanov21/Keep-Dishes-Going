@@ -20,7 +20,8 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public class RestaurantJpaAdapter implements LoadRestaurantPort, UpdateRestaurantPort, SaveRestaurantPort, DeleteRestaurantPort {
+public class RestaurantJpaAdapter implements LoadRestaurantPort, UpdateRestaurantPort, SaveRestaurantPort,
+        DeleteRestaurantPort {
 
     private static final Logger logger = LoggerFactory.getLogger(RestaurantJpaAdapter.class);
     private final RestaurantJpaRepository restaurants;

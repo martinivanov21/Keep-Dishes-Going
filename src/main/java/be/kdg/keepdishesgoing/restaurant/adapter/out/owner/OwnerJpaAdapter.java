@@ -4,20 +4,60 @@ import be.kdg.keepdishesgoing.restaurant.domain.Owner;
 import be.kdg.keepdishesgoing.restaurant.domain.OwnerId;
 import be.kdg.keepdishesgoing.restaurant.port.in.FindAllOwnerPort;
 import be.kdg.keepdishesgoing.restaurant.port.out.owner.LoadOwnerPort;
+import be.kdg.keepdishesgoing.restaurant.port.out.owner.SaveOwnerPort;
+import jakarta.transaction.Transactional;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
 
+
 @Repository
-public class OwnerJpaAdapter implements LoadOwnerPort, FindAllOwnerPort {
+public class OwnerJpaAdapter implements LoadOwnerPort, FindAllOwnerPort, SaveOwnerPort {
+
+    private final Logger log = LoggerFactory.getLogger(OwnerJpaAdapter.class);
+    private final OwnerJpaRepository ownerJpaRepository;
+
+    public OwnerJpaAdapter(OwnerJpaRepository ownerJpaRepository) {
+        this.ownerJpaRepository = ownerJpaRepository;
+    }
+
     @Override
     public Optional<Owner> loadOwnerById(OwnerId ownerId) {
-        return Optional.empty();
+        return ownerJpaRepository.findById(ownerId.uuid())
+                .map(this::mapToDomain);
     }
 
     @Override
     public List<Owner> findAllOwners() {
-        return List.of();
+        return ownerJpaRepository.findAll().stream().map(this::mapToDomain).toList();
+    }
+
+    @Override
+    @Transactional
+    public Owner save(Owner owner) {
+        OwnerJpaEntity entity = mapToEntity(owner);
+        ownerJpaRepository.save(entity);
+        return owner;
+    }
+
+    private OwnerJpaEntity mapToEntity(Owner owner) {
+        return new OwnerJpaEntity(
+                owner.getOwnerId().uuid(),
+                owner.getFirstName(),
+                owner.getLastName(),
+                owner.getEmail()
+        );
+    }
+
+    private Owner mapToDomain(OwnerJpaEntity entity) {
+        return new Owner(
+                new OwnerId(entity.getOwnerId()),
+                entity.getFirstName(),
+                entity.getLastName(),
+                entity.getEmail()
+        );
     }
 }

@@ -4,7 +4,7 @@ import java.util.UUID;
 
 public record OwnerId(UUID uuid) {
 
-    public OwnerId create() {
+    public static OwnerId create() {
         return new OwnerId(UUID.randomUUID());
     }
     public static OwnerId of(String uuid) {
