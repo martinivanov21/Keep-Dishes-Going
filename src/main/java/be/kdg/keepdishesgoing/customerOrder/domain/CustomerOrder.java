@@ -1,7 +1,8 @@
 package be.kdg.keepdishesgoing.customerOrder.domain;
 
-import be.kdg.keepdishesgoing.common.domain.Address;
-import be.kdg.keepdishesgoing.common.domain.Person;
+
+//import be.kdg.keepdishesgoing.restaurant.domain.Address;
+//import be.kdg.keepdishesgoing.restaurant.domain.Owner;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -12,8 +13,8 @@ public class CustomerOrder {
     private double totalPrice;
     private LocalDateTime submittedTime;
     private OrderStatus orderStatus;
-    private Person customer;
-    private Address deliveryAddress;
+//    private Owner customer;
+//    private Address deliveryAddress;
 
 
     public CustomerOrderId getCustomerOrderId() {
@@ -56,19 +57,4 @@ public class CustomerOrder {
         this.orderStatus = orderStatus;
     }
 
-    public Person getCustomer() {
-        return customer;
-    }
-
-    public void setCustomer(Person customer) {
-        this.customer = customer;
-    }
-
-    public Address getDeliveryAddress() {
-        return deliveryAddress;
-    }
-
-    public void setDeliveryAddress(Address deliveryAddress) {
-        this.deliveryAddress = deliveryAddress;
-    }
 }

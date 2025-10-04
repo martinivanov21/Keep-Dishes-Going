@@ -1,6 +1,5 @@
 package be.kdg.keepdishesgoing.restaurant.adapter.out.restaurant;
 
-import be.kdg.keepdishesgoing.common.domain.PersonId;
 import be.kdg.keepdishesgoing.common.events.EventCatalog;
 import be.kdg.keepdishesgoing.restaurant.adapter.out.RestaurantEventJpaEntity;
 import be.kdg.keepdishesgoing.restaurant.domain.OwnerId;
