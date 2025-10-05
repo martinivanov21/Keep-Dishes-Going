@@ -8,6 +8,12 @@ public class Menu {
 
     private List<DishId> dishIds;
 
+
+    public Menu(MenuId menuId, List<DishId> dishIds) {
+        this.menuId = menuId;
+        this.dishIds = dishIds;
+    }
+
     public MenuId getMenuId() {
         return menuId;
     }
@@ -24,8 +30,4 @@ public class Menu {
         this.dishIds = dishIds;
     }
 
-    public Menu(MenuId menuId, List<DishId> dishIds) {
-        this.menuId = menuId;
-        this.dishIds = dishIds;
-    }
 }

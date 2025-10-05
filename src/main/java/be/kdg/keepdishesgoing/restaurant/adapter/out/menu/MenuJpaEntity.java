@@ -20,6 +20,11 @@ public class MenuJpaEntity {
     public MenuJpaEntity() {
     }
 
+    public MenuJpaEntity(UUID menuId, List<DishJpaEntity> dishes) {
+        this.menuId = menuId;
+        this.dishes = dishes;
+    }
+
     public UUID getMenuId() {
         return menuId;
     }

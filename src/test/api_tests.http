@@ -39,3 +39,12 @@ Content-Type: application/json
   "addressId": "583cc59d-1641-4fd7-98c1-6ec474a22156",
   "ownerId": "9f266649-1158-4c4a-8ea9-3692df185818"
 }
+
+###
+POST http://localhost:8080/menus/create
+Accept: application/json
+Content-Type: application/json
+
+{
+
+}
