@@ -42,7 +42,7 @@ public class RestaurantJpaEntity {
     private List<ScheduleHourJpaEntity> workingHours = new ArrayList<>();
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "address_id", nullable = true)
+    @JoinColumn(name = "address_id", nullable = false)
     private AddressJpaEntity address;
 
     @ManyToOne(fetch = FetchType.LAZY)

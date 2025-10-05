@@ -4,7 +4,7 @@ import java.util.UUID;
 
 public record AddressId(UUID uuid) {
 
-    public AddressId create() {
+    public static AddressId create() {
         return new AddressId(UUID.randomUUID());
     }
     public static AddressId of(String uuid) {

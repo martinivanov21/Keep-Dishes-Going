@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/")
+@RequestMapping("/owners")
 public class OwnerController {
 
     private final CreateOwnerUseCase createOwnerUseCase;
@@ -26,7 +26,7 @@ public class OwnerController {
         this.findAllOwnerPort = findAllOwnerPort;
     }
 
-    @PostMapping("owner/create")
+    @PostMapping("/create")
     public ResponseEntity<OwnerDto> createOwner(@RequestBody CreateOwnerRequest request) {
 
         var ownerId = OwnerId.create();
@@ -45,7 +45,7 @@ public class OwnerController {
         ));
     }
 
-    @GetMapping("owners")
+    @GetMapping()
     public ResponseEntity<List<OwnerDto>> findAllOwners() {
         List<OwnerDto> ownerDtos = this.findAllOwnerPort.findAllOwners().stream()
                 .map(owner -> new OwnerDto(owner.getOwnerId().uuid(),

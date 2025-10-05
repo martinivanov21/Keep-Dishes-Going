@@ -12,7 +12,7 @@ import java.util.Locale;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/")
+@RequestMapping("/restaurants")
 public class RestaurantController {
 
     private final FindAllRestaurantPort findAllRestaurantPort;
@@ -28,7 +28,7 @@ public class RestaurantController {
     }
 
 
-    @PostMapping("restaurant/create")
+    @PostMapping("/create")
     public ResponseEntity<RestaurantDto> createRestaurant(@RequestBody CreateRestaurantRequest request) {
 
         var restaurant = new Restaurant(
@@ -39,7 +39,7 @@ public class RestaurantController {
                 request.defaultPreparationTime(),
                 request.contactEmail(),
                 request.picture(),
-//                new AddressId(request.addressId().uuid()),
+//                new AddressId(request.addressId().to),
 //                new OwnerId(request.ownerId().uuid()),
                 request.addressId() != null ? new AddressId(UUID.fromString(request.addressId())) : null,
                 request.ownerId() != null ? new OwnerId(UUID.fromString(request.ownerId())) : null,
@@ -64,7 +64,7 @@ public class RestaurantController {
     }
 
 
-    @GetMapping("restaurants")
+    @GetMapping()
     public ResponseEntity<List<RestaurantDto>> findAll() {
         List<RestaurantDto> restaurantDtos = this.findAllRestaurantPort.findAll().stream()
                 .map(r -> new RestaurantDto(
@@ -79,7 +79,7 @@ public class RestaurantController {
         return ResponseEntity.ok(restaurantDtos);
     }
 
-    @PostMapping("restaurant/{restaurantId}/dishes/{dishId}/out-of-stock")
+    @PostMapping("/{restaurantId}/dishes/{dishId}/out-of-stock")
     public ResponseEntity<Void> makeDishOutOfStock(
             @PathVariable UUID restaurantId,
             @PathVariable UUID dishId,

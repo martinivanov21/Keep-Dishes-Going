@@ -11,12 +11,29 @@ public class Address {
     private String country;
 
 
+    public Address(AddressId addressId, String street, int number, String postalCode, String city, String country) {
+        this.addressId = addressId;
+        this.street = street;
+        this.number = number;
+        this.postalCode = postalCode;
+        this.city = city;
+        this.country = country;
+    }
+
     public Address(String street, int number, String postalCode, String city, String country) {
         this.street = street;
         this.number = number;
         this.postalCode = postalCode;
         this.city = city;
         this.country = country;
+    }
+
+    public AddressId getAddressId() {
+        return addressId;
+    }
+
+    public void setAddressId(AddressId addressId) {
+        this.addressId = addressId;
     }
 
     public String getStreet() {

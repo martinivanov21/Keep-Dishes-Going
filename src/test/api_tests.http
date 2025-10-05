@@ -1,4 +1,4 @@
-POST http://localhost:8080/owner/create
+POST http://localhost:8080/owners/create
 Accept: application/json
 Content-Type: application/json
 
@@ -10,7 +10,22 @@ Content-Type: application/json
 
 ###
 
-POST http://localhost:8080/restaurant/create
+
+
+POST http://localhost:8080/addresses/create
+Accept: application/json
+Content-Type: application/json
+
+{
+  "street": "Random",
+  "number": 1,
+  "postalCode": "2000",
+  "city": "Antwerpen",
+  "country": "Belgium"
+}
+###
+
+POST http://localhost:8080/restaurants/create
 Accept: application/json
 Content-Type: application/json
 
@@ -21,5 +36,6 @@ Content-Type: application/json
   "defaultPreparationTime": 20,
   "contactEmail": "contact@goodfood.com",
   "picture": "goodfood.png",
-  "ownerId": "11c1eb37-2e2b-4080-843b-549e665826e9"
+  "addressId": "583cc59d-1641-4fd7-98c1-6ec474a22156",
+  "ownerId": "9f266649-1158-4c4a-8ea9-3692df185818"
 }

@@ -23,6 +23,15 @@ public class AddressJpaEntity {
     private String city;
     private String country;
 
+    public AddressJpaEntity(UUID addressId, String street, int number, String postalCode, String city, String country) {
+        this.addressId = addressId;
+        this.street = street;
+        this.number = number;
+        this.postalCode = postalCode;
+        this.city = city;
+        this.country = country;
+    }
+
     public AddressJpaEntity() {
     }
 
@@ -73,4 +82,5 @@ public class AddressJpaEntity {
     public void setCountry(String country) {
         this.country = country;
     }
+
 }
