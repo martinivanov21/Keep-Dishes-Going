@@ -16,6 +16,18 @@ public class Dish {
     private DishStatus status;
     private int quantity;
 
+    private Menu menu;
+
+    public Dish(DishId dishId, DishVersion liveVersion, DishVersion draftVersion,
+                DishStatus status, int quantity, Menu menu) {
+        this.dishId = dishId;
+        this.liveVersion = liveVersion;
+        this.draftVersion = draftVersion;
+        this.status = status;
+        this.quantity = quantity;
+        this.menu = menu;
+    }
+
     public DishId getDishId() {
         return dishId;
     }
@@ -57,6 +69,15 @@ public class Dish {
     public void setQuantity(int quantity) {
         this.quantity = quantity;
     }
+
+    public Menu getMenu() {
+        return menu;
+    }
+
+    public void setMenu(Menu menu) {
+        this.menu = menu;
+    }
+
 
     public void createDraft(DishVersion draftVersion) {
         if (status == DishStatus.UNPUBLISHED) {

@@ -16,6 +16,26 @@ public class DishVersion {
     private FoodTag foodTag;
     private DishType typeOfDish;
 
+    public DishVersion(DishVersionId dishVersionId, String nameOfDish, String description,
+                       double price, String picture, LocalDateTime preparationTime, FoodTag foodTag, DishType typeOfDish) {
+        this.dishVersionId = dishVersionId;
+        this.nameOfDish = nameOfDish;
+        this.description = description;
+        this.price = price;
+        this.picture = picture;
+        this.preparationTime = preparationTime;
+        this.foodTag = foodTag;
+        this.typeOfDish = typeOfDish;
+    }
+
+    public DishVersionId getDishVersionId() {
+        return dishVersionId;
+    }
+
+    public void setDishVersionId(DishVersionId dishVersionId) {
+        this.dishVersionId = dishVersionId;
+    }
+
     public String getNameOfDish() {
         return nameOfDish;
     }

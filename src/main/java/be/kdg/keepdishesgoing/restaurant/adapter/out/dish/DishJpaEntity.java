@@ -29,12 +29,21 @@ public class DishJpaEntity {
     @Column(nullable = false)
     private int quantity;
 
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "menu_id")
     private MenuJpaEntity menu;
 
     public DishJpaEntity() {
+    }
+
+    public DishJpaEntity(UUID dishId, DishVersionJpaEntity liveVersion, DishVersionJpaEntity draftVersion,
+                         DishStatus status, int quantity, MenuJpaEntity menu) {
+        this.dishId = dishId;
+        this.liveVersion = liveVersion;
+        this.draftVersion = draftVersion;
+        this.status = status;
+        this.quantity = quantity;
+        this.menu = menu;
     }
 
     public UUID getDishId() {
@@ -84,4 +93,5 @@ public class DishJpaEntity {
     public void setMenu(MenuJpaEntity menu) {
         this.menu = menu;
     }
+
 }

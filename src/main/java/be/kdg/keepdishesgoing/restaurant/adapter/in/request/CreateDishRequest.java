@@ -1,14 +1,12 @@
-package be.kdg.keepdishesgoing.restaurant.adapter.in.response;
+package be.kdg.keepdishesgoing.restaurant.adapter.in.request;
 
 import be.kdg.keepdishesgoing.restaurant.domain.DishId;
 import be.kdg.keepdishesgoing.restaurant.domain.DishVersion;
 import be.kdg.keepdishesgoing.restaurant.domain.Menu;
 import be.kdg.keepdishesgoing.restaurant.domain.enums.DishStatus;
 
-import java.util.UUID;
 
-public record DishDto(
-        UUID dishId,
+public record CreateDishRequest(
         DishVersion liveVersion,
         DishVersion draftVersion,
         DishStatus status,

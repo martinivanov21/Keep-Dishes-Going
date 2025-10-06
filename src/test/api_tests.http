@@ -48,3 +48,19 @@ Content-Type: application/json
 {
 
 }
+
+###
+POST http://localhost:8080/dishes/create
+Accept: application/json
+Content-Type: application/json
+
+{
+  "quantity": 23,
+  "status": "PUBLISHED",
+  "menu": {
+    "menuId": {
+      "uuid": "7ca09c79-b668-4003-9ea0-90c52bfe3bb1"
+    }
+  }
+
+}
