@@ -12,12 +12,12 @@ public class DishVersion {
     private String description;
     private double price;
     private String picture;
-    private LocalDateTime preparationTime;
+    private String preparationTime;
     private FoodTag foodTag;
     private DishType typeOfDish;
 
     public DishVersion(DishVersionId dishVersionId, String nameOfDish, String description,
-                       double price, String picture, LocalDateTime preparationTime, FoodTag foodTag, DishType typeOfDish) {
+                       double price, String picture, String preparationTime, FoodTag foodTag, DishType typeOfDish) {
         this.dishVersionId = dishVersionId;
         this.nameOfDish = nameOfDish;
         this.description = description;
@@ -68,11 +68,11 @@ public class DishVersion {
         this.picture = picture;
     }
 
-    public LocalDateTime getPreparationTime() {
+    public String getPreparationTime() {
         return preparationTime;
     }
 
-    public void setPreparationTime(LocalDateTime preparationTime) {
+    public void setPreparationTime(String preparationTime) {
         this.preparationTime = preparationTime;
     }
 

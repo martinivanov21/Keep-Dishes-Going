@@ -119,6 +119,7 @@ public class Dish {
         return status == DishStatus.PUBLISHED && quantity > 0;
     }
 
+
     public Optional<Double> getCurrentPrice() {
         return liveVersion != null ? Optional.of(liveVersion.getPrice()) : Optional.empty();
     }

@@ -25,7 +25,7 @@ public class DishVersionJpaEntity {
 
     private String picture;
 
-    private LocalDateTime preparationTime;
+    private String preparationTime;
 
     @Enumerated(EnumType.STRING)
     private FoodTag foodTag;
@@ -33,7 +33,7 @@ public class DishVersionJpaEntity {
     private DishType dishType;
 
     public DishVersionJpaEntity(UUID dishVersionId, String nameOfDish,
-                                String description, double price, String picture, LocalDateTime preparationTime, FoodTag foodTag, DishType dishType) {
+                                String description, double price, String picture, String preparationTime, FoodTag foodTag, DishType dishType) {
         this.dishVersionId = dishVersionId;
         this.nameOfDish = nameOfDish;
         this.description = description;
@@ -42,6 +42,9 @@ public class DishVersionJpaEntity {
         this.preparationTime = preparationTime;
         this.foodTag = foodTag;
         this.dishType = dishType;
+    }
+
+    public DishVersionJpaEntity() {
     }
 
     public UUID getDishVersionId() {
@@ -84,11 +87,11 @@ public class DishVersionJpaEntity {
         this.picture = picture;
     }
 
-    public LocalDateTime getPreparationTime() {
+    public String getPreparationTime() {
         return preparationTime;
     }
 
-    public void setPreparationTime(LocalDateTime preparationTime) {
+    public void setPreparationTime(String preparationTime) {
         this.preparationTime = preparationTime;
     }
 

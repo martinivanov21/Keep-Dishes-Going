@@ -55,12 +55,38 @@ Accept: application/json
 Content-Type: application/json
 
 {
-  "quantity": 23,
+  "quantity": 12,
   "status": "PUBLISHED",
   "menu": {
     "menuId": {
       "uuid": "7ca09c79-b668-4003-9ea0-90c52bfe3bb1"
     }
   }
+
+}
+
+###
+POST http://localhost:8080/dishversions/create
+Accept: application/json
+Content-Type: application/json
+
+{
+  "nameOfDish": "Vegan Spagettii Boloneeze",
+  "description": "meatballs, spagethi, bolonese sauce",
+  "picture": "test2.png",
+  "price": 21.01,
+  "preparationTime": "45 minutes",
+  "foodTag": "VEGAN",
+  "typeOfDish": "MAIN"
+}
+
+###
+PUT http://localhost:8080/dishversions/c7618c7e-9f76-455a-87d2-51c6dd20bca0/update
+Content-Type: application/json
+
+{
+  "description": "Creamy Italian pasta with pancetta",
+  "preparationTime": "1 hour",
+  "typeOfDish": "STARTER"
 
 }
