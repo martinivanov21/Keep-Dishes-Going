@@ -10,7 +10,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
-import java.util.UUID;
 
 @Repository
 public class DishVersionJpaAdapter implements CreateDishVersionPort, UpdateDishVersionPort {
@@ -31,7 +30,6 @@ public class DishVersionJpaAdapter implements CreateDishVersionPort, UpdateDishV
     }
 
 
-    // CHANGE IT LATER
     @Override
     @Transactional
     public DishVersion update(DishVersion updatedDishVersion) {

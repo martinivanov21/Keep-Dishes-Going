@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/menus")
+@RequestMapping("/api/menus")
 public class MenuController {
 
     private final CreateMenuUseCase createMenuUseCase;

@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/dishversions")
+@RequestMapping("/api/dishversions")
 public class DishVersionController {
 
     private static final Logger logger = LoggerFactory.getLogger(DishVersionController.class);

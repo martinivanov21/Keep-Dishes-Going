@@ -33,6 +33,12 @@ dependencies {
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.springframework.modulith:spring-modulith-starter-test")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+    testImplementation("org.springframework.boot:spring-boot-starter-test")
+    implementation ("org.apache.logging.log4j:log4j-api:2.13.3")
+    implementation ("org.apache.logging.log4j:log4j-core:2.13.3")
+    testImplementation ("org.springframework.security:spring-security-test")
+    implementation("org.springframework.boot:spring-boot-starter-oauth2-resource-server")
+    implementation("org.springframework.boot:spring-boot-starter-security")
 }
 
 dependencyManagement {

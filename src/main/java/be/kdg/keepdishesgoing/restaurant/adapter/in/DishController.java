@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/dishes")
+@RequestMapping("/api/dishes")
 public class DishController {
 
     private final CreateDishUseCase createDishUseCase;

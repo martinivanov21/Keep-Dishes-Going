@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/owners")
+@RequestMapping("/api/owners")
 public class OwnerController {
 
     private final CreateOwnerUseCase createOwnerUseCase;

@@ -12,7 +12,7 @@ import java.util.Locale;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/restaurants")
+@RequestMapping("/api/restaurants")
 public class RestaurantController {
 
     private final FindAllRestaurantPort findAllRestaurantPort;
@@ -39,8 +39,6 @@ public class RestaurantController {
                 request.defaultPreparationTime(),
                 request.contactEmail(),
                 request.picture(),
-//                new AddressId(request.addressId().to),
-//                new OwnerId(request.ownerId().uuid()),
                 request.addressId() != null ? new AddressId(UUID.fromString(request.addressId())) : null,
                 request.ownerId() != null ? new OwnerId(UUID.fromString(request.ownerId())) : null,
                 null,
