@@ -38,8 +38,7 @@ public class MenuController {
         Menu newMenu = createMenuUseCase.createMenu(command);
 
         return ResponseEntity.ok(new MenuDto(
-                newMenu.getMenuId().uuid(),
-                List.of()
+                newMenu.getMenuId().uuid()
         ));
 
     }

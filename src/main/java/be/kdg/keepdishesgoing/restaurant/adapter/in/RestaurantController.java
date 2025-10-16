@@ -1,9 +1,12 @@
 package be.kdg.keepdishesgoing.restaurant.adapter.in;
 
 import be.kdg.keepdishesgoing.restaurant.adapter.in.request.CreateRestaurantRequest;
+import be.kdg.keepdishesgoing.restaurant.adapter.in.response.MenuDto;
 import be.kdg.keepdishesgoing.restaurant.adapter.in.response.RestaurantDto;
+import be.kdg.keepdishesgoing.restaurant.adapter.in.response.ScheduleHourDto;
 import be.kdg.keepdishesgoing.restaurant.domain.*;
 import be.kdg.keepdishesgoing.restaurant.port.in.*;
+import jakarta.transaction.Transactional;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,6 +32,7 @@ public class RestaurantController {
 
 
     @PostMapping("/create")
+    @Transactional
     public ResponseEntity<RestaurantDto> createRestaurant(@RequestBody CreateRestaurantRequest request) {
 
         var restaurant = new Restaurant(
@@ -41,8 +45,14 @@ public class RestaurantController {
                 request.picture(),
                 request.addressId() != null ? new AddressId(UUID.fromString(request.addressId())) : null,
                 request.ownerId() != null ? new OwnerId(UUID.fromString(request.ownerId())) : null,
-                null,
-                List.of()
+                request.menuId() != null ? new Menu(request.menuId(), List.of()) : null,
+                request.workingHours() != null ? request.workingHours().stream()
+                                .map(wh -> new ScheduleHour(
+                                        wh.getScheduleHourId(),
+                                        wh.getDayOfWeek(),
+                                        wh.getOpeningTime(),
+                                        wh.getClosingTime()
+                                )).toList() : List.of()
         );
 
         Restaurant created = createRestaurantUseCase.createRestaurant(
@@ -52,10 +62,21 @@ public class RestaurantController {
         RestaurantDto restaurantDto = new RestaurantDto(
                 created.getRestaurantId().uuid(),
                 created.getNameOfRestaurant(),
+                created.getCuisine().name(),
+                created.getDefaultPreparationTime(),
                 created.getContactEmail(),
                 created.getPicture(),
-                created.getCuisine().name(),
-                created.getOpeningStatus().name()
+                created.getOpeningStatus().name(),
+                created.getAddressId().uuid(),
+                created.getWorkingHours().stream()
+                                .map(wh -> new ScheduleHourDto(
+                                        wh.getScheduleHourId(),
+                                        wh.getDayOfWeek().name(),
+                                        wh.getOpeningTime(),
+                                        wh.getClosingTime()
+                                )).toList(),
+                created.getOwnerId().uuid(),
+                created.getMenu() != null ? new MenuDto(created.getMenu().getMenuId().uuid()) : null
         );
 
         return ResponseEntity.ok(restaurantDto);
@@ -68,10 +89,22 @@ public class RestaurantController {
                 .map(r -> new RestaurantDto(
                         r.getRestaurantId().uuid(),
                         r.getNameOfRestaurant(),
+                        r.getCuisine().name(),
+                        r.getDefaultPreparationTime(),
                         r.getContactEmail(),
                         r.getPicture(),
-                        r.getCuisine().name(),
-                        r.getOpeningStatus().name()
+                        r.getOpeningStatus().name(),
+                        r.getAddressId().uuid(),
+                        r.getWorkingHours().stream()
+                                .map(work -> new ScheduleHourDto(
+                                        work.getScheduleHourId(),
+                                        work.getDayOfWeek().name(),
+                                        work.getOpeningTime(),
+                                        work.getClosingTime()
+                                )).toList(),
+                        r.getOwnerId().uuid(),
+                        new MenuDto(r.getMenu().getMenuId().uuid())
+
                 )).toList();
 
         return ResponseEntity.ok(restaurantDtos);

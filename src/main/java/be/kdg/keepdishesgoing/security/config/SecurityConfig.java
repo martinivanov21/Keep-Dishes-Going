@@ -20,23 +20,45 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 @EnableWebSecurity
-//@EnableMethodSecurity(prePostEnabled = true)
+@EnableMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
 
+//    @Bean
+//    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+//        http
+//                .csrf(csrf -> csrf.disable()) // Disable CSRF for APIs
+//                .cors(cors -> {}) // Enable CORS using the config below
+//                .authorizeHttpRequests(auth -> auth
+//                        .anyRequest().permitAll()
+//                )
+//                .sessionManagement(session -> session
+//                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+//                );
+//
+//        return http.build();
+//    }
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(csrf -> csrf.disable()) // Disable CSRF for APIs
-                .cors(cors -> {}) // Enable CORS using the config below
-                .authorizeHttpRequests(auth -> auth
+                .csrf(AbstractHttpConfigurer::disable)
+                .cors(Customizer.withDefaults())
+                .authorizeHttpRequests((authorize) -> authorize
+                        .requestMatchers("/unsecured").permitAll()
                         .anyRequest().permitAll()
-                )
-                .sessionManagement(session -> session
-                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                );
-
+//                        .anyRequest().authenticated()
+                ).sessionManagement(mgmt -> mgmt.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+//                .oauth2ResourceServer(rs -> rs.jwt(jwt -> jwtAuthenticationConverter()));
         return http.build();
     }
+
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", new CorsConfiguration().applyPermitDefaultValues());
+        return source;
+    }
+
+
 
     @Bean
     public WebMvcConfigurer corsConfigurer() {
@@ -52,14 +74,12 @@ public class SecurityConfig {
         };
     }
 
-
-
-    @Bean
-    JwtAuthenticationConverter jwtAuthenticationConverter() {
-        JwtAuthenticationConverter jwtConverter = new JwtAuthenticationConverter();
-        jwtConverter.setJwtGrantedAuthoritiesConverter(new KeycloakRealmRoleConverter());
-        return jwtConverter;
-    }
+//    @Bean
+//    JwtAuthenticationConverter jwtAuthenticationConverter() {
+//        JwtAuthenticationConverter jwtConverter = new JwtAuthenticationConverter();
+//        jwtConverter.setJwtGrantedAuthoritiesConverter(new KeycloakRealmRoleConverter());
+//        return jwtConverter;
+//    }
 
 }
 

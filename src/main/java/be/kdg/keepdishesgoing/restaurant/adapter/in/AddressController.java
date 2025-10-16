@@ -6,18 +6,24 @@ import be.kdg.keepdishesgoing.restaurant.domain.Address;
 import be.kdg.keepdishesgoing.restaurant.domain.AddressId;
 import be.kdg.keepdishesgoing.restaurant.port.in.CreateAddressCommand;
 import be.kdg.keepdishesgoing.restaurant.port.in.CreateAddressUseCase;
+import be.kdg.keepdishesgoing.restaurant.port.in.FindAllAddressUseCase;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/addresses")
 public class AddressController {
 
     private final CreateAddressUseCase createAddressUseCase;
+    private final FindAllAddressUseCase findAllAddressUseCase;
 
 
-    public AddressController(CreateAddressUseCase createAddressUseCase) {
+    public AddressController(CreateAddressUseCase createAddressUseCase, FindAllAddressUseCase findAllAddressUseCase) {
         this.createAddressUseCase = createAddressUseCase;
+        this.findAllAddressUseCase = findAllAddressUseCase;
     }
 
     @PostMapping("/create")
@@ -47,5 +53,23 @@ public class AddressController {
                         newAddress.getCity(),
                         newAddress.getCountry()
                 ));
+    }
+
+    @GetMapping()
+    public ResponseEntity<List<AddressDto>> getAllAddresses() {
+
+        List<AddressDto> addressDtos = findAllAddressUseCase.findAll().stream()
+                .map(
+                        address -> new AddressDto(
+                                address.getAddressId().uuid(),
+                                address.getStreet(),
+                                address.getNumber(),
+                                address.getPostalCode(),
+                                address.getCity(),
+                                address.getCountry()
+                        )
+                ).toList();
+
+        return ResponseEntity.ok(addressDtos);
     }
 }

@@ -16,8 +16,8 @@ public record CreateRestaurantRequest(
         String contactEmail,
         String picture,
         String addressId,
-        String ownerId
-//        Menu menu,
-//        List<ScheduleHour>workingHours
+        String ownerId,
+        MenuId menuId,
+        List<ScheduleHour> workingHours
 ) {
 }

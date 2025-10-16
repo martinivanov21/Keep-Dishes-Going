@@ -1,47 +1,47 @@
-POST http://localhost:8080/owners/create
+POST http://localhost:8080/api/owners/create
 Accept: application/json
 Content-Type: application/json
 
 {
-  "firstName": "John",
-  "lastName": "Doe",
-  "email": "john.doe@example.com"
+  "firstName": "Danya",
+  "lastName": "Reichel",
+  "email": "danaiil@ukr.com"
 }
 
 ###
 
 
 
-POST http://localhost:8080/addresses/create
+POST http://localhost:8080/api/addresses/create
 Accept: application/json
 Content-Type: application/json
 
 {
-  "street": "Random",
-  "number": 1,
+  "street": "Jodenstraat",
+  "number": 12,
   "postalCode": "2000",
   "city": "Antwerpen",
   "country": "Belgium"
 }
 ###
 
-POST http://localhost:8080/restaurants/create
+POST http://localhost:8080/api/restaurants/create
 Accept: application/json
 Content-Type: application/json
 
 {
-  "nameOfRestaurant": "Good Food",
-  "cuisine": "ITALIAN",
-  "openingStatus": "OPEN",
-  "defaultPreparationTime": 20,
-  "contactEmail": "contact@goodfood.com",
-  "picture": "goodfood.png",
-  "addressId": "583cc59d-1641-4fd7-98c1-6ec474a22156",
-  "ownerId": "9f266649-1158-4c4a-8ea9-3692df185818"
+  "nameOfRestaurant": "Sloppy Berchem",
+  "cuisine": "BALTIC",
+  "openingStatus": "CLOSED",
+  "defaultPreparationTime": 75,
+  "contactEmail": "business@berchemrt.com",
+  "picture": "https://balticheaven.pl/wp-content/uploads/2025/06/WhatsApp-Image-2025-06-23-at-14.31.48-8-1024x1024.jpeg",
+  "addressId": "439d5c91-5569-4e96-9518-03b5885b45c1",
+  "ownerId": "9df5bc29-352c-408a-acac-339f2980df14"
 }
 
 ###
-POST http://localhost:8080/menus/create
+POST http://localhost:8080/api/menus/create
 Accept: application/json
 Content-Type: application/json
 
@@ -50,13 +50,13 @@ Content-Type: application/json
 }
 
 ###
-POST http://localhost:8080/dishes/create
+POST http://localhost:8080/api/dishes/create
 Accept: application/json
 Content-Type: application/json
 
 {
-  "quantity": 12,
-  "status": "PUBLISHED",
+  "quantity": 0,
+  "status": "UNPUBLISHED",
   "menu": {
     "menuId": {
       "uuid": "7ca09c79-b668-4003-9ea0-90c52bfe3bb1"
@@ -90,3 +90,9 @@ Content-Type: application/json
   "typeOfDish": "STARTER"
 
 }
+
+###
+GET http://localhost:8080/api/addresses
+
+###
+POST http://localhost:8080/api/restaurants/fbcd8926-9bdb-4b1a-9fa9-800039ea15d7/dishes/f3d7d95e-2c65-4948-ade9-8f9e3e1909c6/out-of-stock
