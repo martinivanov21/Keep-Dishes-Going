@@ -45,7 +45,7 @@ public class RestaurantJpaEntity {
     @JoinColumn(name = "address_id", nullable = false)
     private AddressJpaEntity address;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "owner_id",nullable = false)
     private OwnerJpaEntity owner;
 

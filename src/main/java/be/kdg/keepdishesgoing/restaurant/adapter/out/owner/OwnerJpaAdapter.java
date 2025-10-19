@@ -36,6 +36,11 @@ public class OwnerJpaAdapter implements LoadOwnerPort, FindAllOwnerPort, SaveOwn
     }
 
     @Override
+    public Optional<Owner> findByEmail(String email) {
+        return  ownerJpaRepository.findByEmail(email);
+    }
+
+    @Override
     @Transactional
     public Owner save(Owner owner) {
         OwnerJpaEntity entity = mapToEntity(owner);

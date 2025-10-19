@@ -1,40 +1,41 @@
-package be.kdg.keepdishesgoing.customerOrder.domain;
+package be.kdg.keepdishesgoing.customerOrder.adapter.out;
 
+import be.kdg.keepdishesgoing.customerOrder.domain.OrderStatus;
+import jakarta.persistence.*;
+import jdk.jfr.Name;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-public class CustomerOrder {
-    private CustomerOrderId customerOrderId;
+@Entity
+@Table(name = "customer_order", schema = "kdg_customerOrder" )
+public class CustomerOrderJpaEntity {
+
+    @Id
+    @Column(name = "customer_order_id", nullable = false)
+    private UUID customerOrderId;
+
+    @Column(nullable = false, name = "estimated_time")
     private double estimateTime;
+    @Column(nullable = false, name = "total_price")
     private double totalPrice;
+    @Column(nullable = false)
     private LocalDateTime submittedTime;
+    @Enumerated(EnumType.STRING)
     private OrderStatus orderStatus;
-    private Address deliveryAddress;
+    @OneToOne(cascade = CascadeType.ALL)
+    private AddressJpaEntity deliveryAddress;
 
-    public CustomerOrder(CustomerOrderId customerOrderId, double estimateTime, double totalPrice,
-                         LocalDateTime submittedTime, OrderStatus orderStatus, Address deliveryAddress) {
-        this.customerOrderId = customerOrderId;
-        this.estimateTime = estimateTime;
-        this.totalPrice = totalPrice;
-        this.submittedTime = submittedTime;
-        this.orderStatus = orderStatus;
-        this.deliveryAddress = deliveryAddress;
+    public CustomerOrderJpaEntity() {
     }
 
-    public Address getDeliveryAddress() {
-        return deliveryAddress;
-    }
 
-    public void setDeliveryAddress(Address deliveryAddress) {
-        this.deliveryAddress = deliveryAddress;
-    }
 
-    public CustomerOrderId getCustomerOrderId() {
+    public UUID getCustomerOrderId() {
         return customerOrderId;
     }
 
-    public void setCustomerOrderId(CustomerOrderId customerOrderId) {
+    public void setCustomerOrderId(UUID customerOrderId) {
         this.customerOrderId = customerOrderId;
     }
 
@@ -70,4 +71,11 @@ public class CustomerOrder {
         this.orderStatus = orderStatus;
     }
 
+    public AddressJpaEntity getDeliveryAddress() {
+        return deliveryAddress;
+    }
+
+    public void setDeliveryAddress(AddressJpaEntity deliveryAddress) {
+        this.deliveryAddress = deliveryAddress;
+    }
 }

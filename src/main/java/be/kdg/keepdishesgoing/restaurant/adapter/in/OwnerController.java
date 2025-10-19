@@ -7,8 +7,13 @@ import be.kdg.keepdishesgoing.restaurant.domain.OwnerId;
 import be.kdg.keepdishesgoing.restaurant.port.in.CreateOwnerCommand;
 import be.kdg.keepdishesgoing.restaurant.port.in.CreateOwnerUseCase;
 import be.kdg.keepdishesgoing.restaurant.port.in.FindAllOwnerPort;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.UUID;
@@ -24,6 +29,21 @@ public class OwnerController {
     public OwnerController(CreateOwnerUseCase createOwnerUseCase, FindAllOwnerPort findAllOwnerPort) {
         this.createOwnerUseCase = createOwnerUseCase;
         this.findAllOwnerPort = findAllOwnerPort;
+    }
+
+    @GetMapping("/{ownerId}")
+    @PreAuthorize("hasRole('owner')")
+    public ResponseEntity<OwnerDto> addOwner(@AuthenticationPrincipal Jwt jwt, @PathVariable UUID ownerId) {
+        String email = jwt.getClaimAsString("email");
+        Owner owner = findAllOwnerPort.findByEmail(email)
+                .orElseThrow( () ->  new ResponseStatusException(HttpStatus.NOT_FOUND, "Owner not found"));
+
+        return ResponseEntity.ok(new OwnerDto(
+                owner.getOwnerId().uuid(),
+                owner.getFirstName(),
+                owner.getLastName(),
+                owner.getEmail()
+        ));
     }
 
     @PostMapping("/create")
