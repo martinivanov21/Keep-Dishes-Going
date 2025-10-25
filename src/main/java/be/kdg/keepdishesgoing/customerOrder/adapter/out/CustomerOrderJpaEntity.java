@@ -2,7 +2,6 @@ package be.kdg.keepdishesgoing.customerOrder.adapter.out;
 
 import be.kdg.keepdishesgoing.customerOrder.domain.OrderStatus;
 import jakarta.persistence.*;
-import jdk.jfr.Name;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -24,7 +23,7 @@ public class CustomerOrderJpaEntity {
     @Enumerated(EnumType.STRING)
     private OrderStatus orderStatus;
     @OneToOne(cascade = CascadeType.ALL)
-    private AddressJpaEntity deliveryAddress;
+    private AddressCustomerOrderJpaEntity deliveryAddress;
 
     public CustomerOrderJpaEntity() {
     }
@@ -71,11 +70,11 @@ public class CustomerOrderJpaEntity {
         this.orderStatus = orderStatus;
     }
 
-    public AddressJpaEntity getDeliveryAddress() {
+    public AddressCustomerOrderJpaEntity getDeliveryAddress() {
         return deliveryAddress;
     }
 
-    public void setDeliveryAddress(AddressJpaEntity deliveryAddress) {
+    public void setDeliveryAddress(AddressCustomerOrderJpaEntity deliveryAddress) {
         this.deliveryAddress = deliveryAddress;
     }
 }

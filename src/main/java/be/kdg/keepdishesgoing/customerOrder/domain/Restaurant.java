@@ -14,31 +14,27 @@ public class Restaurant {
     private Address deliveryAddress;
     private Cuisine cuisine;
     private String pictureUrl;
-    private Menu menu;
     private List<ScheduleHour> workingHours;
     private PriceRange priceRange;
     private BigDecimal averagePrice;
     private int guesstimatedDeliveryTimeMinutes;
     private List<Dish> publishedDishes;
 
-    private final List<DomainEvent> eventStore = new ArrayList<>();
-    private final List<DomainEvent> uncommitedEvents = new ArrayList<>();
+
 
     public Restaurant(RestaurantId restaurantId, String restaurantName, Address deliveryAddress, Cuisine cuisine,
-                      String pictureUrl, Menu menu, List<ScheduleHour> workingHours, PriceRange priceRange,
+                      String pictureUrl, List<ScheduleHour> workingHours, PriceRange priceRange,
                       BigDecimal averagePrice, int guesstimatedDeliveryTimeMinutes, List<Dish> publishedDishes) {
         this.restaurantId = restaurantId;
         this.restaurantName = restaurantName;
         this.deliveryAddress = deliveryAddress;
         this.cuisine = cuisine;
         this.pictureUrl = pictureUrl;
-        this.menu = menu;
         this.workingHours = workingHours;
         this.priceRange = priceRange;
         this.averagePrice = averagePrice;
         this.guesstimatedDeliveryTimeMinutes = guesstimatedDeliveryTimeMinutes;
         this.publishedDishes = publishedDishes;
-        this.eventStore.addAll(eventStore);
     }
 
     public List<Dish> getPublishedDishes() {
@@ -49,10 +45,7 @@ public class Restaurant {
         this.publishedDishes = publishedDishes;
     }
 
-    public void commitEvents() {
-        eventStore.addAll(uncommitedEvents);
-        uncommitedEvents.clear();
-    }
+
 
     public BigDecimal getAveragePrice() {
         return averagePrice;
@@ -68,11 +61,6 @@ public class Restaurant {
 
     public void setGuesstimatedDeliveryTimeMinutes(int guesstimatedDeliveryTimeMinutes) {
         this.guesstimatedDeliveryTimeMinutes = guesstimatedDeliveryTimeMinutes;
-    }
-
-    public List<DomainEvent> getDomainEvents() {
-        return new ArrayList<>(
-                Stream.concat(eventStore.stream(), uncommitedEvents.stream()).toList());
     }
 
     public RestaurantId getRestaurantId() {
@@ -115,13 +103,6 @@ public class Restaurant {
         this.pictureUrl = pictureUrl;
     }
 
-    public Menu getMenu() {
-        return menu;
-    }
-
-    public void setMenu(Menu menu) {
-        this.menu = menu;
-    }
 
     public List<ScheduleHour> getWorkingHours() {
         return workingHours;
@@ -139,12 +120,5 @@ public class Restaurant {
         this.priceRange = priceRange;
     }
 
-    public List<DomainEvent> getEventStore() {
-        return eventStore;
-    }
-
-    public List<DomainEvent> getUncommitedEvents() {
-        return uncommitedEvents;
-    }
 }
 

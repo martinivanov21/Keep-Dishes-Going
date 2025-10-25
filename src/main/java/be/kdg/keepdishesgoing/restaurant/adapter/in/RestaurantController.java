@@ -71,7 +71,7 @@ public class RestaurantController {
                 created.getWorkingHours().stream()
                                 .map(wh -> new ScheduleHourDto(
                                         wh.getScheduleHourId(),
-                                        wh.getDayOfWeek().name(),
+                                        wh.getDayOfWeek(),
                                         wh.getOpeningTime(),
                                         wh.getClosingTime()
                                 )).toList(),
@@ -98,7 +98,7 @@ public class RestaurantController {
                         r.getWorkingHours().stream()
                                 .map(work -> new ScheduleHourDto(
                                         work.getScheduleHourId(),
-                                        work.getDayOfWeek().name(),
+                                        work.getDayOfWeek(),
                                         work.getOpeningTime(),
                                         work.getClosingTime()
                                 )).toList(),

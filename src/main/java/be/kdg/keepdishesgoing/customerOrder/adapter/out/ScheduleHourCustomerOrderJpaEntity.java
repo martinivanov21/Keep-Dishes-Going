@@ -1,23 +1,30 @@
-package be.kdg.keepdishesgoing.customerOrder.domain;
+package be.kdg.keepdishesgoing.customerOrder.adapter.out;
+
+import jakarta.persistence.*;
 
 import java.time.DayOfWeek;
 import java.time.LocalTime;
 import java.util.UUID;
 
-public class ScheduleHour {
+@Entity
+@Table(name = "schedule_hour_customer_order", schema = "kdg_customerOrder")
+public class ScheduleHourCustomerOrderJpaEntity {
 
+    @Id
+    @Column(name = "schedule_hour_id")
     private UUID scheduleHourId;
 
+    @Enumerated(EnumType.STRING)
     private DayOfWeek dayOfWeek;
 
     private LocalTime openingTime;
     private LocalTime closingTime;
 
-    public ScheduleHour(UUID scheduleHourId, DayOfWeek dayOfWeek, LocalTime openingTime, LocalTime closingTime) {
-        this.scheduleHourId = scheduleHourId;
-        this.dayOfWeek = dayOfWeek;
-        this.openingTime = openingTime;
-        this.closingTime = closingTime;
+    @ManyToOne
+    @JoinColumn(name = "restaurant_id")
+    private RestaurantCustomerOrderJpaEntity restaurant;
+
+    public ScheduleHourCustomerOrderJpaEntity() {
     }
 
     public UUID getScheduleHourId() {
@@ -50,5 +57,13 @@ public class ScheduleHour {
 
     public void setClosingTime(LocalTime closingTime) {
         this.closingTime = closingTime;
+    }
+
+    public RestaurantCustomerOrderJpaEntity getRestaurant() {
+        return restaurant;
+    }
+
+    public void setRestaurant(RestaurantCustomerOrderJpaEntity restaurant) {
+        this.restaurant = restaurant;
     }
 }

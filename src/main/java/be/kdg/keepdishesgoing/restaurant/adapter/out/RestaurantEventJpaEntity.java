@@ -70,7 +70,20 @@ public class RestaurantEventJpaEntity {
         return restaurant;
     }
 
-    public void setRestaurant(RestaurantJpaEntity restaurant) {
-        this.restaurant = restaurant;
-    }
+//    public void setRestaurant(RestaurantJpaEntity restaurant) {
+//        this.restaurant = restaurant;
+//        if (restaurant != null) {
+//            this.restaurantUuid = restaurant.getRestaurantId();
+//        }
+//    }
+//
+//    public UUID getRestaurantUuid() {
+//        return restaurantUuid;
+//    }
+//
+//    public void setRestaurantUuid(UUID restaurantUuid) {
+//        this.restaurantUuid = restaurantUuid;
+//    }
+
+
 }

@@ -1,9 +1,13 @@
 package be.kdg.keepdishesgoing.restaurant.domain;
 
+import be.kdg.keepdishesgoing.common.events.DomainEvent;
+import be.kdg.keepdishesgoing.common.events.RestaurantCreateEvent;
+import be.kdg.keepdishesgoing.common.events.RestaurantOpeningStatusChangedEvent;
+import be.kdg.keepdishesgoing.restaurant.adapter.in.response.ScheduleHourDto;
 import be.kdg.keepdishesgoing.restaurant.domain.enums.Cuisine;
 import be.kdg.keepdishesgoing.restaurant.domain.enums.OpeningStatus;
-import org.jmolecules.event.types.DomainEvent;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -42,8 +46,24 @@ public class Restaurant {
         this.addressId = addressId;
         this.ownerId = ownerId;
         this.menu = menu;
-        this.workingHours = workingHours;
-        this.eventStore.addAll(eventStore);
+        this.workingHours = workingHours != null ? workingHours : new ArrayList<>();
+
+        this.raiseEvent(new RestaurantCreateEvent(
+                restaurantId.uuid(),
+                nameOfRestaurant,
+                picture,
+                cuisine.name(),
+                defaultPreparationTime,
+                contactEmail,
+                workingHours.stream()
+                        .map(wh -> new ScheduleHourDto(
+                                null,
+                                wh.getDayOfWeek(),
+                                wh.getOpeningTime(),
+                                wh.getClosingTime()
+                        )).toList(),
+                LocalDateTime.now()
+        ));
     }
 
     public RestaurantId getRestaurantId() {
@@ -107,6 +127,24 @@ public class Restaurant {
     public List<DomainEvent> getDomainEvents() {
         return new ArrayList<>(
                 Stream.concat(eventStore.stream(), uncommitedEvents.stream()).toList());
+    }
+
+    public void raiseEvent(DomainEvent event) {
+        this.uncommitedEvents.add(event);
+    }
+
+    public void changeOpeningStatus(OpeningStatus newStatus) {
+        if (this.openingStatus != newStatus) {
+            this.openingStatus = newStatus;
+            raiseEvent(new RestaurantOpeningStatusChangedEvent(
+                    this.restaurantId.uuid(),
+                    newStatus.name(),
+                    LocalDateTime.now()
+            ));
+        }
+    }
+    public void clearEvents() {
+        uncommitedEvents.clear();
     }
 
 
