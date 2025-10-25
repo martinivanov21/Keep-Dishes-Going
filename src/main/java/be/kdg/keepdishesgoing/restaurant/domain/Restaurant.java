@@ -57,7 +57,7 @@ public class Restaurant {
                 contactEmail,
                 workingHours.stream()
                         .map(wh -> new ScheduleHourDto(
-                                null,
+                                (wh.getScheduleHourId().uuid()),
                                 wh.getDayOfWeek(),
                                 wh.getOpeningTime(),
                                 wh.getClosingTime()
@@ -114,6 +114,7 @@ public class Restaurant {
         eventStore.addAll(uncommitedEvents);
         uncommitedEvents.clear();
     }
+
 
 
     public List<DomainEvent> getUncommitedEvents() {

@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Entity
-@Table(name = "menu_customer_order", schema = "kdg_customerOrder")
+@Table(name = "menu_customer_order", schema = "kdg_customer_order")
 public class MenuCustomerOrderJpaEntity {
 
     @Id

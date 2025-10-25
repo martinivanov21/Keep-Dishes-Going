@@ -4,5 +4,5 @@ GRANT ALL PRIVILEGES ON DATABASE kdg TO kdg;
 
 \c kdg kdg;
 CREATE SCHEMA kdg_restaurant;
-CREATE SCHEMA kdg_customerOrder;
+CREATE SCHEMA kdg_customer_order;
 

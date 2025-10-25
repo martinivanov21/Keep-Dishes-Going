@@ -8,5 +8,5 @@ import java.util.UUID;
 
 public interface RestaurantEventJpaRepository extends JpaRepository<RestaurantEventJpaEntity, UUID> {
 
-    List<RestaurantEventJpaEntity> findByRestaurantUuidOrderByEventPitAsc(UUID restaurantUuid);
+//    List<RestaurantEventJpaEntity> findByRestaurantUuidOrderByEventPitAsc(UUID restaurantUuid);
 }

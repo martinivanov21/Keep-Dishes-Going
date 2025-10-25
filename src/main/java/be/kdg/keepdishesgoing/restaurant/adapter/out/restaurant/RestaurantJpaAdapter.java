@@ -145,7 +145,7 @@ public class RestaurantJpaAdapter implements LoadRestaurantPort, UpdateRestauran
         if (entity == null) return null;
 
         return new ScheduleHour(
-                entity.getScheduleHourId(),
+                new ScheduleHourId(entity.getScheduleHourId()),
                 entity.getDayOfWeek(),
                 entity.getOpeningTime(),
                 entity.getClosingTime()

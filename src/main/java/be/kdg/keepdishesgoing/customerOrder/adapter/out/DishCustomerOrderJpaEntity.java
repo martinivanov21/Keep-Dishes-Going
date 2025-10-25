@@ -5,7 +5,7 @@ import jakarta.persistence.*;
 import java.util.UUID;
 
 @Entity
-@Table(name = "dish_customer_order", schema = "kdg_customerOrder")
+@Table(name = "dish_customer_order", schema = "kdg_customer_order")
 public class DishCustomerOrderJpaEntity {
 
     @Id

@@ -6,25 +6,25 @@ import java.util.UUID;
 
 public class ScheduleHour {
 
-    private UUID scheduleHourId;
+    private ScheduleHourId scheduleHourId;
 
     private DayOfWeek dayOfWeek;
 
     private LocalTime openingTime;
     private LocalTime closingTime;
 
-    public ScheduleHour(UUID scheduleHourId, DayOfWeek dayOfWeek, LocalTime openingTime, LocalTime closingTime) {
+    public ScheduleHour(ScheduleHourId scheduleHourId, DayOfWeek dayOfWeek, LocalTime openingTime, LocalTime closingTime) {
         this.scheduleHourId = scheduleHourId;
         this.dayOfWeek = dayOfWeek;
         this.openingTime = openingTime;
         this.closingTime = closingTime;
     }
 
-    public UUID getScheduleHourId() {
+    public ScheduleHourId getScheduleHourId() {
         return scheduleHourId;
     }
 
-    public void setScheduleHourId(UUID scheduleHourId) {
+    public void setScheduleHourId(ScheduleHourId scheduleHourId) {
         this.scheduleHourId = scheduleHourId;
     }
 

@@ -7,7 +7,7 @@ import java.time.LocalTime;
 import java.util.UUID;
 
 @Entity
-@Table(name = "schedule_hour_customer_order", schema = "kdg_customerOrder")
+@Table(name = "schedule_hour_customer_order", schema = "kdg_customer_order")
 public class ScheduleHourCustomerOrderJpaEntity {
 
     @Id

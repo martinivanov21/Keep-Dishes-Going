@@ -5,6 +5,7 @@ import be.kdg.keepdishesgoing.common.events.RestaurantOpeningStatusChangedEvent;
 import be.kdg.keepdishesgoing.customerOrder.domain.*;
 //import be.kdg.keepdishesgoing.restaurant.port.out.restaurant.SaveRestaurantPort;
 import be.kdg.keepdishesgoing.customerOrder.port.out.SaveRestaurantPort;
+import be.kdg.keepdishesgoing.customerOrder.domain.ScheduleHourId;
 import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,17 +31,21 @@ public class RestaurantProjectionEventListener {
     @EventListener
     @Transactional
     public void on(RestaurantCreateEvent event) {
-        log.info("Restaurant Created");
+        log.info("========================================");
+        log.info("Received RestaurantCreateEvent: {}", event.restaurantName());
+        log.info("Event ID: {}", event.restaurantId());
+        log.info("========================================");
+
 
         Restaurant restaurant = new Restaurant(
-                new RestaurantId(UUID.randomUUID()),
+                RestaurantId.of(event.restaurantId()),
                 event.restaurantName(),
                 null,
                 Cuisine.valueOf(event.cuisine()),
                 event.pictureUrl(),
                 event.workingHours().stream()
                         .map(dto -> new ScheduleHour(
-                                null,
+                                ScheduleHourId.of(dto.scheduleHourId().toString()),
                                 dto.dayOfWeek(),
                                 dto.openingTime(),
                                 dto.closingTime()
@@ -59,7 +64,7 @@ public class RestaurantProjectionEventListener {
     @EventListener
     @Transactional
     public void on(RestaurantOpeningStatusChangedEvent event) {
-        log.info("Restaurant Opening Status Changed");
+        log.info("Received RestaurantOpeningStatusChangedEvent: {}", event.restaurantId());
 
     }
 

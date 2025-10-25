@@ -3,9 +3,9 @@ Accept: application/json
 Content-Type: application/json
 
 {
-  "firstName": "Danya",
-  "lastName": "Reichel",
-  "email": "danaiil@ukr.com"
+  "firstName": "Martin",
+  "lastName": "Ivanov",
+  "email": "martin@ivanov.com"
 }
 
 ###
@@ -28,16 +28,18 @@ Content-Type: application/json
 POST http://localhost:8080/api/restaurants/create
 Accept: application/json
 Content-Type: application/json
+#Authorization: Bearer eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJ0Z1RCVVNrcWVWeG13U1dlWWNyQm1Cb0dFUE5SSEw2d0NnMDBsRlE5RUZBIn0.eyJleHAiOjE3NjA4MTkyNTMsImlhdCI6MTc2MDgxODk1MywianRpIjoib25ydHJvOjQ4NWY3M2U3LTdiNjUtMmFkYy1lMWQ1LWRlM2UzYWIxODg4YyIsImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6ODE4MC9yZWFsbXMvcmVzdGF1cmFudCIsImF1ZCI6ImFjY291bnQiLCJzdWIiOiI4NTc1MDNmYi1kYmNlLTQ2YWMtYTVlZS0wYzE5ZmY5YTI4YTMiLCJ0eXAiOiJCZWFyZXIiLCJhenAiOiJCYWNrZW5kIiwic2lkIjoiMGNhNjZhMzYtYzE4Zi00ZTEwLTk2NDMtNWRiODYwNWQ4NmZhIiwiYWNyIjoiMSIsImFsbG93ZWQtb3JpZ2lucyI6WyIqIl0sInJlYWxtX2FjY2VzcyI6eyJyb2xlcyI6WyJPV05FUiIsImRlZmF1bHQtcm9sZXMtcmVzdGF1cmFudCIsIm9mZmxpbmVfYWNjZXNzIiwidW1hX2F1dGhvcml6YXRpb24iXX0sInJlc291cmNlX2FjY2VzcyI6eyJCYWNrZW5kIjp7InJvbGVzIjpbIk9XTkVSIl19LCJhY2NvdW50Ijp7InJvbGVzIjpbIm1hbmFnZS1hY2NvdW50IiwibWFuYWdlLWFjY291bnQtbGlua3MiLCJ2aWV3LXByb2ZpbGUiXX19LCJzY29wZSI6ImVtYWlsIHByb2ZpbGUiLCJlbWFpbF92ZXJpZmllZCI6dHJ1ZSwibmFtZSI6Im93bmVyIG93bmVyIiwicHJlZmVycmVkX3VzZXJuYW1lIjoib3duZXIiLCJnaXZlbl9uYW1lIjoib3duZXIiLCJmYW1pbHlfbmFtZSI6Im93bmVyIiwiZW1haWwiOiJvd25lckBleGFtcGxlLmNvbSJ9.MuGX6Jj-IgIInFLEll_iLXo18gITgLET-b96NFvdPm-yYFt_2hrMDxHXH4p7_Cv8hStqFPatp5b-aa_HsjZqeP0wYcRY8jqV3S4fUsGkHmCarTcvJg_sBoDPMWGb9M_MqBkABlKTo73_7eebxmhkCT2XYS-X5XO-IXcPIxEIWExB_DD4haZeVeMILgqqKnFO-vtPMzzNrzqwWFv8CVi7LMq9XoIrTqwNZmHxagRaaDJNjX4SwqsWuL92qf0r6K29oJ-onxF2TfdHCqJS4MZp-YQ80mc1p5SZ2eWbzxTgTF4IWSP4lnI9VXV3cnn5ot-aM-d37T5g3m_pXhJJAcKUTA
+#Cookie:	JSESSIONID=F15EFB09A6476BA2A3AD6DD796F8A5A1
 
 {
-  "nameOfRestaurant": "Sloppy Berchem",
-  "cuisine": "BALTIC",
-  "openingStatus": "CLOSED",
-  "defaultPreparationTime": 75,
-  "contactEmail": "business@berchemrt.com",
-  "picture": "https://balticheaven.pl/wp-content/uploads/2025/06/WhatsApp-Image-2025-06-23-at-14.31.48-8-1024x1024.jpeg",
-  "addressId": "439d5c91-5569-4e96-9518-03b5885b45c1",
-  "ownerId": "9df5bc29-352c-408a-acac-339f2980df14"
+  "nameOfRestaurant": "Latino4Ever",
+  "cuisine": "MEXICAN",
+  "openingStatus": "OPEN",
+  "defaultPreparationTime": 34,
+  "contactEmail": "goodfood@gcmo.com",
+  "picture": "https://popmenucloud.com/cdn-cgi/image/width%3D1200%2Cheight%3D1200%2Cfit%3Dscale-down%2Cformat%3Dauto%2Cquality%3D60/xrpblwcd/85ba676e-8969-4793-ba64-46c7724547be.jpg",
+  "addressId": "c6f69868-c41a-4348-bf98-3e7439248ee7",
+  "ownerId": "f3f67d47-89f1-49c1-b1dc-781269c57b9f"
 }
 
 ###

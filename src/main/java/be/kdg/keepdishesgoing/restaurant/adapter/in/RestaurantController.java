@@ -70,7 +70,7 @@ public class RestaurantController {
                 created.getAddressId().uuid(),
                 created.getWorkingHours().stream()
                                 .map(wh -> new ScheduleHourDto(
-                                        wh.getScheduleHourId(),
+                                        wh.getScheduleHourId().uuid(),
                                         wh.getDayOfWeek(),
                                         wh.getOpeningTime(),
                                         wh.getClosingTime()
@@ -97,7 +97,7 @@ public class RestaurantController {
                         r.getAddressId().uuid(),
                         r.getWorkingHours().stream()
                                 .map(work -> new ScheduleHourDto(
-                                        work.getScheduleHourId(),
+                                        work.getScheduleHourId().uuid(),
                                         work.getDayOfWeek(),
                                         work.getOpeningTime(),
                                         work.getClosingTime()
