@@ -1,8 +1,11 @@
 package be.kdg.keepdishesgoing.restaurant.domain;
 
+import be.kdg.keepdishesgoing.common.events.DishUpdatedEvent;
+import be.kdg.keepdishesgoing.common.events.DomainEvent;
 import be.kdg.keepdishesgoing.restaurant.domain.enums.DishStatus;
 import be.kdg.keepdishesgoing.restaurant.domain.enums.DishType;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -18,6 +21,8 @@ public class Dish {
 
     private Menu menu;
 
+    private final List<DomainEvent> uncommittedEvents = new ArrayList<>();
+
     public Dish(DishId dishId, DishVersion liveVersion, DishVersion draftVersion,
                 DishStatus status, int quantity, Menu menu) {
         this.dishId = dishId;
@@ -27,6 +32,17 @@ public class Dish {
         this.quantity = quantity;
         this.menu = menu;
     }
+
+    public Dish(DishId dishId, DishVersion draftVersion, int quantity, Menu menu) {
+        this.dishId = dishId;
+        this.draftVersion = draftVersion;
+        this.liveVersion = null;
+        this.status = DishStatus.UNPUBLISHED;
+        this.quantity = quantity;
+        this.menu = menu;
+    }
+
+
 
     public DishId getDishId() {
         return dishId;
@@ -88,7 +104,7 @@ public class Dish {
     }
 
     public void publish() {
-        if (draftVersion == null) {
+        if (this.draftVersion == null) {
             throw new IllegalStateException("Draft version is null");
         }
         this.liveVersion = draftVersion;
@@ -99,6 +115,18 @@ public class Dish {
     public void unpublish() {
         this.liveVersion = null;
         this.status = DishStatus.UNPUBLISHED;
+    }
+
+    public void clearEvents() {
+        this.uncommittedEvents.clear();
+    }
+
+    public List<DomainEvent> getUncommittedEvents() {
+        return uncommittedEvents;
+    }
+
+    public List<Object> getDomainEvents() {
+        return domainEvents;
     }
 
     public void markOutOfStock() {
@@ -114,6 +142,24 @@ public class Dish {
         }
         this.status = DishStatus.PUBLISHED;
     }
+
+//    private void raiseUpdatedEvent() {
+//        DishUpdatedEvent event = new DishUpdatedEvent(
+//                this.dishId.uuid(),
+//                RestaurantId.of()
+//                this.liveVersion.getNameOfDish(),
+//                this.liveVersion.getDescription(),
+//                this.liveVersion.getPrice(),
+//                this.liveVersion.getPicture(),
+//                this.liveVersion.getPreparationTime(),
+//                this.liveVersion.getFoodTag().name(),
+//                this.liveVersion.getTypeOfDish().name(),
+//                this.quantity,
+//                LocalDateTime.now()
+//        );
+//
+//        this.uncommittedEvents.add(event);
+//    }
 
     public boolean isAvailable() {
         return status == DishStatus.PUBLISHED && quantity > 0;

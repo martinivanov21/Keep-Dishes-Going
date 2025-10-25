@@ -6,12 +6,28 @@ public class Menu {
 
     private MenuId menuId;
 
+    private Restaurant restaurant;
+
     private List<DishId> dishIds;
 
+
+    public Menu(MenuId menuId, Restaurant restaurant, List<DishId> dishIds) {
+        this.menuId = menuId;
+        this.restaurant = restaurant;
+        this.dishIds = dishIds;
+    }
 
     public Menu(MenuId menuId, List<DishId> dishIds) {
         this.menuId = menuId;
         this.dishIds = dishIds;
+    }
+
+    public Restaurant getRestaurant() {
+        return restaurant;
+    }
+
+    public void setRestaurant(Restaurant restaurant) {
+        this.restaurant = restaurant;
     }
 
     public MenuId getMenuId() {
