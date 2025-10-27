@@ -17,7 +17,9 @@ public class ScheduleHourCustomerOrderJpaEntity {
     @Enumerated(EnumType.STRING)
     private DayOfWeek dayOfWeek;
 
+    @Column(name = "opening_time", nullable = false)
     private LocalTime openingTime;
+    @Column(name = "closing_time", nullable = false)
     private LocalTime closingTime;
 
     @ManyToOne

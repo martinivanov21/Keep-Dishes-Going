@@ -33,21 +33,42 @@ public class DishJpaAdapter implements UpdateDishPort, LoadDishPort, DeleteDishP
     }
 
     @Override
-    public Optional<Dish> loadDish(DishId dishId) {
+    public Optional<Dish> loadById(DishId dishId) {
         return dishJpaRepository.findById(dishId.uuid())
                 .map(this::mapToDomain);
     }
 
     @Override
-    public void updateDish(DishId dishId) {
+    public List<Dish> findByRestaurantId(RestaurantId restaurantId) {
+        logger.info("Finding dishes by restaurant id: {}", restaurantId.uuid());
+
+        return dishJpaRepository.findDishesByRestaurantId(restaurantId.uuid()).stream()
+                .map(this::mapToDomain)
+                .toList();
+    }
+
+    @Override
+    @Transactional
+    public Dish updateDish(Dish dish) {
+        logger.debug("Updating Dish {}", dish.getDishId());
+
+        return saveDish(dish);
 
     }
+    @Override
+    @Transactional
+    public void deleteDish(DishId dishId) {
+        logger.info("Deleting dish: {}", dishId.uuid());
+        dishJpaRepository.deleteById(dishId.uuid());
+    }
+
+
 
 
     private DishJpaEntity mapToEntity(Dish dish) {
         DishVersionJpaEntity liveVersionEntity = mapToEntity(dish.getLiveVersion());
         DishVersionJpaEntity draftVersionEntity = mapToEntity(dish.getDraftVersion());
-        MenuJpaEntity menuEntity = mapToEntity(dish.getMenu());
+        MenuJpaEntity menuEntity = mapMenuToEntity(dish.getMenu());
 
         return new DishJpaEntity(
                 dish.getDishId().uuid(),
@@ -62,7 +83,7 @@ public class DishJpaAdapter implements UpdateDishPort, LoadDishPort, DeleteDishP
     private Dish mapToDomain(DishJpaEntity entity) {
         DishVersion liveVersion = mapToDomain(entity.getLiveVersion());
         DishVersion draftVersion = mapToDomain(entity.getDraftVersion());
-        Menu menu = mapToDomain(entity.getMenu());
+        Menu menu = mapMenuToDomain(entity.getMenu());
 
         return new Dish(
                 new DishId(entity.getDishId()),
@@ -102,21 +123,28 @@ public class DishJpaAdapter implements UpdateDishPort, LoadDishPort, DeleteDishP
         );
     }
 
-    private MenuJpaEntity mapToEntity(Menu menu) {
+    private MenuJpaEntity mapMenuToEntity(Menu menu) {
         if (menu == null) return null;
-        return new MenuJpaEntity(
-                menu.getMenuId().uuid(),
-                null
-        );
+
+        MenuJpaEntity entity = new MenuJpaEntity();
+        entity.setMenuId(menu.getMenuId().uuid());
+        return entity;
     }
 
-    private Menu mapToDomain(MenuJpaEntity entity) {
+    private Menu mapMenuToDomain(MenuJpaEntity entity) {
         if (entity == null) return null;
+
+        RestaurantId restaurantId = entity.getRestaurant() != null
+                ? new RestaurantId(entity.getRestaurant().getRestaurantId())
+                : null;
+
         return new Menu(
                 new MenuId(entity.getMenuId()),
+                restaurantId,
                 List.of()
         );
     }
+
 
 
 }

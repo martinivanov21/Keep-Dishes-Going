@@ -2,10 +2,13 @@ package be.kdg.keepdishesgoing.customerOrder.domain;
 
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 public class CustomerOrder {
     private CustomerOrderId customerOrderId;
+    private RestaurantId restaurantId;
+    private List<OrderItem> orderItem;
     private double estimateTime;
     private double totalPrice;
     private LocalDateTime submittedTime;
@@ -70,4 +73,29 @@ public class CustomerOrder {
         this.orderStatus = orderStatus;
     }
 
+    public RestaurantId getRestaurantId() {
+        return restaurantId;
+    }
+
+    public void setRestaurantId(RestaurantId restaurantId) {
+        this.restaurantId = restaurantId;
+    }
+
+    public List<OrderItem> getOrderItem() {
+        return orderItem;
+    }
+
+    public void setOrderItem(List<OrderItem> orderItem) {
+        this.orderItem = orderItem;
+    }
+
+    public void updateStatus(OrderStatus orderStatus) {
+        this.orderStatus = orderStatus;
+    }
+
+    public double calculateTotal() {
+        return orderItems.stream()
+                .mapToDouble(item -> item.getUnitPrice() * item.getQuantity())
+                .sum();
+    }
 }

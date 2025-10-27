@@ -1,5 +1,8 @@
 package be.kdg.keepdishesgoing.customerOrder.adapter.mapper;
 
+import be.kdg.keepdishesgoing.customerOrder.adapter.in.response.RestaurantBrowseDto;
+import be.kdg.keepdishesgoing.customerOrder.adapter.in.response.RestaurantDetailDto;
+import be.kdg.keepdishesgoing.customerOrder.adapter.in.response.ScheduleHourDto;
 import be.kdg.keepdishesgoing.customerOrder.adapter.out.RestaurantCustomerOrderJpaEntity;
 import be.kdg.keepdishesgoing.customerOrder.domain.Restaurant;
 import be.kdg.keepdishesgoing.customerOrder.domain.RestaurantId;
@@ -36,6 +39,43 @@ public class RestaurantMapper {
         entity.setAveragePrice(restaurant.getAveragePrice());
         entity.setGuesstimatedDeliveryTimeMinutes(restaurant.getGuesstimatedDeliveryTimeMinutes());
         return entity;
+    }
+
+    public RestaurantDetailDto mapToRestaurantDetailDto(Restaurant restaurant) {
+        return new RestaurantDetailDto(
+                restaurant.getRestaurantId().uuid(),
+                restaurant.getRestaurantName(),
+                restaurant.getCuisine().name(),
+                restaurant.getPictureUrl(),
+                restaurant.getPriceRange().name(),
+                restaurant.getAveragePrice().byteValueExact(),
+                restaurant.getGuesstimatedDeliveryTimeMinutes(),
+                restaurant.getWorkingHours().stream()
+                        .map(wh -> new ScheduleHourDto(
+                                wh.getDayOfWeek().name(),
+                                wh.getOpeningTime(),
+                                wh.getClosingTime()
+                        )).toList(),
+                null // Address
+        );
+    }
+
+    public RestaurantBrowseDto mapToRestaurantBrowseDto(Restaurant restaurant) {
+        return new RestaurantBrowseDto(
+                restaurant.getRestaurantId().uuid(),
+                restaurant.getRestaurantName(),
+                restaurant.getCuisine().name(),
+                restaurant.getPictureUrl(),
+                restaurant.getPriceRange().name(),
+                restaurant.getAveragePrice().byteValueExact(),
+                restaurant.getGuesstimatedDeliveryTimeMinutes(),
+                restaurant.getWorkingHours().stream()
+                        .map(wh -> new ScheduleHourDto(
+                                wh.getDayOfWeek().name(),
+                                wh.getOpeningTime(),
+                                wh.getClosingTime()
+                        )).toList()
+        );
     }
 
 }

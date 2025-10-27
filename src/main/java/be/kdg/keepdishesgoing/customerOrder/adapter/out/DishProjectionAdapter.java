@@ -1,5 +1,6 @@
 package be.kdg.keepdishesgoing.customerOrder.adapter.out;
 
+import be.kdg.keepdishesgoing.customerOrder.adapter.mapper.DishMapperProjection;
 import be.kdg.keepdishesgoing.customerOrder.domain.Dish;
 import be.kdg.keepdishesgoing.customerOrder.domain.DishId;
 import be.kdg.keepdishesgoing.customerOrder.domain.RestaurantId;
@@ -19,10 +20,10 @@ public class DishProjectionAdapter implements SaveDishPort, LoadDishPort, Delete
 
     private static final Logger logger = LoggerFactory.getLogger(DishProjectionAdapter.class);
 
-    private final DishMapper dishMapper;
+    private final DishMapperProjection dishMapper;
     private final DishProjectionJpaRepository dishRepository;
 
-    public DishProjectionAdapter(DishMapper dishMapper, DishProjectionJpaRepository dishRepository) {
+    public DishProjectionAdapter(DishMapperProjection dishMapper, DishProjectionJpaRepository dishRepository) {
         this.dishMapper = dishMapper;
         this.dishRepository = dishRepository;
     }

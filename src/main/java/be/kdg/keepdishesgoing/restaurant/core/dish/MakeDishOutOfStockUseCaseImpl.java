@@ -1,8 +1,8 @@
-package be.kdg.keepdishesgoing.restaurant.core;
+package be.kdg.keepdishesgoing.restaurant.core.dish;
 
 import be.kdg.keepdishesgoing.restaurant.domain.exceptions.UnauthorizedOwnerException;
-import be.kdg.keepdishesgoing.restaurant.port.in.MakeDishOutOfStockCommand;
-import be.kdg.keepdishesgoing.restaurant.port.in.MakeDishOutOfStockUseCase;
+import be.kdg.keepdishesgoing.restaurant.port.in.dish.MakeDishOutOfStockCommand;
+import be.kdg.keepdishesgoing.restaurant.port.in.dish.MakeDishOutOfStockUseCase;
 import be.kdg.keepdishesgoing.restaurant.port.out.dish.LoadDishPort;
 import be.kdg.keepdishesgoing.restaurant.port.out.restaurant.LoadRestaurantPort;
 import be.kdg.keepdishesgoing.restaurant.port.out.dish.UpdateDishPort;

@@ -9,8 +9,8 @@ import java.util.UUID;
 
 public record DishDto(
         UUID dishId,
-        DishVersion liveVersion,
-        DishVersion draftVersion,
+        DishVersionDto liveVersion,
+        DishVersionDto draftVersion,
         DishStatus status,
         int quantity,
         Menu menu

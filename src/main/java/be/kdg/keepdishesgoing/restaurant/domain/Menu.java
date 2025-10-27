@@ -6,14 +6,14 @@ public class Menu {
 
     private MenuId menuId;
 
-    private Restaurant restaurant;
+    private RestaurantId restaurantId;
 
     private List<DishId> dishIds;
 
 
-    public Menu(MenuId menuId, Restaurant restaurant, List<DishId> dishIds) {
+    public Menu(MenuId menuId, RestaurantId restaurantId, List<DishId> dishIds) {
         this.menuId = menuId;
-        this.restaurant = restaurant;
+        this.restaurantId = restaurantId;
         this.dishIds = dishIds;
     }
 
@@ -22,12 +22,12 @@ public class Menu {
         this.dishIds = dishIds;
     }
 
-    public Restaurant getRestaurant() {
-        return restaurant;
+    public RestaurantId getRestaurantId() {
+        return restaurantId;
     }
 
-    public void setRestaurant(Restaurant restaurant) {
-        this.restaurant = restaurant;
+    public void setRestaurantId(RestaurantId restaurantId) {
+        this.restaurantId = restaurantId;
     }
 
     public MenuId getMenuId() {

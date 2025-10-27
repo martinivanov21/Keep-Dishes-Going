@@ -1,8 +1,8 @@
-package be.kdg.keepdishesgoing.restaurant.core;
+package be.kdg.keepdishesgoing.restaurant.core.dish;
 
 import be.kdg.keepdishesgoing.restaurant.domain.Dish;
-import be.kdg.keepdishesgoing.restaurant.port.in.PublishDishCommand;
-import be.kdg.keepdishesgoing.restaurant.port.in.PublishDishUseCase;
+import be.kdg.keepdishesgoing.restaurant.port.in.dish.PublishDishCommand;
+import be.kdg.keepdishesgoing.restaurant.port.in.dish.PublishDishUseCase;
 import be.kdg.keepdishesgoing.restaurant.port.out.dish.LoadDishPort;
 import be.kdg.keepdishesgoing.restaurant.port.out.dish.SaveDishPort;
 import jakarta.transaction.Transactional;
@@ -24,7 +24,7 @@ public class PublishDishUseCaseImpl implements PublishDishUseCase {
     @Override
     @Transactional
     public Dish publishDish(PublishDishCommand command) {
-        Dish dish = loadDishPort.loadbyId(command.dishId())
+        Dish dish = loadDishPort.loadById(command.dishId())
                 .orElseThrow(() -> new IllegalArgumentException("Dish not found"));
 
         dish.publish();

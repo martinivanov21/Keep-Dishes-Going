@@ -1,6 +1,5 @@
-package be.kdg.keepdishesgoing.restaurant.port.in;
+package be.kdg.keepdishesgoing.restaurant.port.in.dish;
 
-import java.util.Objects;
 import java.util.UUID;
 
 public record MakeDishOutOfStockCommand(UUID restaurantUUID, UUID ownerUUID, UUID dishId) {

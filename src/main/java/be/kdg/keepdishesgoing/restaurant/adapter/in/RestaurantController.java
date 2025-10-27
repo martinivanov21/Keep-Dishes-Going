@@ -6,12 +6,13 @@ import be.kdg.keepdishesgoing.restaurant.adapter.in.response.RestaurantDto;
 import be.kdg.keepdishesgoing.restaurant.adapter.in.response.ScheduleHourDto;
 import be.kdg.keepdishesgoing.restaurant.domain.*;
 import be.kdg.keepdishesgoing.restaurant.port.in.*;
+import be.kdg.keepdishesgoing.restaurant.port.in.dish.MakeDishOutOfStockCommand;
+import be.kdg.keepdishesgoing.restaurant.port.in.dish.MakeDishOutOfStockUseCase;
 import jakarta.transaction.Transactional;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Locale;
 import java.util.UUID;
 
 @RestController
