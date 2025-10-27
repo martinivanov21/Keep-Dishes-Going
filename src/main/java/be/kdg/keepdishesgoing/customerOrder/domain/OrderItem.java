@@ -6,13 +6,16 @@ public class OrderItem {
     private String dishName;
     private double unitPrice;
     private int quantity;
+    private String pictureUrl;
 
-    public OrderItem(OrderItemId orderItemId, DishId dishId, String dishName, double unitPrice, int quantity) {
+    public OrderItem(OrderItemId orderItemId, DishId dishId, String dishName, double unitPrice,
+                     int quantity, String pictureUrl) {
         this.orderItemId = orderItemId;
         this.dishId = dishId;
         this.dishName = dishName;
         this.unitPrice = unitPrice;
         this.quantity = quantity;
+        this.pictureUrl = pictureUrl;
     }
 
     public OrderItemId getOrderItemId() {
@@ -57,5 +60,13 @@ public class OrderItem {
 
     public double getSubtotal() {
         return unitPrice * quantity;
+    }
+
+    public String getPictureUrl() {
+        return pictureUrl;
+    }
+
+    public void setPictureUrl(String pictureUrl) {
+        this.pictureUrl = pictureUrl;
     }
 }

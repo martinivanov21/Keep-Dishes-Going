@@ -3,11 +3,8 @@ package be.kdg.keepdishesgoing.customerOrder.adapter.out;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
 import java.util.UUID;
 
 @Repository
-public interface DishProjectionJpaRepository extends JpaRepository<DishCustomerOrderJpaEntity, UUID> {
-
-    List<DishCustomerOrderJpaEntity> findByMenu_RestaurantId(UUID restaurantId);
+public interface BasketJpaRepository extends JpaRepository<BasketJpaEntity, UUID> {
 }

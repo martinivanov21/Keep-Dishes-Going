@@ -48,11 +48,13 @@ public class DishMapperProjection {
         entity.setDishStatus(dish.getStatus());
         entity.setQuantity(dish.getQuantity());
 
-        if (dish.getMenu() != null) {
-            MenuCustomerOrderJpaEntity menuEntity = new MenuCustomerOrderJpaEntity();
-            menuEntity.setMenuId(dish.getMenu().getMenuId().menuId());
-            entity.setMenu(menuEntity);
-        }
+        entity.setMenu(null);
+//        if (dish.getMenu() != null) {
+//            MenuCustomerOrderJpaEntity menuEntity = new MenuCustomerOrderJpaEntity();
+//            menuEntity.setMenuId(dish.getMenu().getMenuId().menuId());
+//            menuEntity.setRestaurantId(dish.getMenu().getRestaurantId().uuid());
+//            entity.setMenu(menuEntity);
+//        }
 
         return entity;
     }

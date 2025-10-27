@@ -1,9 +1,12 @@
 package be.kdg.keepdishesgoing.restaurant.adapter.out.menu;
 
 import be.kdg.keepdishesgoing.restaurant.adapter.out.dish.DishJpaEntity;
+import be.kdg.keepdishesgoing.restaurant.adapter.out.restaurant.RestaurantJpaEntity;
+import be.kdg.keepdishesgoing.restaurant.adapter.out.restaurant.RestaurantJpaRepository;
 import be.kdg.keepdishesgoing.restaurant.domain.DishId;
 import be.kdg.keepdishesgoing.restaurant.domain.Menu;
 import be.kdg.keepdishesgoing.restaurant.domain.MenuId;
+import be.kdg.keepdishesgoing.restaurant.domain.RestaurantId;
 import be.kdg.keepdishesgoing.restaurant.port.out.menu.LoadMenuPort;
 import be.kdg.keepdishesgoing.restaurant.port.out.menu.SaveMenuPort;
 import be.kdg.keepdishesgoing.restaurant.port.out.menu.UpdateMenuPort;
@@ -22,15 +25,28 @@ public class MenuJpaAdapter implements LoadMenuPort, UpdateMenuPort, SaveMenuPor
 
     private final Logger logger = LoggerFactory.getLogger(MenuJpaAdapter.class);
     private final MenuJpaRepository menuJpaRepository;
+    private final RestaurantJpaRepository restaurantJpaRepository;
 
-    public MenuJpaAdapter(MenuJpaRepository menuJpaRepository) {
+    public MenuJpaAdapter(MenuJpaRepository menuJpaRepository, RestaurantJpaRepository restaurantJpaRepository) {
         this.menuJpaRepository = menuJpaRepository;
+        this.restaurantJpaRepository = restaurantJpaRepository;
     }
 
     @Override
-    public Optional<Menu> loadBy(MenuId menuId) {
-        return menuJpaRepository.findById(menuId.uuid())
-                .map(this::mapToDomain);
+    public Optional<Menu> loadById(MenuId menuId) {
+        return menuJpaRepository.findByIdWithRestaurant(menuId.uuid())
+                .map(entity -> {
+                    RestaurantId restaurantId = null;
+                    if (entity.getRestaurant() != null) {
+                        restaurantId = new RestaurantId(entity.getRestaurant().getRestaurantId());
+                    }
+
+                    return new Menu(
+                            new MenuId(entity.getMenuId()),
+                            restaurantId,
+                            List.of()
+                    );
+                });
     }
 
     @Override
@@ -52,31 +68,52 @@ public class MenuJpaAdapter implements LoadMenuPort, UpdateMenuPort, SaveMenuPor
     @Transactional
     public Menu save(Menu menu) {
         logger.debug("Saving menu {}", menu);
-        MenuJpaEntity savedMenu = menuJpaRepository.save(mapToEntity(menu));
-        return mapToDomain(savedMenu);
+        MenuJpaEntity menuEntity = new MenuJpaEntity();
+        menuEntity.setMenuId(menu.getMenuId().uuid());
+        MenuJpaEntity savedMenu = menuJpaRepository.save(menuEntity);
+
+        if (menu.getRestaurantId() != null) {
+            RestaurantJpaEntity restaurant = restaurantJpaRepository
+                    .findById(menu.getRestaurantId().uuid())
+                    .orElseThrow(() -> new IllegalArgumentException(
+                            "Restaurant not found: " + menu.getRestaurantId().uuid()));
+
+            restaurant.setMenu(savedMenu);
+            restaurantJpaRepository.save(restaurant);
+        }
+
+        return new Menu(
+                new MenuId(savedMenu.getMenuId()),
+                menu.getRestaurantId(),
+                List.of()
+        );
     }
 
     private MenuJpaEntity mapToEntity(Menu menu) {
-        List<DishJpaEntity> dishes = menu.getDishIds().stream()
-                .map(dishId -> {
-                    DishJpaEntity dish = new DishJpaEntity();
-                    dish.setDishId(dishId.uuid());
-                    dish.setMenu(new MenuJpaEntity(menu.getMenuId().uuid(),null));
-                    return dish;
-                })
-                .collect(Collectors.toList());
+        MenuJpaEntity entity = new MenuJpaEntity();
+        entity.setMenuId(menu.getMenuId().uuid());
+        if (menu.getRestaurantId() != null) {
+            RestaurantJpaEntity restaurant = restaurantJpaRepository
+                    .findById(menu.getRestaurantId().uuid())
+                    .orElseThrow(() -> new IllegalArgumentException(
+                            "Restaurant not found: " + menu.getRestaurantId().uuid()));
 
-        MenuJpaEntity menuJpaEntity = new MenuJpaEntity(menu.getMenuId().uuid(),dishes);
-        dishes.forEach(d -> d.setMenu(menuJpaEntity));
-        return menuJpaEntity;
+            entity.setRestaurant(restaurant);
+        }
+
+        return entity;
     }
 
-    private Menu mapToDomain(MenuJpaEntity entity) {
-        List<DishId> dishIds = entity.getDishes().stream()
-                .map(dishEntity -> new DishId(dishEntity.getDishId()))
-                .collect(Collectors.toList());
 
-        return new Menu(new MenuId(entity.getMenuId()),dishIds);
+    private Menu mapToDomain(MenuJpaEntity entity) {
+        RestaurantId restaurantId = null;
+        if (entity.getRestaurant() != null) {
+            restaurantId = new RestaurantId(entity.getRestaurant().getRestaurantId());
+        } else {
+            logger.info("Menu {} has no restaurant!", entity.getMenuId());
+        }
+        return new Menu(
+                new MenuId(entity.getMenuId()),restaurantId, List.of());
 
     }
 

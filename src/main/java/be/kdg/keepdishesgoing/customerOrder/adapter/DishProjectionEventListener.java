@@ -6,6 +6,7 @@ import be.kdg.keepdishesgoing.common.events.DishUpdatedEvent;
 import be.kdg.keepdishesgoing.customerOrder.domain.*;
 import be.kdg.keepdishesgoing.customerOrder.port.out.DeleteDishPort;
 import be.kdg.keepdishesgoing.customerOrder.port.out.LoadDishPort;
+import be.kdg.keepdishesgoing.customerOrder.port.out.LoadRestaurantPort;
 import be.kdg.keepdishesgoing.customerOrder.port.out.SaveDishPort;
 import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
@@ -14,68 +15,37 @@ import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
+import java.util.UUID;
 
 @Component
 public class DishProjectionEventListener {
 
-    private static final Logger log = LoggerFactory.getLogger(DishProjectionEventListener.class);
+    private static final Logger logger = LoggerFactory.getLogger(DishProjectionEventListener.class);
 
     private final SaveDishPort saveDishPort;
     private final DeleteDishPort deleteDishPort;
     private final LoadDishPort loadDishPort;
+    private final LoadRestaurantPort loadRestaurantPort;
 
-    public DishProjectionEventListener(SaveDishPort saveDishPort, DeleteDishPort deleteDishPort, LoadDishPort loadDishPort) {
+    public DishProjectionEventListener(SaveDishPort saveDishPort, DeleteDishPort deleteDishPort, LoadDishPort loadDishPort, LoadRestaurantPort loadRestaurantPort) {
         this.saveDishPort = saveDishPort;
         this.deleteDishPort = deleteDishPort;
         this.loadDishPort = loadDishPort;
+        this.loadRestaurantPort = loadRestaurantPort;
     }
 
     @EventListener
     @Transactional
-    public void on(DishPublishedEvent event) {
-        log.info("========================================");
-        log.info("Received DishPublishedEvent: {}", event.nameOfDish());
-        log.info("Dish ID: {}, Restaurant ID: {}", event.dishId(), event.restaurantId());
-        log.info("========================================");
+    public void handleDishPublished(DishPublishedEvent event) {
+        logger.info("Received DishPublishedEvent for dish: {}", event.dishId());
 
-        Dish dish = new Dish(
-                DishId.of(event.dishId()),
-                event.nameOfDish(),
-                event.description(),
-                event.price(),
-                event.pictureUrl(),
-                event.preparationTime(),
-                FoodTag.valueOf(event.foodTag()),
-                DishType.valueOf(event.dishType()),
-                DishStatus.PUBLISHED,
-                event.quantity(),
-                null
-        );
+        try {
+            loadRestaurantPort.loadById(new RestaurantId(event.restaurantId()))
+                    .orElseThrow(() -> new IllegalStateException(
+                            "Restaurant not found in projection: " + event.restaurantId()));
 
-        saveDishPort.saveDish(dish);
-        log.info("Dish projection created successfully: {}", event.nameOfDish());
-    }
-
-    @EventListener
-    @Transactional
-    public void on(DishUnpublishedEvent event) {
-        log.info("Received DishUnpublishedEvent for dish: {}", event.dishId());
-
-        deleteDishPort.deleteDish(DishId.of(event.dishId()));
-        log.info("Dish unpublished successfully: {}", event.dishId());
-
-    }
-
-    @EventListener
-    @Transactional
-    public void on(DishUpdatedEvent event) {
-        log.info("Received DishUpdatedEvent: {}", event.nameOfDish());
-
-        Optional<Dish> existingDish = loadDishPort.loadById(DishId.of(event.dishId()));
-
-        if (existingDish.isPresent()) {
-            Dish updatedDish = new Dish(
-                    DishId.of(event.dishId()),
+            Dish dish = new Dish(
+                    new DishId(event.dishId()),
                     event.nameOfDish(),
                     event.description(),
                     event.price(),
@@ -85,19 +55,35 @@ public class DishProjectionEventListener {
                     DishType.valueOf(event.dishType()),
                     DishStatus.PUBLISHED,
                     event.quantity(),
-                    existingDish.get().getMenu()
+                    new Menu(
+                            new MenuId(UUID.randomUUID()),
+                            new RestaurantId(event.restaurantId())
+                    )
             );
 
-            saveDishPort.saveDish(updatedDish);
-            log.info("Dish projection updated: {}", event.nameOfDish());
-        } else {
-            log.warn("Dish {} not found for update - creating new projection", event.dishId());
-            on(new DishPublishedEvent(
-                    event.dishId(), event.restaurantId(), event.nameOfDish(),
-                    event.description(), event.price(), event.pictureUrl(),
-                    event.preparationTime(), event.foodTag(), event.dishType(),
-                    event.quantity(), event.eventPit()
-            ));
+            saveDishPort.saveDish(dish);
+
+            logger.info("Dish projection created successfully for: {}", event.dishId());
+
+        } catch (Exception e) {
+            logger.error("Failed to project dish: {}", event.dishId(), e);
+            throw e;
         }
     }
+    @EventListener
+    @Transactional
+    public void handleDishUnpublished(DishUnpublishedEvent event) {
+        logger.info("Received DishUnpublishedEvent for dish: {}", event.dishId());
+
+        try {
+            deleteDishPort.deleteDish(new DishId(event.dishId()));
+            logger.info("Dish projection deleted successfully for: {}", event.dishId());
+        } catch (Exception e) {
+            logger.error("Failed to delete dish projection: {}", event.dishId(), e);
+            throw e;
+        }
+    }
+
+
+
 }

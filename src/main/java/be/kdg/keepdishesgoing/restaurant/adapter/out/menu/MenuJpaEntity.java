@@ -16,8 +16,7 @@ public class MenuJpaEntity {
     @Column(name = "menu_id", nullable = false)
     private UUID menuId;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "restaurant_id")
+    @OneToOne(mappedBy = "menu", fetch = FetchType.EAGER)
     private RestaurantJpaEntity restaurant;
 
     @OneToMany(mappedBy = "menu", cascade = CascadeType.ALL, orphanRemoval = true)

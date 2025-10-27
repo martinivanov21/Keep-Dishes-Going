@@ -28,8 +28,7 @@ Content-Type: application/json
 POST http://localhost:8080/api/restaurants/create
 Accept: application/json
 Content-Type: application/json
-#Authorization: Bearer eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJ0Z1RCVVNrcWVWeG13U1dlWWNyQm1Cb0dFUE5SSEw2d0NnMDBsRlE5RUZBIn0.eyJleHAiOjE3NjA4MTkyNTMsImlhdCI6MTc2MDgxODk1MywianRpIjoib25ydHJvOjQ4NWY3M2U3LTdiNjUtMmFkYy1lMWQ1LWRlM2UzYWIxODg4YyIsImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6ODE4MC9yZWFsbXMvcmVzdGF1cmFudCIsImF1ZCI6ImFjY291bnQiLCJzdWIiOiI4NTc1MDNmYi1kYmNlLTQ2YWMtYTVlZS0wYzE5ZmY5YTI4YTMiLCJ0eXAiOiJCZWFyZXIiLCJhenAiOiJCYWNrZW5kIiwic2lkIjoiMGNhNjZhMzYtYzE4Zi00ZTEwLTk2NDMtNWRiODYwNWQ4NmZhIiwiYWNyIjoiMSIsImFsbG93ZWQtb3JpZ2lucyI6WyIqIl0sInJlYWxtX2FjY2VzcyI6eyJyb2xlcyI6WyJPV05FUiIsImRlZmF1bHQtcm9sZXMtcmVzdGF1cmFudCIsIm9mZmxpbmVfYWNjZXNzIiwidW1hX2F1dGhvcml6YXRpb24iXX0sInJlc291cmNlX2FjY2VzcyI6eyJCYWNrZW5kIjp7InJvbGVzIjpbIk9XTkVSIl19LCJhY2NvdW50Ijp7InJvbGVzIjpbIm1hbmFnZS1hY2NvdW50IiwibWFuYWdlLWFjY291bnQtbGlua3MiLCJ2aWV3LXByb2ZpbGUiXX19LCJzY29wZSI6ImVtYWlsIHByb2ZpbGUiLCJlbWFpbF92ZXJpZmllZCI6dHJ1ZSwibmFtZSI6Im93bmVyIG93bmVyIiwicHJlZmVycmVkX3VzZXJuYW1lIjoib3duZXIiLCJnaXZlbl9uYW1lIjoib3duZXIiLCJmYW1pbHlfbmFtZSI6Im93bmVyIiwiZW1haWwiOiJvd25lckBleGFtcGxlLmNvbSJ9.MuGX6Jj-IgIInFLEll_iLXo18gITgLET-b96NFvdPm-yYFt_2hrMDxHXH4p7_Cv8hStqFPatp5b-aa_HsjZqeP0wYcRY8jqV3S4fUsGkHmCarTcvJg_sBoDPMWGb9M_MqBkABlKTo73_7eebxmhkCT2XYS-X5XO-IXcPIxEIWExB_DD4haZeVeMILgqqKnFO-vtPMzzNrzqwWFv8CVi7LMq9XoIrTqwNZmHxagRaaDJNjX4SwqsWuL92qf0r6K29oJ-onxF2TfdHCqJS4MZp-YQ80mc1p5SZ2eWbzxTgTF4IWSP4lnI9VXV3cnn5ot-aM-d37T5g3m_pXhJJAcKUTA
-#Cookie:	JSESSIONID=F15EFB09A6476BA2A3AD6DD796F8A5A1
+
 
 {
   "nameOfRestaurant": "Latino4Ever",
@@ -43,44 +42,37 @@ Content-Type: application/json
 }
 
 ###
-POST http://localhost:8080/api/menus/create
+POST http://localhost:8080/api/restaurant/491b77a8-c09c-4382-bcb5-9b4489c2805c/menus/create
 Accept: application/json
 Content-Type: application/json
 
-{
-
-}
 
 ###
-POST http://localhost:8080/api/dishes/create
+POST http://localhost:8080/api/restaurants/491b77a8-c09c-4382-bcb5-9b4489c2805c/dishes/create-draft
 Accept: application/json
 Content-Type: application/json
 
-{
-  "quantity": 0,
-  "status": "UNPUBLISHED",
-  "menu": {
-    "menuId": {
-      "uuid": "7ca09c79-b668-4003-9ea0-90c52bfe3bb1"
-    }
-  }
-
-}
-
-###
-POST http://localhost:8080/dishversions/create
-Accept: application/json
-Content-Type: application/json
 
 {
-  "nameOfDish": "Vegan Spagettii Boloneeze",
-  "description": "meatballs, spagethi, bolonese sauce",
-  "picture": "test2.png",
-  "price": 21.01,
-  "preparationTime": "45 minutes",
+  "typeOfDish": "MAIN",
   "foodTag": "VEGAN",
-  "typeOfDish": "MAIN"
+  "preparationTime": "15",
+  "price": 12.99,
+  "picture": "https://ooni.com/cdn/shop/articles/20220211142347-margherita-9920_ba86be55-674e-4f35-8094-2067ab41a671.jpg?v=1737104576",
+  "description": "Classic Italian pizza with fresh mozzarella, tomatoes, and basil",
+  "nameOfDish": "Margherita Pizza",
+  "menuId": "6b217ef8-3e59-45a8-aad3-acf3bf3e7e6c",
+  "quantity": 25
+
 }
+
+###
+###
+
+
+POST http://localhost:8080/api/restaurants/491b77a8-c09c-4382-bcb5-9b4489c2805c/dishes/72847aa5-ebdf-4e9c-8f47-74f7926f53d1/publish
+Accept: application/json
+Content-Type: application/json
 
 ###
 PUT http://localhost:8080/dishversions/c7618c7e-9f76-455a-87d2-51c6dd20bca0/update

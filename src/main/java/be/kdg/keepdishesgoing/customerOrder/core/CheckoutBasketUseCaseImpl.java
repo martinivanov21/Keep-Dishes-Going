@@ -15,14 +15,13 @@ public class CheckoutBasketUseCaseImpl implements CheckoutBasketUseCase {
 
     private final LoadBasketPort loadBasketPort;
     private final SaveBasketPort saveBasketPort;
-    private final SaveCustomerOrderPort saveCustomerOrderPort;
+//    private final SaveCustomerOrderPort saveCustomerOrderPort;
     private final LoadRestaurantPort loadRestaurantPort;
 
     public CheckoutBasketUseCaseImpl(LoadBasketPort loadBasketPort, SaveBasketPort saveBasketPort,
-                                     SaveCustomerOrderPort saveCustomerOrderPort, LoadRestaurantPort loadRestaurantPort) {
+                                     LoadRestaurantPort loadRestaurantPort) {
         this.loadBasketPort = loadBasketPort;
         this.saveBasketPort = saveBasketPort;
-        this.saveCustomerOrderPort = saveCustomerOrderPort;
         this.loadRestaurantPort = loadRestaurantPort;
     }
 
@@ -46,10 +45,11 @@ public class CheckoutBasketUseCaseImpl implements CheckoutBasketUseCase {
         Address deliveryAddress = new Address(command.street(), command.number(),command.city());
 
 //        CustomerOrder order = basket.c
-        CustomerOrder savedOrder = saveCustomerOrderPort.save(order);
+//        CustomerOrder savedOrder = saveCustomerOrderPort.save(order);
 
         saveBasketPort.save(basket);
-        return savedOrder;
+//        return savedOrder;
+        return null;
 
 
     }

@@ -93,9 +93,9 @@ public class CustomerOrder {
         this.orderStatus = orderStatus;
     }
 
-    public double calculateTotal() {
-        return orderItems.stream()
-                .mapToDouble(item -> item.getUnitPrice() * item.getQuantity())
-                .sum();
-    }
+//    public double calculateTotal() {
+//        return orderItems.stream()
+//                .mapToDouble(item -> item.getUnitPrice() * item.getQuantity())
+//                .sum();
+//    }
 }

@@ -50,7 +50,9 @@ public class DishProjectionAdapter implements SaveDishPort, LoadDishPort, Delete
 
     @Override
     public List<Dish> loadByRestaurantId(RestaurantId restaurantId) {
-        return List.of();
+        return dishRepository.findByMenu_RestaurantId(restaurantId.uuid()).stream()
+                .map(dishMapper::toDomain)
+                .toList();
     }
 
     @Override

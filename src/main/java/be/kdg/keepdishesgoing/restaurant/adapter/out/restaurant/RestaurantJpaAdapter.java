@@ -1,10 +1,7 @@
 package be.kdg.keepdishesgoing.restaurant.adapter.out.restaurant;
 
-import be.kdg.keepdishesgoing.common.events.EventCatalog;
-import be.kdg.keepdishesgoing.restaurant.adapter.out.RestaurantEventJpaEntity;
 import be.kdg.keepdishesgoing.restaurant.adapter.out.address.AddressJpaEntity;
 import be.kdg.keepdishesgoing.restaurant.adapter.out.menu.MenuJpaEntity;
-import be.kdg.keepdishesgoing.restaurant.adapter.out.menu.MenuJpaRepository;
 import be.kdg.keepdishesgoing.restaurant.adapter.out.owner.OwnerJpaEntity;
 import be.kdg.keepdishesgoing.restaurant.domain.*;
 
@@ -13,12 +10,10 @@ import be.kdg.keepdishesgoing.restaurant.port.out.restaurant.LoadRestaurantPort;
 import be.kdg.keepdishesgoing.restaurant.port.out.restaurant.SaveRestaurantPort;
 import be.kdg.keepdishesgoing.restaurant.port.out.restaurant.UpdateRestaurantPort;
 import jakarta.transaction.Transactional;
-import org.jmolecules.event.annotation.DomainEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;

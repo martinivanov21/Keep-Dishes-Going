@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.UUID;
 
 public record MenuDto(
-        UUID menuId
+        UUID menuId,
+        UUID restaurantId
 ) {
 }

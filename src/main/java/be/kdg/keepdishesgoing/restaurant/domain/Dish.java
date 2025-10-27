@@ -118,6 +118,13 @@ public class Dish {
         if (this.draftVersion == null) {
             throw new IllegalStateException("Draft version is null");
         }
+
+        if (this.menu == null) {
+            throw new IllegalStateException("Dish must have a menu to be published");
+        }
+        if (this.menu.getRestaurantId() == null) {
+            throw new IllegalStateException("Menu must have a restaurantId to publish dish");
+        }
         this.liveVersion = draftVersion;
         this.draftVersion = null;
         this.status = DishStatus.PUBLISHED;

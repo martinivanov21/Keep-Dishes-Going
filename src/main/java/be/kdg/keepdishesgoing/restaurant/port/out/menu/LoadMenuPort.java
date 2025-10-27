@@ -8,6 +8,6 @@ import java.util.Optional;
 
 public interface LoadMenuPort {
 
-    Optional<Menu> loadBy(MenuId menuId);
+    Optional<Menu> loadById(MenuId menuId);
     List<Menu> loadAll();
 }

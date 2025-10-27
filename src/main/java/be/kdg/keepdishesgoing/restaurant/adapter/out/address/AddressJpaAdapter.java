@@ -4,7 +4,6 @@ import be.kdg.keepdishesgoing.restaurant.domain.Address;
 import be.kdg.keepdishesgoing.restaurant.domain.AddressId;
 import be.kdg.keepdishesgoing.restaurant.port.out.address.LoadAddressPort;
 import be.kdg.keepdishesgoing.restaurant.port.out.address.SaveAddressPort;
-import be.kdg.keepdishesgoing.restaurant.port.out.owner.LoadOwnerPort;
 import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

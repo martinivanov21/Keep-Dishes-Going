@@ -31,16 +31,17 @@ public class DishController {
     private final UnpublishDishUseCase unpublishDishUseCase;
     private final UpdateDishVersionUseCase updateDishVersionUseCase;
     private final LoadDishPort loadDishPort;
-    private DishMapper dishMapper;
+    private final DishMapper dishMapper;
     private final UpdateDishDraftUseCase updateDishDraftUseCase;
 
     public DishController(CreateDishDraftUseCase createDishDraftUseCase, PublishDishUseCase publishDishUseCase,
-                          UnpublishDishUseCase unpublishDishUseCase, UpdateDishVersionUseCase updateDishVersionUseCase, LoadDishPort loadDishPort, UpdateDishDraftUseCase updateDishDraftUseCase) {
+                          UnpublishDishUseCase unpublishDishUseCase, UpdateDishVersionUseCase updateDishVersionUseCase, LoadDishPort loadDishPort, DishMapper dishMapper, UpdateDishDraftUseCase updateDishDraftUseCase) {
         this.createDishDraftUseCase = createDishDraftUseCase;
         this.publishDishUseCase = publishDishUseCase;
         this.unpublishDishUseCase = unpublishDishUseCase;
         this.updateDishVersionUseCase = updateDishVersionUseCase;
         this.loadDishPort = loadDishPort;
+        this.dishMapper = dishMapper;
         this.updateDishDraftUseCase = updateDishDraftUseCase;
     }
 

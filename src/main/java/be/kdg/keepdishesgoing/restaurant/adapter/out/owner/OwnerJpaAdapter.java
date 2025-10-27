@@ -40,14 +40,6 @@ public class OwnerJpaAdapter implements LoadOwnerPort, FindAllOwnerPort, SaveOwn
         return  ownerJpaRepository.findByEmail(email);
     }
 
-    @Override
-    @Transactional
-    public Owner save(Owner owner) {
-        OwnerJpaEntity entity = mapToEntity(owner);
-        ownerJpaRepository.save(entity);
-        return owner;
-    }
-
     private OwnerJpaEntity mapToEntity(Owner owner) {
         return new OwnerJpaEntity(
                 owner.getOwnerId().uuid(),
@@ -64,5 +56,10 @@ public class OwnerJpaAdapter implements LoadOwnerPort, FindAllOwnerPort, SaveOwn
                 entity.getLastName(),
                 entity.getEmail()
         );
+    }
+
+    @Override
+    public Owner save(Owner owner) {
+        return null;
     }
 }

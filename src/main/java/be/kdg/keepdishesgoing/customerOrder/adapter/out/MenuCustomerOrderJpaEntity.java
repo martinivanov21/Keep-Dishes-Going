@@ -16,7 +16,7 @@ public class MenuCustomerOrderJpaEntity {
     @OneToMany(mappedBy = "menu", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<DishCustomerOrderJpaEntity> dishes;
 
-    @Column(name = "restaurant_id")
+    @Column(name = "restaurant_id",nullable = false)
     private UUID restaurantId;
 
     public MenuCustomerOrderJpaEntity() {

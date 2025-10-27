@@ -77,7 +77,8 @@ public class RestaurantController {
                                         wh.getClosingTime()
                                 )).toList(),
                 created.getOwnerId().uuid(),
-                created.getMenu() != null ? new MenuDto(created.getMenu().getMenuId().uuid()) : null
+                created.getMenu() != null ? new MenuDto(created.getMenu().getMenuId().uuid(),
+                        created.getRestaurantId().uuid()) : null
         );
 
         return ResponseEntity.ok(restaurantDto);
@@ -104,7 +105,8 @@ public class RestaurantController {
                                         work.getClosingTime()
                                 )).toList(),
                         r.getOwnerId().uuid(),
-                        new MenuDto(r.getMenu().getMenuId().uuid())
+                        new MenuDto(r.getMenu().getMenuId().uuid(),
+                                r.getRestaurantId().uuid())
 
                 )).toList();
 

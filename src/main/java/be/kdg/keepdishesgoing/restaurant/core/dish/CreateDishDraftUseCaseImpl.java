@@ -16,10 +16,10 @@ import java.util.List;
 public class CreateDishDraftUseCaseImpl implements CreateDishDraftUseCase {
 
     private static final Logger logger = LoggerFactory.getLogger(CreateDishDraftUseCaseImpl.class);
-    private final List<SaveDishPort> saveDishPort;
+    private final List<SaveDishPort> saveDishPorts;
 
-    public CreateDishDraftUseCaseImpl(List<SaveDishPort> saveDishPort) {
-        this.saveDishPort = saveDishPort;
+    public CreateDishDraftUseCaseImpl(List<SaveDishPort> saveDishPorts) {
+        this.saveDishPorts = saveDishPorts;
     }
 
 
@@ -30,14 +30,19 @@ public class CreateDishDraftUseCaseImpl implements CreateDishDraftUseCase {
 
         logger.info("Creating draft for Dish {}", dish.getDraftVersion().getNameOfDish());
 
-        if (dish.getStatus() == DishStatus.UNPUBLISHED) {
-            throw new IllegalStateException("Dish status is UNPUBLISHED");
-        }
-        if (dish.getLiveVersion() != null ) {
-            throw new IllegalArgumentException("new dish can not have a live version");
+        if (dish.getStatus() != DishStatus.UNPUBLISHED) {
+            throw new IllegalStateException("New dishes must be created as UNPUBLISHED (draft)");
         }
 
-        for  (SaveDishPort saveDishPort : saveDishPort) {
+        if (dish.getLiveVersion() != null) {
+            throw new IllegalArgumentException("New dish cannot have a live version");
+        }
+
+        if (dish.getDraftVersion() == null) {
+            throw new IllegalArgumentException("Draft version is required");
+        }
+
+        for (SaveDishPort saveDishPort : saveDishPorts) {
             dish = saveDishPort.saveDish(dish);
         }
 

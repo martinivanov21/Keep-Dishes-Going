@@ -31,10 +31,8 @@ public class RestaurantProjectionEventListener {
     @EventListener
     @Transactional
     public void on(RestaurantCreateEvent event) {
-        log.info("========================================");
         log.info("Received RestaurantCreateEvent: {}", event.restaurantName());
         log.info("Event ID: {}", event.restaurantId());
-        log.info("========================================");
 
 
         Restaurant restaurant = new Restaurant(

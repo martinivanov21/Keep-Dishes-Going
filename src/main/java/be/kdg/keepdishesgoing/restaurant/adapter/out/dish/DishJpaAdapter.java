@@ -134,9 +134,10 @@ public class DishJpaAdapter implements UpdateDishPort, LoadDishPort, DeleteDishP
     private Menu mapMenuToDomain(MenuJpaEntity entity) {
         if (entity == null) return null;
 
-        RestaurantId restaurantId = entity.getRestaurant() != null
-                ? new RestaurantId(entity.getRestaurant().getRestaurantId())
-                : null;
+        RestaurantId restaurantId = null;
+        if (entity.getRestaurant() != null) {
+            restaurantId = new RestaurantId(entity.getRestaurant().getRestaurantId());
+        }
 
         return new Menu(
                 new MenuId(entity.getMenuId()),
