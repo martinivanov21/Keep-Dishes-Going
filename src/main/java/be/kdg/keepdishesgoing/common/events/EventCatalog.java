@@ -7,5 +7,6 @@ public enum EventCatalog {
     CREATE_OWNER,
     PUBLISH_DISH,
     UNPUBLISH_DISH,
-    UPDATE_DISH
+    UPDATE_DISH,
+    CREATE_MENU
 }

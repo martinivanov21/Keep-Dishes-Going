@@ -1,5 +1,6 @@
 package be.kdg.keepdishesgoing.restaurant.core;
 
+import be.kdg.keepdishesgoing.restaurant.adapter.out.MenuEventPublisher;
 import be.kdg.keepdishesgoing.restaurant.domain.Menu;
 import be.kdg.keepdishesgoing.restaurant.port.in.CreateMenuCommand;
 import be.kdg.keepdishesgoing.restaurant.port.in.CreateMenuUseCase;
@@ -11,14 +12,20 @@ import org.springframework.stereotype.Service;
 public class CreateMenuUseCaseImpl implements CreateMenuUseCase {
 
     private final SaveMenuPort saveMenuPort;
+    private final MenuEventPublisher menuEventPublisher;
 
-    public CreateMenuUseCaseImpl(SaveMenuPort saveMenuPort) {
+    public CreateMenuUseCaseImpl(SaveMenuPort saveMenuPort, MenuEventPublisher menuEventPublisher) {
         this.saveMenuPort = saveMenuPort;
+        this.menuEventPublisher = menuEventPublisher;
     }
 
     @Override
     @Transactional
     public Menu createMenu(CreateMenuCommand command) {
-        return saveMenuPort.save(command.menu());
+        Menu menu = command.menu();
+        menu.create();
+        Menu savedMenu = saveMenuPort.save(menu);
+        menuEventPublisher.save(savedMenu);
+        return savedMenu;
     }
 }

@@ -79,6 +79,7 @@ public class MenuJpaAdapter implements LoadMenuPort, UpdateMenuPort, SaveMenuPor
                             "Restaurant not found: " + menu.getRestaurantId().uuid()));
 
             restaurant.setMenu(savedMenu);
+            menuEntity.setRestaurant(restaurant);
             restaurantJpaRepository.save(restaurant);
         }
 
