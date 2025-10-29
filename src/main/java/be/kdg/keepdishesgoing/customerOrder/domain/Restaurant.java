@@ -13,7 +13,7 @@ public class Restaurant {
     private String restaurantName;
     private Cuisine cuisine;
     private String pictureUrl;
-    private List<ScheduleHour> workingHours;
+    private List<WorkingHour> workingHours;
     private PriceRange priceRange;
     private BigDecimal averagePrice;
     private int guesstimatedDeliveryTimeMinutes;
@@ -25,7 +25,7 @@ public class Restaurant {
     private String deliveryCity;
 
     public Restaurant(RestaurantId restaurantId, String restaurantName, Cuisine cuisine,
-                      String pictureUrl, List<ScheduleHour> workingHours, PriceRange priceRange,
+                      String pictureUrl, List<WorkingHour> workingHours, PriceRange priceRange,
                       BigDecimal averagePrice, int guesstimatedDeliveryTimeMinutes, MenuId menuId,
                       OpeningStatus openingStatus, String deliveryStreet, int deliveryNumber, String deliveryCity) {
         this.restaurantId = restaurantId;
@@ -132,13 +132,8 @@ public class Restaurant {
         this.pictureUrl = pictureUrl;
     }
 
-
-    public List<ScheduleHour> getWorkingHours() {
+    public List<WorkingHour> getWorkingHours() {
         return workingHours;
-    }
-
-    public void setWorkingHours(List<ScheduleHour> workingHours) {
-        this.workingHours = workingHours;
     }
 
     public PriceRange getPriceRange() {

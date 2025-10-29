@@ -4,6 +4,7 @@ import be.kdg.keepdishesgoing.common.events.DomainEvent;
 import be.kdg.keepdishesgoing.common.events.RestaurantCreateEvent;
 import be.kdg.keepdishesgoing.common.events.RestaurantOpeningStatusChangedEvent;
 import be.kdg.keepdishesgoing.restaurant.adapter.in.response.ScheduleHourDto;
+import be.kdg.keepdishesgoing.restaurant.adapter.in.response.WorkingHourDto;
 import be.kdg.keepdishesgoing.restaurant.domain.enums.Cuisine;
 import be.kdg.keepdishesgoing.restaurant.domain.enums.OpeningStatus;
 
@@ -25,7 +26,7 @@ public class Restaurant {
     private AddressId addressId;
     private OwnerId ownerId;
     private MenuId menuId;
-    private List<ScheduleHour>  workingHours;
+    private List<WorkingHour>  workingHours;
 
     private final List<DomainEvent> eventStore = new ArrayList<>();
     private final List<DomainEvent> uncommitedEvents = new ArrayList<>();
@@ -36,7 +37,7 @@ public class Restaurant {
     public Restaurant(RestaurantId restaurantId, String nameOfRestaurant, Cuisine cuisine,
                       OpeningStatus openingStatus, int defaultPreparationTime, String contactEmail,
                       String picture, AddressId addressId, OwnerId ownerId, MenuId menuId,
-                      List<ScheduleHour> workingHours, Address address) {
+                      List<WorkingHour> workingHours, Address address) {
         this.restaurantId = restaurantId;
         this.nameOfRestaurant = nameOfRestaurant;
         this.cuisine = cuisine;
@@ -60,11 +61,10 @@ public class Restaurant {
                 address != null ? address.getNumber() : 0,
                 address != null ? address.getCity() : "",
                 workingHours.stream()
-                        .map(wh -> new ScheduleHourDto(
-                                wh.getScheduleHourId().uuid(),
-                                wh.getDayOfWeek(),
-                                wh.getOpeningTime(),
-                                wh.getClosingTime()
+                        .map(wh -> new WorkingHourDto(
+                                wh.getDayOfWeek().toString(),
+                                wh.getOpeningTime().toString(),
+                                wh.getClosingTime().toString()
                         )).toList(),
                 menuId.uuid(),
                 LocalDateTime.now()
@@ -73,7 +73,7 @@ public class Restaurant {
     public Restaurant(RestaurantId restaurantId, String nameOfRestaurant, Cuisine cuisine,
                       OpeningStatus openingStatus, int defaultPreparationTime, String contactEmail,
                       String picture, AddressId addressId, OwnerId ownerId, MenuId menuId,
-                      List<ScheduleHour> workingHours) {
+                      List<WorkingHour> workingHours) {
         this.restaurantId = restaurantId;
         this.nameOfRestaurant = nameOfRestaurant;
         this.cuisine = cuisine;
@@ -84,7 +84,7 @@ public class Restaurant {
         this.addressId = addressId;
         this.ownerId = ownerId;
         this.menuId = menuId;
-        this.workingHours = workingHours != null ? workingHours : new ArrayList<>();
+        this.workingHours = (workingHours != null) ? workingHours : new ArrayList<>();
     }
 
     public void raiseRestaurantCreatedEvent(String street, int number, String city) {
@@ -99,11 +99,10 @@ public class Restaurant {
                 number,
                 city,
                 workingHours.stream()
-                        .map(wh -> new ScheduleHourDto(
-                                wh.getScheduleHourId().uuid(),
-                                wh.getDayOfWeek(),
-                                wh.getOpeningTime(),
-                                wh.getClosingTime()
+                        .map(wh -> new WorkingHourDto(
+                                wh.getDayOfWeek().name(),
+                                wh.getOpeningTime().toString(),
+                                wh.getClosingTime().toString()
                         )).toList(),
                 menuId != null ? menuId.uuid() : null,
                 LocalDateTime.now()
@@ -151,8 +150,7 @@ public class Restaurant {
     }
 
 
-
-    public List<ScheduleHour> getWorkingHours() {
+    public List<WorkingHour> getWorkingHours() {
         return workingHours;
     }
 

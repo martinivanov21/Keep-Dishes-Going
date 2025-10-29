@@ -1,6 +1,7 @@
 package be.kdg.keepdishesgoing.restaurant.adapter.out.restaurant;
 
 import be.kdg.keepdishesgoing.restaurant.adapter.out.address.AddressJpaEntity;
+import be.kdg.keepdishesgoing.restaurant.adapter.out.embeded.WorkingHourEmbeddable;
 import be.kdg.keepdishesgoing.restaurant.adapter.out.menu.MenuJpaEntity;
 import be.kdg.keepdishesgoing.restaurant.adapter.out.owner.OwnerJpaEntity;
 import be.kdg.keepdishesgoing.restaurant.domain.*;
@@ -96,6 +97,14 @@ public class RestaurantJpaAdapter implements LoadRestaurantPort, UpdateRestauran
         entity.setContactEmail(restaurant.getContactEmail());
         entity.setPicture(restaurant.getPicture());
 
+        List<WorkingHourEmbeddable> hours = restaurant.getWorkingHours().stream()
+                .map(h -> new WorkingHourEmbeddable(
+                        h.getDayOfWeek(),
+                        h.getOpeningTime(),
+                        h.getClosingTime()
+                )).toList();
+        entity.setWorkingHours(hours);
+
         if (restaurant.getAddressId() != null) {
             AddressJpaEntity address = new AddressJpaEntity();
             address.setAddressId(restaurant.getAddressId().uuid());
@@ -118,6 +127,13 @@ public class RestaurantJpaAdapter implements LoadRestaurantPort, UpdateRestauran
     }
 
     private Restaurant mapToDomain(RestaurantJpaEntity entity) {
+        List<WorkingHour> hours = entity.getWorkingHours().stream()
+                .map(h -> new WorkingHour(
+                        h.getDayOfWeek(),
+                        h.getOpeningTime(),
+                        h.getClosingTime()
+                )).toList();
+
         return new Restaurant(
                 new RestaurantId(entity.getRestaurantId()),
                 entity.getNameOfRestaurant(),
@@ -129,10 +145,7 @@ public class RestaurantJpaAdapter implements LoadRestaurantPort, UpdateRestauran
                 entity.getAddress() != null ? new AddressId(entity.getAddress().getAddressId()) : null,
                 entity.getOwner() != null ? new OwnerId(entity.getOwner().getOwnerId()) : null,
                 entity.getMenu() != null ? new MenuId(entity.getMenu().getMenuId()) : null, // Just map to MenuId
-                entity.getWorkingHours().stream()
-                        .map(this::mapScheduleHour)
-                        .filter(Objects::nonNull)
-                        .toList()
+                hours
         );
     }
 
@@ -145,17 +158,6 @@ public class RestaurantJpaAdapter implements LoadRestaurantPort, UpdateRestauran
                 .toList();
 
         return new Menu(new MenuId(entity.getMenuId()), dishIds);
-    }
-
-    private ScheduleHour mapScheduleHour(ScheduleHourJpaEntity entity) {
-        if (entity == null) return null;
-
-        return new ScheduleHour(
-                new ScheduleHourId(entity.getScheduleHourId()),
-                entity.getDayOfWeek(),
-                entity.getOpeningTime(),
-                entity.getClosingTime()
-        );
     }
 
 }

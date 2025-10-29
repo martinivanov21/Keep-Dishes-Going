@@ -7,6 +7,7 @@ import be.kdg.keepdishesgoing.customerOrder.domain.RestaurantId;
 import be.kdg.keepdishesgoing.customerOrder.port.out.DeleteDishPort;
 import be.kdg.keepdishesgoing.customerOrder.port.out.LoadDishPort;
 import be.kdg.keepdishesgoing.customerOrder.port.out.SaveDishPort;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Component
 public class DishProjectionAdapter implements SaveDishPort, LoadDishPort, DeleteDishPort {
@@ -22,10 +24,12 @@ public class DishProjectionAdapter implements SaveDishPort, LoadDishPort, Delete
 
     private final DishMapperProjection dishMapper;
     private final DishProjectionJpaRepository dishRepository;
+    private final MenuCustomerOrderJpaRepository menuRepository;
 
-    public DishProjectionAdapter(DishMapperProjection dishMapper, DishProjectionJpaRepository dishRepository) {
+    public DishProjectionAdapter(DishMapperProjection dishMapper, DishProjectionJpaRepository dishRepository, MenuCustomerOrderJpaRepository menuRepository) {
         this.dishMapper = dishMapper;
         this.dishRepository = dishRepository;
+        this.menuRepository = menuRepository;
     }
 
     @Override
@@ -60,9 +64,19 @@ public class DishProjectionAdapter implements SaveDishPort, LoadDishPort, Delete
     public Dish saveDish(Dish dish) {
         logger.info("Saving dish projection: {}", dish.getNameOfDish());
 
+        if (dish.getMenuId() == null) {
+            throw new IllegalStateException("Dish must have a menuId to be projected");
+        }
+        MenuCustomerOrderJpaEntity menuRef;
+        try {
+            menuRef = menuRepository.getReferenceById(dish.getMenuId().menuId());
+        } catch (EntityNotFoundException e) {
+            throw new IllegalStateException("Menu projection not found for id: " + dish.getMenuId().menuId(), e);
+        }
         DishCustomerOrderJpaEntity entity = dishMapper.toEntity(dish);
-        DishCustomerOrderJpaEntity saved = dishRepository.save(entity);
+        entity.setMenu(menuRef);
 
+        DishCustomerOrderJpaEntity saved = dishRepository.save(entity);
         return dishMapper.toDomain(saved);
     }
 }

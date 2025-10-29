@@ -12,7 +12,7 @@ public record RestaurantDetailDto(
         String priceRange,
         double averagePrice,
         int estimatedDeliveryMinutes,
-        List<ScheduleHourDto> workingHours,
+        List<WorkingHourDto> workingHours,
         String openingStatus,
         AddressProjectionDto address
 

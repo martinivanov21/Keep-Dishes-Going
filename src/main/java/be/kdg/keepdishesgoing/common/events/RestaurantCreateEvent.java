@@ -1,6 +1,7 @@
 package be.kdg.keepdishesgoing.common.events;
 
 import be.kdg.keepdishesgoing.restaurant.adapter.in.response.ScheduleHourDto;
+import be.kdg.keepdishesgoing.restaurant.adapter.in.response.WorkingHourDto;
 import be.kdg.keepdishesgoing.restaurant.domain.Address;
 import be.kdg.keepdishesgoing.restaurant.domain.enums.Cuisine;
 
@@ -21,7 +22,7 @@ public record RestaurantCreateEvent(
         int deliveryNumber,
         String deliveryCity,
 
-        List<ScheduleHourDto> workingHours,
+        List<WorkingHourDto> workingHours,
         UUID menuId,
         LocalDateTime eventPit
 ) implements DomainEvent {

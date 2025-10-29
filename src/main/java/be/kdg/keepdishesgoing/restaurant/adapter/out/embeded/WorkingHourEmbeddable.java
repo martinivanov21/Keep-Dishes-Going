@@ -1,31 +1,30 @@
-package be.kdg.keepdishesgoing.restaurant.domain;
+package be.kdg.keepdishesgoing.restaurant.adapter.out.embeded;
+
+import jakarta.persistence.*;
 
 import java.time.DayOfWeek;
 import java.time.LocalTime;
-import java.util.UUID;
 
-public class ScheduleHour {
+@Embeddable
+public class WorkingHourEmbeddable {
 
-    private ScheduleHourId scheduleHourId;
-
+    @Enumerated(EnumType.STRING)
+    @Column(name = "day_of_week", nullable = false)
     private DayOfWeek dayOfWeek;
 
+    @Column(name = "open_time", nullable = false)
     private LocalTime openingTime;
+
+    @Column(name = "close_time", nullable = false)
     private LocalTime closingTime;
 
-    public ScheduleHour(ScheduleHourId scheduleHourId, DayOfWeek dayOfWeek, LocalTime openingTime, LocalTime closingTime) {
-        this.scheduleHourId = scheduleHourId;
+    public WorkingHourEmbeddable() {
+    }
+
+    public WorkingHourEmbeddable(DayOfWeek dayOfWeek, LocalTime openingTime, LocalTime closingTime) {
         this.dayOfWeek = dayOfWeek;
         this.openingTime = openingTime;
         this.closingTime = closingTime;
-    }
-
-    public ScheduleHourId getScheduleHourId() {
-        return scheduleHourId;
-    }
-
-    public void setScheduleHourId(ScheduleHourId scheduleHourId) {
-        this.scheduleHourId = scheduleHourId;
     }
 
     public DayOfWeek getDayOfWeek() {

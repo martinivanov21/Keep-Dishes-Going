@@ -12,7 +12,7 @@ public record RestaurantDto(UUID uuid,
                             String picture,
                             String openingStatus,
                             UUID addressId,
-                            List<ScheduleHourDto> workingHours,
+                            List<WorkingHourDto> workingHours,
                             UUID ownerId,
                             MenuDto menu) {
 }

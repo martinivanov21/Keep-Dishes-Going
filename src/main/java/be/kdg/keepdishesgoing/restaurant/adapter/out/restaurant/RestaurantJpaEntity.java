@@ -2,9 +2,9 @@ package be.kdg.keepdishesgoing.restaurant.adapter.out.restaurant;
 
 import be.kdg.keepdishesgoing.restaurant.adapter.out.RestaurantEventJpaEntity;
 import be.kdg.keepdishesgoing.restaurant.adapter.out.address.AddressJpaEntity;
+import be.kdg.keepdishesgoing.restaurant.adapter.out.embeded.WorkingHourEmbeddable;
 import be.kdg.keepdishesgoing.restaurant.adapter.out.menu.MenuJpaEntity;
 import be.kdg.keepdishesgoing.restaurant.adapter.out.owner.OwnerJpaEntity;
-import be.kdg.keepdishesgoing.restaurant.domain.Menu;
 import be.kdg.keepdishesgoing.restaurant.domain.enums.Cuisine;
 import be.kdg.keepdishesgoing.restaurant.domain.enums.OpeningStatus;
 import jakarta.persistence.*;
@@ -38,8 +38,13 @@ public class RestaurantJpaEntity {
     @Enumerated(EnumType.STRING)
     private OpeningStatus openingStatus;
 
-    @OneToMany(mappedBy = "restaurant")
-    private List<ScheduleHourJpaEntity> workingHours = new ArrayList<>();
+    @ElementCollection
+    @CollectionTable(
+            name = "restaurant_working_hours",
+            schema = "kdg_restaurant",
+            joinColumns = @JoinColumn(name = "restaurant_id")
+    )
+    private List<WorkingHourEmbeddable> workingHours = new ArrayList<>();
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "address_id", nullable = false)
@@ -56,10 +61,9 @@ public class RestaurantJpaEntity {
     @JoinColumn(name = "menu_id", referencedColumnName = "menu_id")
     private MenuJpaEntity menu;
 
-    public RestaurantJpaEntity(UUID restaurantId, String nameOfRestaurant, Cuisine cuisine,
-                               int defaultPreparationTime, String contactEmail, String picture,
-                               OpeningStatus openingStatus, List<ScheduleHourJpaEntity> workingHours,
-                               AddressJpaEntity address, OwnerJpaEntity owner, MenuJpaEntity menu) {
+    public RestaurantJpaEntity(UUID restaurantId, String nameOfRestaurant, Cuisine cuisine, int defaultPreparationTime, String contactEmail,
+                               String picture, OpeningStatus openingStatus, List<WorkingHourEmbeddable> workingHours,
+                               AddressJpaEntity address, OwnerJpaEntity owner, List<RestaurantEventJpaEntity> events, MenuJpaEntity menu) {
         this.restaurantId = restaurantId;
         this.nameOfRestaurant = nameOfRestaurant;
         this.cuisine = cuisine;
@@ -70,6 +74,7 @@ public class RestaurantJpaEntity {
         this.workingHours = workingHours;
         this.address = address;
         this.owner = owner;
+        this.events = events;
         this.menu = menu;
     }
 
@@ -141,11 +146,11 @@ public class RestaurantJpaEntity {
         this.openingStatus = openingStatus;
     }
 
-    public List<ScheduleHourJpaEntity> getWorkingHours() {
+    public List<WorkingHourEmbeddable> getWorkingHours() {
         return workingHours;
     }
 
-    public void setWorkingHours(List<ScheduleHourJpaEntity> workingHours) {
+    public void setWorkingHours(List<WorkingHourEmbeddable> workingHours) {
         this.workingHours = workingHours;
     }
 

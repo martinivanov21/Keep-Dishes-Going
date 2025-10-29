@@ -11,6 +11,6 @@ public record RestaurantBrowseDto(
         String priceRange,
         double averagePrice,
         int estimatedDeliveryMinutes,
-        List<ScheduleHourDto> workingHours
+        List<WorkingHourDto> workingHours
 ) {
 }

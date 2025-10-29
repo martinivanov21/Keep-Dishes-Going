@@ -3,9 +3,9 @@ Accept: application/json
 Content-Type: application/json
 
 {
-  "firstName": "Martin",
-  "lastName": "Ivanov",
-  "email": "martin@ivanov.com"
+  "firstName": "Megan",
+  "lastName": "Katseye",
+  "email": "megan@katseye.com"
 }
 
 ###
@@ -17,8 +17,8 @@ Accept: application/json
 Content-Type: application/json
 
 {
-  "street": "Jodenstraat",
-  "number": 12,
+  "street": "Einjladje",
+  "number": 2,
   "postalCode": "2000",
   "city": "Antwerpen",
   "country": "Belgium"
@@ -31,38 +31,45 @@ Content-Type: application/json
 
 
 {
-  "nameOfRestaurant": "Latino4Ever",
-  "cuisine": "MEXICAN",
+  "nameOfRestaurant": "Panda's taste",
+  "cuisine": "CHINESE",
   "openingStatus": "OPEN",
-  "defaultPreparationTime": 34,
-  "contactEmail": "goodfood@gcmo.com",
-  "picture": "https://popmenucloud.com/cdn-cgi/image/width%3D1200%2Cheight%3D1200%2Cfit%3Dscale-down%2Cformat%3Dauto%2Cquality%3D60/xrpblwcd/85ba676e-8969-4793-ba64-46c7724547be.jpg",
-  "addressId": "c6f69868-c41a-4348-bf98-3e7439248ee7",
-  "ownerId": "f3f67d47-89f1-49c1-b1dc-781269c57b9f"
+  "defaultPreparationTime": 18,
+  "contactEmail": "fired@chicken.com",
+  "picture": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ-oC-z7bu7bFCHWVNf20Quv3oEDUF0zHWf_Q&s",
+  "addressId": "547e5ec6-e11d-4185-9894-2c9d5b96972a",
+  "ownerId": "4b4aeba7-781a-4529-9f51-1b0933d5cf36",
+  "workingHours": {
+    "MONDAY":  { "openHour": "12:45", "closeHour": "21:00" },
+    "TUESDAY":    { "openHour": "12:00", "closeHour": "21:00" },
+    "FRIDAY":    { "openHour": "12:00", "closeHour": "21:00" },
+    "SATURDAY":  { "openHour": "11:00", "closeHour": "23:00" },
+    "SUNDAY":  { "openHour": "11:45", "closeHour": "23:00" }
+  }
 }
 
 ###
-POST http://localhost:8080/api/restaurant/491b77a8-c09c-4382-bcb5-9b4489c2805c/menus/create
+POST http://localhost:8080/api/restaurant/5f394775-0b4d-4eda-9077-f901ba0fc6bf/menus/create
 Accept: application/json
 Content-Type: application/json
 
 
 ###
-POST http://localhost:8080/api/restaurants/491b77a8-c09c-4382-bcb5-9b4489c2805c/dishes/create-draft
+POST http://localhost:8080/api/restaurants/a268252f-dafd-4cd4-8681-994ea8be9dc3/dishes/create-draft
 Accept: application/json
 Content-Type: application/json
 
 
 {
-  "typeOfDish": "MAIN",
-  "foodTag": "VEGAN",
-  "preparationTime": "15",
-  "price": 12.99,
-  "picture": "https://ooni.com/cdn/shop/articles/20220211142347-margherita-9920_ba86be55-674e-4f35-8094-2067ab41a671.jpg?v=1737104576",
-  "description": "Classic Italian pizza with fresh mozzarella, tomatoes, and basil",
-  "nameOfDish": "Margherita Pizza",
-  "menuId": "6b217ef8-3e59-45a8-aad3-acf3bf3e7e6c",
-  "quantity": 25
+  "typeOfDish": "DESERT",
+  "foodTag": "LACTOSE",
+  "preparationTime": "5",
+  "price": 14.99,
+  "picture": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQAY3ZkwqjK40z2fexYy97huWAwD6Ds6wBubg&s",
+  "description": "Fine dining ice cream testing",
+  "nameOfDish": "Kiss of Nature",
+  "menuId": "318dd04c-cd24-4e56-af48-6b780a9bfc72",
+  "quantity": 11
 
 }
 
@@ -70,7 +77,7 @@ Content-Type: application/json
 ###
 
 
-POST http://localhost:8080/api/restaurants/491b77a8-c09c-4382-bcb5-9b4489c2805c/dishes/72847aa5-ebdf-4e9c-8f47-74f7926f53d1/publish
+POST http://localhost:8080/api/restaurants/a268252f-dafd-4cd4-8681-994ea8be9dc3/dishes/122db980-c508-406d-80a6-2c4448765b09/publish
 Accept: application/json
 Content-Type: application/json
 

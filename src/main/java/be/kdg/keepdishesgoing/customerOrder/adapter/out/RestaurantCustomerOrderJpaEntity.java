@@ -38,11 +38,16 @@ public class RestaurantCustomerOrderJpaEntity {
     @JoinColumn(name = "menu_id", referencedColumnName = "menu_id")
     private MenuCustomerOrderJpaEntity menu;
 
-    @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<ScheduleHourCustomerOrderJpaEntity> workingHours = new ArrayList<>();
+    @ElementCollection
+    @CollectionTable(
+            name = "restaurant_working_hours",
+            schema = "kdg_customer_order",
+            joinColumns = @JoinColumn(name = "restaurant_id")
+    )
+    private List<WorkingHourCustomerEmbeddable> workingHours = new ArrayList<>();
 
     private BigDecimal averagePrice;
-    @Enumerated(EnumType.STRING)
+    @Enumerated(EnumType.ORDINAL)
     @Column(name = "price_range")
     private PriceRange priceRange;
     @Column(name = "guesstimated_delivery_time_minutes")
@@ -118,11 +123,11 @@ public class RestaurantCustomerOrderJpaEntity {
     }
 
 
-    public List<ScheduleHourCustomerOrderJpaEntity> getWorkingHours() {
+    public List<WorkingHourCustomerEmbeddable> getWorkingHours() {
         return workingHours;
     }
 
-    public void setWorkingHours(List<ScheduleHourCustomerOrderJpaEntity> workingHours) {
+    public void setWorkingHours(List<WorkingHourCustomerEmbeddable> workingHours) {
         this.workingHours = workingHours;
     }
 

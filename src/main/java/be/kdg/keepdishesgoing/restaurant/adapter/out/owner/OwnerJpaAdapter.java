@@ -60,6 +60,8 @@ public class OwnerJpaAdapter implements LoadOwnerPort, FindAllOwnerPort, SaveOwn
 
     @Override
     public Owner save(Owner owner) {
-        return null;
+        OwnerJpaEntity entity = mapToEntity(owner);
+        OwnerJpaEntity saved = ownerJpaRepository.save(entity);
+        return mapToDomain(saved);
     }
 }

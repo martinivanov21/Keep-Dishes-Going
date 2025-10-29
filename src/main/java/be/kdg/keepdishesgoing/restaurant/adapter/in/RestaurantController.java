@@ -4,14 +4,21 @@ import be.kdg.keepdishesgoing.restaurant.adapter.in.request.CreateRestaurantRequ
 import be.kdg.keepdishesgoing.restaurant.adapter.in.response.MenuDto;
 import be.kdg.keepdishesgoing.restaurant.adapter.in.response.RestaurantDto;
 import be.kdg.keepdishesgoing.restaurant.adapter.in.response.ScheduleHourDto;
+import be.kdg.keepdishesgoing.restaurant.adapter.in.response.WorkingHourDto;
+import be.kdg.keepdishesgoing.restaurant.adapter.out.embeded.WorkingHourEmbeddable;
 import be.kdg.keepdishesgoing.restaurant.domain.*;
 import be.kdg.keepdishesgoing.restaurant.port.in.*;
 import be.kdg.keepdishesgoing.restaurant.port.in.dish.MakeDishOutOfStockCommand;
 import be.kdg.keepdishesgoing.restaurant.port.in.dish.MakeDishOutOfStockUseCase;
 import jakarta.transaction.Transactional;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 
@@ -36,6 +43,20 @@ public class RestaurantController {
     @Transactional
     public ResponseEntity<RestaurantDto> createRestaurant(@RequestBody CreateRestaurantRequest request) {
 
+        List<WorkingHour> hours = new ArrayList<>();
+        if (request.workingHours() != null) {
+            request.workingHours().forEach((day, interval) -> {
+                LocalTime open  = LocalTime.parse(interval.openHour());
+                LocalTime close = LocalTime.parse(interval.closeHour());
+                if (!open.isBefore(close)) {
+                    throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                            "Opening time must be before closing time for " + day);
+                }
+                hours.add(new WorkingHour(day, open, close));
+            });
+            hours.sort(Comparator.comparing(WorkingHour::getDayOfWeek));
+        }
+
         var restaurant = new Restaurant(
                 RestaurantId.create(),
                 request.nameOfRestaurant(),
@@ -47,13 +68,7 @@ public class RestaurantController {
                 request.addressId() != null ? new AddressId(UUID.fromString(request.addressId())) : null,
                 request.ownerId() != null ? new OwnerId(UUID.fromString(request.ownerId())) : null,
                 request.menuId() != null ? new MenuId(request.menuId().uuid()) : null,
-                request.workingHours() != null ? request.workingHours().stream()
-                                .map(wh -> new ScheduleHour(
-                                        wh.getScheduleHourId(),
-                                        wh.getDayOfWeek(),
-                                        wh.getOpeningTime(),
-                                        wh.getClosingTime()
-                                )).toList() : List.of()
+                hours
         );
 
         Restaurant created = createRestaurantUseCase.createRestaurant(
@@ -70,11 +85,10 @@ public class RestaurantController {
                 created.getOpeningStatus().name(),
                 created.getAddressId().uuid(),
                 created.getWorkingHours().stream()
-                                .map(wh -> new ScheduleHourDto(
-                                        wh.getScheduleHourId().uuid(),
-                                        wh.getDayOfWeek(),
-                                        wh.getOpeningTime(),
-                                        wh.getClosingTime()
+                                .map(wh -> new WorkingHourDto(
+                                        wh.getDayOfWeek().name(),
+                                        wh.getOpeningTime().toString(),
+                                        wh.getClosingTime().toString()
                                 )).toList(),
                 created.getOwnerId().uuid(),
                 created.getMenuId() != null ? new MenuDto(created.getMenuId().uuid(),
@@ -98,11 +112,10 @@ public class RestaurantController {
                         r.getOpeningStatus().name(),
                         r.getAddressId().uuid(),
                         r.getWorkingHours().stream()
-                                .map(work -> new ScheduleHourDto(
-                                        work.getScheduleHourId().uuid(),
-                                        work.getDayOfWeek(),
-                                        work.getOpeningTime(),
-                                        work.getClosingTime()
+                                .map(work -> new WorkingHourDto(
+                                        work.getDayOfWeek().name(),
+                                        work.getOpeningTime().toString(),
+                                        work.getClosingTime().toString()
                                 )).toList(),
                         r.getOwnerId().uuid(),
                         new MenuDto(r.getMenuId().uuid(),

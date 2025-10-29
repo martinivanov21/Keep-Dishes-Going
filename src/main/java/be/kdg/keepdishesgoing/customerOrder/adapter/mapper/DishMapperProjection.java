@@ -11,16 +11,13 @@ import org.springframework.stereotype.Component;
 public class DishMapperProjection {
 
     public Dish toDomain(DishCustomerOrderJpaEntity entity) {
-        Menu menu = null;
-        if (entity.getMenu() != null) {
-            menu = new Menu(
-                    MenuId.of(entity.getMenu().getMenuId().toString()),
-                    RestaurantId.of(entity.getMenu().getRestaurantId())
-            );
-        }
+        MenuId menuId = (entity.getMenu() != null)
+                ? MenuId.of(entity.getMenu().getMenuId().toString())
+                : null;
+
         return new Dish(
                 new DishId(entity.getDishId()),
-                new MenuId(entity.getMenu().getMenuId()),
+                menuId,
                 entity.getNameOfDish(),
                 entity.getDescription(),
                 entity.getPrice(),
