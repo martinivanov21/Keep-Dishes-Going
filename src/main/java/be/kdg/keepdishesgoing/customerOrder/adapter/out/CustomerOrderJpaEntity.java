@@ -38,10 +38,30 @@ public class CustomerOrderJpaEntity {
     @Column(name = "delivery_city", nullable = false)
     private String deliveryCity;
 
+    private String customerName;
+
+    private String customerEmail;
+
     @OneToMany(mappedBy = "customerOrder", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<OrderItemJpaEntity> orderItems = new ArrayList<>();
 
     public CustomerOrderJpaEntity() {
+    }
+
+    public String getCustomerName() {
+        return customerName;
+    }
+
+    public void setCustomerName(String customerName) {
+        this.customerName = customerName;
+    }
+
+    public String getCustomerEmail() {
+        return customerEmail;
+    }
+
+    public void setCustomerEmail(String customerEmail) {
+        this.customerEmail = customerEmail;
     }
 
     public UUID getCustomerOrderId() {

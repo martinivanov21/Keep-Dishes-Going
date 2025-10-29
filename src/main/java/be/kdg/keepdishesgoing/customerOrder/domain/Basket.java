@@ -144,15 +144,23 @@ public class Basket {
         touch();
     }
 
-    // In Basket class
-    public CustomerOrder checkout(String deliveryStreet,
-                                  int deliveryNumber, String deliveryCity,
-                                  int estimatedDeliveryTimeMinutes) {
+
+    public CustomerOrder checkout(String customerName, String customerEmail,
+                                  String deliveryStreet, int deliveryNumber,
+                                  String deliveryCity, int estimatedDeliveryTimeMinutes) {
         if (!canCheckout()) {
-            throw new IllegalStateException("Basket is not ready for checkout. " +
-                    "Ensure basket has items and is linked to a restaurant.");
+            throw new IllegalStateException("Basket is not ready for checkout");
         }
 
+        // Validate customer info
+        if (customerName == null || customerName.trim().isEmpty()) {
+            throw new IllegalArgumentException("Customer name is required");
+        }
+        if (customerEmail == null || !customerEmail.matches("^[A-Za-z0-9+_.-]+@(.+)$")) {
+            throw new IllegalArgumentException("Valid email is required");
+        }
+
+        // Validate delivery address
         if (deliveryStreet == null || deliveryStreet.trim().isEmpty()) {
             throw new IllegalArgumentException("Delivery street is required");
         }
@@ -167,6 +175,8 @@ public class Basket {
                 new CustomerOrderId(UUID.randomUUID()),
                 this.restaurantId,
                 new ArrayList<>(this.items),
+                customerName,
+                customerEmail,
                 this.getTotalPrice(),
                 estimatedDeliveryTimeMinutes,
                 LocalDateTime.now(),

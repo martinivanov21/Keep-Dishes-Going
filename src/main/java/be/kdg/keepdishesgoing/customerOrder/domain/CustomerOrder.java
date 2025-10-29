@@ -12,6 +12,10 @@ public class CustomerOrder {
     private RestaurantId restaurantId;
     private List<OrderItem> orderItems;
 
+    private String customerName;
+    private String customerEmail;
+
+
     private BigDecimal totalPrice;
     private int estimateTime;
     private LocalDateTime submittedTime;
@@ -35,6 +39,42 @@ public class CustomerOrder {
         this.deliveryStreet = deliveryStreet;
         this.deliveryStreetNumber = deliveryStreetNumber;
         this.deliveryCity = deliveryCity;
+    }
+
+    public CustomerOrder(CustomerOrderId customerOrderId, RestaurantId restaurantId,
+                         List<OrderItem> orderItems, String customerName, String customerEmail,
+                         BigDecimal totalPrice, int estimatedDeliveryTimeMinutes,
+                         LocalDateTime submittedTime, OrderStatus orderStatus,
+                         String deliveryStreet, int deliveryStreetNumber, String deliveryCity) {
+        this.customerOrderId = customerOrderId;
+        this.restaurantId = restaurantId;
+        this.orderItems = orderItems != null ? new ArrayList<>(orderItems) : new ArrayList<>();
+        this.customerName = customerName;
+        this.customerEmail = customerEmail;
+        this.totalPrice = totalPrice;
+        this.estimateTime = estimatedDeliveryTimeMinutes;
+        this.submittedTime = submittedTime;
+        this.orderStatus = orderStatus;
+        this.deliveryStreet = deliveryStreet;
+        this.deliveryStreetNumber = deliveryStreetNumber;
+        this.deliveryCity = deliveryCity;
+    }
+
+
+    public String getCustomerName() {
+        return customerName;
+    }
+
+    public void setCustomerName(String customerName) {
+        this.customerName = customerName;
+    }
+
+    public String getCustomerEmail() {
+        return customerEmail;
+    }
+
+    public void setCustomerEmail(String customerEmail) {
+        this.customerEmail = customerEmail;
     }
 
     public String getDeliveryStreet() {
@@ -120,6 +160,11 @@ public class CustomerOrder {
 
     public void updateStatus(OrderStatus orderStatus) {
         this.orderStatus = orderStatus;
+    }
+
+
+    public String getFullDeliveryAddress() {
+        return String.format("%s %d, %s", deliveryStreet, deliveryStreetNumber, deliveryCity);
     }
 
 

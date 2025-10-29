@@ -15,11 +15,11 @@ public class OrderItemJpaEntity {
     private UUID orderItemId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "customer_order_id", nullable = false)
+    @JoinColumn(name = "customer_order_id")
     private CustomerOrderJpaEntity customerOrder;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "basket_id", nullable = false)
+    @JoinColumn(name = "basket_id")
     private BasketJpaEntity basket;
 
     @Column(name = "dish_id", nullable = false)
@@ -46,6 +46,7 @@ public class OrderItemJpaEntity {
 
     public void setCustomerOrder(CustomerOrderJpaEntity customerOrder) {
         this.customerOrder = customerOrder;
+        this.basket = null;
     }
 
     public UUID getOrderItemId() {
@@ -62,6 +63,7 @@ public class OrderItemJpaEntity {
 
     public void setBasket(BasketJpaEntity basket) {
         this.basket = basket;
+        this.customerOrder = null;
     }
 
     public UUID getDishId() {

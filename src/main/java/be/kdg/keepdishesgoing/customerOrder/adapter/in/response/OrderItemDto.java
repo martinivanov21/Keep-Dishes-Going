@@ -1,0 +1,14 @@
+package be.kdg.keepdishesgoing.customerOrder.adapter.in.response;
+
+import java.math.BigDecimal;
+import java.util.UUID;
+
+public record OrderItemDto(
+        UUID dishId,
+        String dishName,
+        BigDecimal unitPrice,
+        int quantity,
+        BigDecimal subtotal,
+        String pictureUrl
+) {
+}
