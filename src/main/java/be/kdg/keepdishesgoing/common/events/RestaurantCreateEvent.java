@@ -16,7 +16,13 @@ public record RestaurantCreateEvent(
         String cuisine,
         int defaultPreparationTime,
         String contactEmail,
+
+        String deliveryStreet,
+        int deliveryNumber,
+        String deliveryCity,
+
         List<ScheduleHourDto> workingHours,
+        UUID menuId,
         LocalDateTime eventPit
 ) implements DomainEvent {
 

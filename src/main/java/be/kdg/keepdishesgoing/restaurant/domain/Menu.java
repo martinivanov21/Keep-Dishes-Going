@@ -30,6 +30,11 @@ public class Menu {
         this.dishIds = dishIds;
     }
 
+    public Menu(MenuId menuId, RestaurantId restaurantId) {
+        this.menuId = menuId;
+        this.restaurantId = restaurantId;
+    }
+
     public RestaurantId getRestaurantId() {
         return restaurantId;
     }

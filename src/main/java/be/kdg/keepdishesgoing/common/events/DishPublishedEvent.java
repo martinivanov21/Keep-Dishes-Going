@@ -6,7 +6,7 @@ import java.util.UUID;
 
 public record DishPublishedEvent(
         UUID dishId,
-        UUID restaurantId,
+        UUID menuId,
         String nameOfDish,
         String description,
         double price,
@@ -20,7 +20,6 @@ public record DishPublishedEvent(
 
     public DishPublishedEvent {
         Objects.requireNonNull(dishId, "dishId cannot be null");
-        Objects.requireNonNull(restaurantId, "restaurantId cannot be null");
         Objects.requireNonNull(nameOfDish, "nameOfDish cannot be null");
         if (eventPit == null) {
             eventPit = LocalDateTime.now();

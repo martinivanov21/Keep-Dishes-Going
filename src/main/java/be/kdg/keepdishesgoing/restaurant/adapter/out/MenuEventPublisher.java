@@ -30,10 +30,7 @@ public class MenuEventPublisher implements SaveMenuPort {
     public Menu save(Menu menu) {
         List<DomainEvent> events = menu.getUncommittedEvents();
 
-        for (DomainEvent event : events) {
-            logger.info("Publishing event: {}", event.getClass().getSimpleName());
-            applicationEventPublisher.publishEvent(event);
-        }
+        events.forEach(applicationEventPublisher::publishEvent);
         menu.clearEvents();
         return menu;
 

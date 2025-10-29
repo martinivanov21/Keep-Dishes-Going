@@ -24,7 +24,7 @@ public class Restaurant {
     private String picture;
     private AddressId addressId;
     private OwnerId ownerId;
-    private Menu menu;
+    private MenuId menuId;
     private List<ScheduleHour>  workingHours;
 
     private final List<DomainEvent> eventStore = new ArrayList<>();
@@ -33,9 +33,10 @@ public class Restaurant {
 
 
 
-    public Restaurant(RestaurantId restaurantId, String nameOfRestaurant, Cuisine cuisine, OpeningStatus openingStatus,
-                      int defaultPreparationTime, String contactEmail, String picture, AddressId addressId,
-                      OwnerId ownerId, Menu menu, List<ScheduleHour> workingHours) {
+    public Restaurant(RestaurantId restaurantId, String nameOfRestaurant, Cuisine cuisine,
+                      OpeningStatus openingStatus, int defaultPreparationTime, String contactEmail,
+                      String picture, AddressId addressId, OwnerId ownerId, MenuId menuId,
+                      List<ScheduleHour> workingHours, Address address) {
         this.restaurantId = restaurantId;
         this.nameOfRestaurant = nameOfRestaurant;
         this.cuisine = cuisine;
@@ -45,7 +46,7 @@ public class Restaurant {
         this.picture = picture;
         this.addressId = addressId;
         this.ownerId = ownerId;
-        this.menu = menu;
+        this.menuId = menuId;
         this.workingHours = workingHours != null ? workingHours : new ArrayList<>();
 
         this.raiseEvent(new RestaurantCreateEvent(
@@ -55,13 +56,56 @@ public class Restaurant {
                 cuisine.name(),
                 defaultPreparationTime,
                 contactEmail,
+                address != null ? address.getStreet() : "",
+                address != null ? address.getNumber() : 0,
+                address != null ? address.getCity() : "",
                 workingHours.stream()
                         .map(wh -> new ScheduleHourDto(
-                                (wh.getScheduleHourId().uuid()),
+                                wh.getScheduleHourId().uuid(),
                                 wh.getDayOfWeek(),
                                 wh.getOpeningTime(),
                                 wh.getClosingTime()
                         )).toList(),
+                menuId.uuid(),
+                LocalDateTime.now()
+        ));
+    }
+    public Restaurant(RestaurantId restaurantId, String nameOfRestaurant, Cuisine cuisine,
+                      OpeningStatus openingStatus, int defaultPreparationTime, String contactEmail,
+                      String picture, AddressId addressId, OwnerId ownerId, MenuId menuId,
+                      List<ScheduleHour> workingHours) {
+        this.restaurantId = restaurantId;
+        this.nameOfRestaurant = nameOfRestaurant;
+        this.cuisine = cuisine;
+        this.openingStatus = openingStatus;
+        this.defaultPreparationTime = defaultPreparationTime;
+        this.contactEmail = contactEmail;
+        this.picture = picture;
+        this.addressId = addressId;
+        this.ownerId = ownerId;
+        this.menuId = menuId;
+        this.workingHours = workingHours != null ? workingHours : new ArrayList<>();
+    }
+
+    public void raiseRestaurantCreatedEvent(String street, int number, String city) {
+        this.raiseEvent(new RestaurantCreateEvent(
+                restaurantId.uuid(),
+                nameOfRestaurant,
+                picture,
+                cuisine.name(),
+                defaultPreparationTime,
+                contactEmail,
+                street,
+                number,
+                city,
+                workingHours.stream()
+                        .map(wh -> new ScheduleHourDto(
+                                wh.getScheduleHourId().uuid(),
+                                wh.getDayOfWeek(),
+                                wh.getOpeningTime(),
+                                wh.getClosingTime()
+                        )).toList(),
+                menuId != null ? menuId.uuid() : null,
                 LocalDateTime.now()
         ));
     }
@@ -90,6 +134,10 @@ public class Restaurant {
         return contactEmail;
     }
 
+    public MenuId getMenuId() {
+        return menuId;
+    }
+
     public String getPicture() {
         return picture;
     }
@@ -102,9 +150,7 @@ public class Restaurant {
         return ownerId;
     }
 
-    public Menu getMenu() {
-        return menu;
-    }
+
 
     public List<ScheduleHour> getWorkingHours() {
         return workingHours;
@@ -114,7 +160,6 @@ public class Restaurant {
         eventStore.addAll(uncommitedEvents);
         uncommitedEvents.clear();
     }
-
 
 
     public List<DomainEvent> getUncommitedEvents() {
@@ -149,22 +194,4 @@ public class Restaurant {
     }
 
 
-    @Override
-    public String toString() {
-        return "Restaurant{" +
-                "restaurantId=" + restaurantId +
-                ", nameOfRestaurant='" + nameOfRestaurant + '\'' +
-                ", cuisine=" + cuisine +
-                ", openingStatus=" + openingStatus +
-                ", defaultPreparationTime=" + defaultPreparationTime +
-                ", contactEmail='" + contactEmail + '\'' +
-                ", picture='" + picture + '\'' +
-                ", addressId=" + addressId +
-                ", ownerId=" + ownerId +
-                ", menu=" + menu +
-                ", workingHours=" + workingHours +
-                ", eventStore=" + eventStore +
-                ", uncommitedEvents=" + uncommitedEvents +
-                '}';
-    }
 }

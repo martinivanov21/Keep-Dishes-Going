@@ -4,6 +4,7 @@ import be.kdg.keepdishesgoing.customerOrder.domain.*;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -15,21 +16,41 @@ public class RestaurantCustomerOrderJpaEntity {
     @Column(name = "restaurant_id",nullable = false)
     private UUID restaurantId;
 
-//    private AddressCustomerOrderJpaEntity address;
     private String restaurantName;
+
+
     @Enumerated(EnumType.STRING)
     private Cuisine cuisine;
+
     private String pictureUrl;
+
+    @Column(name = "delivery_street")
+    private String deliveryStreet;
+
+    @Column(name = "delivery_number")
+    private int deliveryNumber;
+
+    @Column(name = "delivery_city")
+    private String deliveryCity;
+
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "menu_id", referencedColumnName = "menu_id")
     private MenuCustomerOrderJpaEntity menu;
-//    @OneToMany(mappedBy = "restaurant_customer_order")
-//    private List<ScheduleHourCustomerOrderJpaEntity> scheduleHours;
+
+    @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<ScheduleHourCustomerOrderJpaEntity> workingHours = new ArrayList<>();
+
     private BigDecimal averagePrice;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "price_range")
     private PriceRange priceRange;
+    @Column(name = "guesstimated_delivery_time_minutes")
     private int guesstimatedDeliveryTimeMinutes;
-//    private List<DishCustomerOrderJpaEntity> publishedDishes;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "opening_status")
+    private OpeningStatus openingStatus;
 
     public UUID getRestaurantId() {
         return restaurantId;
@@ -39,13 +60,6 @@ public class RestaurantCustomerOrderJpaEntity {
         this.restaurantId = restaurantId;
     }
 
-//    public AddressCustomerOrderJpaEntity getAddress() {
-//        return address;
-//    }
-//
-//    public void setAddress(AddressCustomerOrderJpaEntity address) {
-//        this.address = address;
-//    }
 
     public String getRestaurantName() {
         return restaurantName;
@@ -79,14 +93,6 @@ public class RestaurantCustomerOrderJpaEntity {
         this.menu = menu;
     }
 
-//    public List<ScheduleHourCustomerOrderJpaEntity> getScheduleHours() {
-//        return scheduleHours;
-//    }
-//
-//    public void setScheduleHours(List<ScheduleHourCustomerOrderJpaEntity> scheduleHours) {
-//        this.scheduleHours = scheduleHours;
-//    }
-
     public BigDecimal getAveragePrice() {
         return averagePrice;
     }
@@ -111,4 +117,44 @@ public class RestaurantCustomerOrderJpaEntity {
         this.guesstimatedDeliveryTimeMinutes = guesstimatedDeliveryTimeMinutes;
     }
 
+
+    public List<ScheduleHourCustomerOrderJpaEntity> getWorkingHours() {
+        return workingHours;
+    }
+
+    public void setWorkingHours(List<ScheduleHourCustomerOrderJpaEntity> workingHours) {
+        this.workingHours = workingHours;
+    }
+
+    public OpeningStatus getOpeningStatus() {
+        return openingStatus;
+    }
+
+    public void setOpeningStatus(OpeningStatus openingStatus) {
+        this.openingStatus = openingStatus;
+    }
+
+    public String getDeliveryStreet() {
+        return deliveryStreet;
+    }
+
+    public void setDeliveryStreet(String deliveryStreet) {
+        this.deliveryStreet = deliveryStreet;
+    }
+
+    public int getDeliveryNumber() {
+        return deliveryNumber;
+    }
+
+    public void setDeliveryNumber(int deliveryNumber) {
+        this.deliveryNumber = deliveryNumber;
+    }
+
+    public String getDeliveryCity() {
+        return deliveryCity;
+    }
+
+    public void setDeliveryCity(String deliveryCity) {
+        this.deliveryCity = deliveryCity;
+    }
 }

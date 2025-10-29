@@ -1,21 +1,28 @@
 package be.kdg.keepdishesgoing.customerOrder.domain;
 
+import java.math.BigDecimal;
+
 public class OrderItem {
     private OrderItemId orderItemId;
     private DishId dishId;
     private String dishName;
-    private double unitPrice;
+    private BigDecimal unitPrice;
     private int quantity;
     private String pictureUrl;
 
-    public OrderItem(OrderItemId orderItemId, DishId dishId, String dishName, double unitPrice,
-                     int quantity, String pictureUrl) {
+    public OrderItem(OrderItemId orderItemId, DishId dishId, String dishName,
+                     BigDecimal unitPrice, int quantity, String pictureUrl) {
         this.orderItemId = orderItemId;
         this.dishId = dishId;
         this.dishName = dishName;
         this.unitPrice = unitPrice;
         this.quantity = quantity;
         this.pictureUrl = pictureUrl;
+    }
+
+    public OrderItem(OrderItemId orderItemId, DishId dishId, String dishName,
+                     double unitPrice, int quantity, String pictureUrl) {
+        this(orderItemId, dishId, dishName, BigDecimal.valueOf(unitPrice), quantity, pictureUrl);
     }
 
     public OrderItemId getOrderItemId() {
@@ -42,24 +49,16 @@ public class OrderItem {
         this.dishName = dishName;
     }
 
-    public double getUnitPrice() {
+    public BigDecimal getUnitPrice() {
         return unitPrice;
     }
 
-    public void setUnitPrice(double unitPrice) {
+    public void setUnitPrice(BigDecimal unitPrice) {
         this.unitPrice = unitPrice;
     }
 
     public int getQuantity() {
         return quantity;
-    }
-
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
-    }
-
-    public double getSubtotal() {
-        return unitPrice * quantity;
     }
 
     public String getPictureUrl() {
@@ -68,5 +67,23 @@ public class OrderItem {
 
     public void setPictureUrl(String pictureUrl) {
         this.pictureUrl = pictureUrl;
+    }
+
+    public void increaseQuantity(int amount) {
+        if (amount <= 0) {
+            throw new IllegalArgumentException("Amount must be positive");
+        }
+        this.quantity += amount;
+    }
+
+    public void setQuantity(int quantity) {
+        if (quantity < 0) {
+            throw new IllegalArgumentException("Quantity cannot be negative");
+        }
+        this.quantity = quantity;
+    }
+
+    public BigDecimal getSubtotal() {
+        return unitPrice.multiply(BigDecimal.valueOf(quantity));
     }
 }

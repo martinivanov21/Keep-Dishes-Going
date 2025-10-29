@@ -35,7 +35,7 @@ public class CustomerDishController {
 
 
     @GetMapping
-    public ResponseEntity<List<DishBrowseDto>> getRestaurantMenu(@PathVariable UUID restaurantId) {
+    public ResponseEntity<List<DishBrowseDto>> getRestaurantDishes(@PathVariable UUID restaurantId) {
         logger.info("Customer viewing menu from restaurant " + restaurantId);
 
         List<Dish> dishes = loadDishPort.loadByRestaurantId(RestaurantId.of(restaurantId));

@@ -18,21 +18,22 @@ public class BasketMapper {
 
     private OrderItemMapper orderItemMapper;
 
+    public BasketMapper(OrderItemMapper orderItemMapper) {
+        this.orderItemMapper = orderItemMapper;
+
+    }
+
     public Basket toDomain(BasketJpaEntity entity) {
-        List<OrderItem> items = entity.getItems() != null
+        List<OrderItem> orderItems = entity.getItems() != null
                 ? entity.getItems().stream()
-                .map(orderItemMapper::mapOrderItemToDomain)
-                .collect(Collectors.toList())
+                .map(orderItemMapper::orderItemToDomain)
+                .toList()
                 : new ArrayList<>();
 
-        RestaurantId restaurantId = entity.getRestaurantId() != null
-                ? RestaurantId.of(entity.getRestaurantId())
-                : null;
-
         return new Basket(
-                BasketId.of(entity.getBasketId().toString()),
-                restaurantId,
-                items,
+                new BasketId(entity.getBasketId()),
+                entity.getRestaurantId() != null ? new RestaurantId(entity.getRestaurantId()) : null,
+                orderItems,
                 entity.getOrderStatus(),
                 entity.getCreatedAt(),
                 entity.getUpdatedAt()
@@ -50,8 +51,8 @@ public class BasketMapper {
 
         if (basket.getItems() != null && !basket.getItems().isEmpty()) {
             List<OrderItemJpaEntity> itemEntities = basket.getItems().stream()
-                    .map(item -> orderItemMapper.mapOrderItemToEntity(item, entity))
-                    .collect(Collectors.toList());
+                    .map(item -> orderItemMapper.toEntity(item, entity))
+                    .toList();
             entity.setItems(itemEntities);
         }
 

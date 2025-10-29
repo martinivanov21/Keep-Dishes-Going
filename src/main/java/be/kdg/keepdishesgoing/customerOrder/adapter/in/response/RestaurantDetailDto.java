@@ -1,5 +1,6 @@
 package be.kdg.keepdishesgoing.customerOrder.adapter.in.response;
 
+
 import java.util.List;
 import java.util.UUID;
 
@@ -12,7 +13,8 @@ public record RestaurantDetailDto(
         double averagePrice,
         int estimatedDeliveryMinutes,
         List<ScheduleHourDto> workingHours,
-        String address
+        String openingStatus,
+        AddressProjectionDto address
 
 ) {
 }

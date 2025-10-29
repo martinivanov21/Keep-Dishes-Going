@@ -4,6 +4,7 @@ package be.kdg.keepdishesgoing.customerOrder.domain;
 
 public class Dish {
     private DishId dishId;
+    private MenuId menuId;
     private String nameOfDish;
     private String description;
     private double price;
@@ -13,11 +14,11 @@ public class Dish {
     private DishType dishType;
     private DishStatus status;
     private int quantity;
-    private Menu menu;
 
-    public Dish(DishId dishId, String nameOfDish, String description, double price, String pictureUrl,
-                String preparationTime, FoodTag foodTag, DishType dishType, DishStatus status, int quantity, Menu menu) {
+    public Dish(DishId dishId, MenuId menuId, String nameOfDish, String description, double price, String pictureUrl,
+                String preparationTime, FoodTag foodTag, DishType dishType, DishStatus status, int quantity) {
         this.dishId = dishId;
+        this.menuId = menuId;
         this.nameOfDish = nameOfDish;
         this.description = description;
         this.price = price;
@@ -27,7 +28,6 @@ public class Dish {
         this.dishType = dishType;
         this.status = status;
         this.quantity = quantity;
-        this.menu = menu;
     }
 
     public DishId getDishId() {
@@ -110,11 +110,11 @@ public class Dish {
         this.quantity = quantity;
     }
 
-    public Menu getMenu() {
-        return menu;
+    public MenuId getMenuId() {
+        return menuId;
     }
 
-    public void setMenu(Menu menu) {
-        this.menu = menu;
+    public void setMenuId(MenuId menuId) {
+        this.menuId = menuId;
     }
 }

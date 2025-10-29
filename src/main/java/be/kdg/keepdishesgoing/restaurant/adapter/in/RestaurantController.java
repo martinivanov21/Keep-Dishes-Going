@@ -46,7 +46,7 @@ public class RestaurantController {
                 request.picture(),
                 request.addressId() != null ? new AddressId(UUID.fromString(request.addressId())) : null,
                 request.ownerId() != null ? new OwnerId(UUID.fromString(request.ownerId())) : null,
-                request.menuId() != null ? new Menu(request.menuId(), List.of()) : null,
+                request.menuId() != null ? new MenuId(request.menuId().uuid()) : null,
                 request.workingHours() != null ? request.workingHours().stream()
                                 .map(wh -> new ScheduleHour(
                                         wh.getScheduleHourId(),
@@ -77,7 +77,7 @@ public class RestaurantController {
                                         wh.getClosingTime()
                                 )).toList(),
                 created.getOwnerId().uuid(),
-                created.getMenu() != null ? new MenuDto(created.getMenu().getMenuId().uuid(),
+                created.getMenuId() != null ? new MenuDto(created.getMenuId().uuid(),
                         created.getRestaurantId().uuid()) : null
         );
 
@@ -105,7 +105,7 @@ public class RestaurantController {
                                         work.getClosingTime()
                                 )).toList(),
                         r.getOwnerId().uuid(),
-                        new MenuDto(r.getMenu().getMenuId().uuid(),
+                        new MenuDto(r.getMenuId().uuid(),
                                 r.getRestaurantId().uuid())
 
                 )).toList();

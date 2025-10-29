@@ -28,7 +28,7 @@ public class Basket {
                   LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.basketId = basketId;
         this.restaurantId = restaurantId;
-        this.items = items;
+        this.items = items != null ? items : new ArrayList<>();
         this.status = status;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
@@ -84,23 +84,30 @@ public class Basket {
     }
 
 
-//    public void addItem(Dish dish, int quantity) {
-//        validateQuantity(quantity);
-//        lockToRestaurantIfFirst(dish);
-//        validateSameRestaurant(dish);
-//        validateDishAvailable(dish);
-//
-//        OrderItem existingItem = findItemByDishId(dish.getDishId());
-//
-//        if (existingItem != null) {
-//            existingItem.increaseQuantity(quantity);
-//        } else {
-//            OrderItem newItem = createOrderItem(dish, quantity);
-//            this.items.add(newItem);
-//        }
-//
-//        touch();
-//    }
+    public void addItem(DishId dishId, String dishName, double price, String pictureUrl,
+                        int quantity, RestaurantId restaurantId) {
+        validateQuantity(quantity);
+        lockToRestaurantIfFirst(restaurantId);
+        validateSameRestaurant(restaurantId);
+
+        OrderItem existingItem = findItemByDishId(dishId);
+
+        if (existingItem != null) {
+            existingItem.increaseQuantity(quantity);
+        } else {
+            OrderItem newItem = new OrderItem(
+                    new OrderItemId(UUID.randomUUID()),
+                    dishId,
+                    dishName,
+                    price,
+                    quantity,
+                    pictureUrl
+            );
+            this.items.add(newItem);
+        }
+
+        touch();
+    }
 
     public void removeItem(DishId dishId) {
         this.items.removeIf(item -> item.getDishId().equals(dishId));
@@ -137,38 +144,56 @@ public class Basket {
         touch();
     }
 
-//    public CustomerOrder checkout(Address deliveryAddress, double estimatedTime) {
-//        if (!canCheckout()) {
-//            throw new IllegalStateException("Basket is not ready for checkout");
-//        }
-//
-//        CustomerOrder order = new CustomerOrder(
-//                new CustomerOrderId(UUID.randomUUID()),
-//                this.restaurantId,
-//                new ArrayList<>(this.items),
-//                deliveryAddress,
-//                estimatedTime,
-//                this.getTotalPrice().doubleValue(),
-//                LocalDateTime.now(),
-//                OrderStatus.PENDING
-//        );
-//
-//        this.status = OrderStatus.CHECKED_OUT;
-//
-//        return order;
-//    }
+    // In Basket class
+    public CustomerOrder checkout(String deliveryStreet,
+                                  int deliveryNumber, String deliveryCity,
+                                  int estimatedDeliveryTimeMinutes) {
+        if (!canCheckout()) {
+            throw new IllegalStateException("Basket is not ready for checkout. " +
+                    "Ensure basket has items and is linked to a restaurant.");
+        }
 
-//    public BigDecimal getTotalPrice() {
-//        return items.stream()
-//                .map(OrderItem::getSubtotal)
-//                .reduce(BigDecimal.ZERO, BigDecimal::add);
-//    }
+        if (deliveryStreet == null || deliveryStreet.trim().isEmpty()) {
+            throw new IllegalArgumentException("Delivery street is required");
+        }
+        if (deliveryCity == null || deliveryCity.trim().isEmpty()) {
+            throw new IllegalArgumentException("Delivery city is required");
+        }
+        if (deliveryNumber <= 0) {
+            throw new IllegalArgumentException("Delivery number must be positive");
+        }
+
+        CustomerOrder order = new CustomerOrder(
+                new CustomerOrderId(UUID.randomUUID()),
+                this.restaurantId,
+                new ArrayList<>(this.items),
+                this.getTotalPrice(),
+                estimatedDeliveryTimeMinutes,
+                LocalDateTime.now(),
+                OrderStatus.ACTIVE,
+                deliveryStreet,
+                deliveryNumber,
+                deliveryCity
+        );
+
+        this.status = OrderStatus.PENDING;
+        touch();
+
+        return order;
+    }
+
+    public BigDecimal getTotalPrice() {
+        return items.stream()
+                .map(OrderItem::getSubtotal)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
 
     public int getTotalItemCount() {
         return items.stream()
                 .mapToInt(OrderItem::getQuantity)
                 .sum();
     }
+
 
     public boolean canCheckout() {
         return !items.isEmpty()
@@ -178,26 +203,21 @@ public class Basket {
     public boolean isEmpty() {
         return items.isEmpty();
     }
-    private void lockToRestaurantIfFirst(Dish dish) {
+
+    private void lockToRestaurantIfFirst(RestaurantId restaurantId) {
         if (this.restaurantId == null) {
-            this.restaurantId = dish.getMenu().getRestaurantId();
+            this.restaurantId = restaurantId;
         }
     }
     private void unlockRestaurant() {
         this.restaurantId = null;
     }
 
-    private void validateSameRestaurant(Dish dish) {
-        if (!dish.getMenu().getRestaurantId().equals(this.restaurantId)) {
+    private void validateSameRestaurant(RestaurantId restaurantId) {
+        if (this.restaurantId != null && !this.restaurantId.equals(restaurantId)) {
             throw new IllegalArgumentException(
                     "Cannot add dishes from different restaurants. " +
                             "Please clear your basket to order from a different restaurant.");
-        }
-    }
-
-    private void validateDishAvailable(Dish dish) {
-        if (dish.getStatus() != DishStatus.PUBLISHED || dish.getQuantity() <= 0) {
-            throw new IllegalArgumentException("Dish is not available");
         }
     }
 

@@ -8,24 +8,30 @@ import be.kdg.keepdishesgoing.restaurant.port.out.menu.SaveMenuPort;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class CreateMenuUseCaseImpl implements CreateMenuUseCase {
 
-    private final SaveMenuPort saveMenuPort;
+    private final List<SaveMenuPort> saveMenuPorts;
     private final MenuEventPublisher menuEventPublisher;
 
-    public CreateMenuUseCaseImpl(SaveMenuPort saveMenuPort, MenuEventPublisher menuEventPublisher) {
-        this.saveMenuPort = saveMenuPort;
+    public CreateMenuUseCaseImpl(List<SaveMenuPort> saveMenuPorts, MenuEventPublisher menuEventPublisher) {
+        this.saveMenuPorts = saveMenuPorts;
         this.menuEventPublisher = menuEventPublisher;
     }
+
 
     @Override
     @Transactional
     public Menu createMenu(CreateMenuCommand command) {
         Menu menu = command.menu();
+
         menu.create();
-        Menu savedMenu = saveMenuPort.save(menu);
-        menuEventPublisher.save(savedMenu);
-        return savedMenu;
+
+        for (SaveMenuPort saveMenuPort : saveMenuPorts) {
+            menu = saveMenuPort.save(menu);
+        }
+        return menu;
     }
 }

@@ -15,8 +15,6 @@ public class AddressCustomerOrderJpaEntity {
     @Column(name = "street_name")
     private int number;
     private String city;
-    private String postalCode;
-    private String country;
 
     public AddressCustomerOrderJpaEntity() {
     }
@@ -53,19 +51,6 @@ public class AddressCustomerOrderJpaEntity {
         this.city = city;
     }
 
-    public String getPostalCode() {
-        return postalCode;
-    }
 
-    public void setPostalCode(String postalCode) {
-        this.postalCode = postalCode;
-    }
 
-    public String getCountry() {
-        return country;
-    }
-
-    public void setCountry(String country) {
-        this.country = country;
-    }
 }

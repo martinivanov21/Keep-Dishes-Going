@@ -34,12 +34,10 @@ public class RestaurantProjectionEventListener {
         log.info("Received RestaurantCreateEvent: {}", event.restaurantName());
         log.info("Event ID: {}", event.restaurantId());
 
-
         Restaurant restaurant = new Restaurant(
                 RestaurantId.of(event.restaurantId()),
                 event.restaurantName(),
-                null,
-                Cuisine.valueOf(event.cuisine()),
+                Cuisine.valueOf(event.cuisine().toString()),
                 event.pictureUrl(),
                 event.workingHours().stream()
                         .map(dto -> new ScheduleHour(
@@ -51,7 +49,11 @@ public class RestaurantProjectionEventListener {
                 PriceRange.REGULAR,
                 BigDecimal.ZERO,
                 event.defaultPreparationTime(),
-                new ArrayList<>()
+                MenuId.of(event.menuId().toString()),
+                OpeningStatus.OPEN,
+                event.deliveryStreet(),
+                event.deliveryNumber(),
+                event.deliveryCity()
         );
 
         saveRestaurantPort.saveRestaurant(restaurant);

@@ -33,7 +33,6 @@ public class RestaurantEventStoreAdapter implements SaveRestaurantPort {
                eventJpaEntity.setEventPit(event.eventPit().toString());
                eventJpaEntity.setEventType(event.getClass().getSimpleName());
 
-//               eventJpaEntity.setRestaurantUuid(restaurant.getRestaurantId().uuid());
 
                if (event instanceof RestaurantCreateEvent) {
                    eventJpaEntity.setOwner(restaurant.getOwnerId().uuid());

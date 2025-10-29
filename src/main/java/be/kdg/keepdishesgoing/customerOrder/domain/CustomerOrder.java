@@ -1,36 +1,72 @@
 package be.kdg.keepdishesgoing.customerOrder.domain;
 
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 public class CustomerOrder {
     private CustomerOrderId customerOrderId;
     private RestaurantId restaurantId;
-    private List<OrderItem> orderItem;
-    private double estimateTime;
-    private double totalPrice;
+    private List<OrderItem> orderItems;
+
+    private BigDecimal totalPrice;
+    private int estimateTime;
     private LocalDateTime submittedTime;
     private OrderStatus orderStatus;
-    private Address deliveryAddress;
 
-    public CustomerOrder(CustomerOrderId customerOrderId, double estimateTime, double totalPrice,
-                         LocalDateTime submittedTime, OrderStatus orderStatus, Address deliveryAddress) {
+    private String deliveryStreet;
+    private int deliveryStreetNumber;
+    private String deliveryCity;
+
+
+    public CustomerOrder(CustomerOrderId customerOrderId, RestaurantId restaurantId, List<OrderItem> orderItems,
+                         BigDecimal totalPrice, int estimateTime, LocalDateTime submittedTime,
+                         OrderStatus orderStatus, String deliveryStreet, int deliveryStreetNumber, String deliveryCity) {
         this.customerOrderId = customerOrderId;
-        this.estimateTime = estimateTime;
+        this.restaurantId = restaurantId;
+        this.orderItems = orderItems;
         this.totalPrice = totalPrice;
+        this.estimateTime = estimateTime;
         this.submittedTime = submittedTime;
         this.orderStatus = orderStatus;
-        this.deliveryAddress = deliveryAddress;
+        this.deliveryStreet = deliveryStreet;
+        this.deliveryStreetNumber = deliveryStreetNumber;
+        this.deliveryCity = deliveryCity;
     }
 
-    public Address getDeliveryAddress() {
-        return deliveryAddress;
+    public String getDeliveryStreet() {
+        return deliveryStreet;
     }
 
-    public void setDeliveryAddress(Address deliveryAddress) {
-        this.deliveryAddress = deliveryAddress;
+    public void setDeliveryStreet(String deliveryStreet) {
+        this.deliveryStreet = deliveryStreet;
+    }
+
+    public int getDeliveryStreetNumber() {
+        return deliveryStreetNumber;
+    }
+
+    public void setDeliveryStreetNumber(int deliveryStreetNumber) {
+        this.deliveryStreetNumber = deliveryStreetNumber;
+    }
+
+    public String getDeliveryCity() {
+        return deliveryCity;
+    }
+
+    public void setDeliveryCity(String deliveryCity) {
+        this.deliveryCity = deliveryCity;
+    }
+
+    public BigDecimal getTotalPrice() {
+        return totalPrice;
+    }
+
+    public void setTotalPrice(BigDecimal totalPrice) {
+        this.totalPrice = totalPrice;
     }
 
     public CustomerOrderId getCustomerOrderId() {
@@ -41,21 +77,14 @@ public class CustomerOrder {
         this.customerOrderId = customerOrderId;
     }
 
-    public double getEstimateTime() {
+    public int getEstimateTime() {
         return estimateTime;
     }
 
-    public void setEstimateTime(double estimateTime) {
+    public void setEstimateTime(int estimateTime) {
         this.estimateTime = estimateTime;
     }
 
-    public double getTotalPrice() {
-        return totalPrice;
-    }
-
-    public void setTotalPrice(double totalPrice) {
-        this.totalPrice = totalPrice;
-    }
 
     public LocalDateTime getSubmittedTime() {
         return submittedTime;
@@ -81,21 +110,22 @@ public class CustomerOrder {
         this.restaurantId = restaurantId;
     }
 
-    public List<OrderItem> getOrderItem() {
-        return orderItem;
+    public List<OrderItem> getOrderItems() {
+        return orderItems;
     }
 
-    public void setOrderItem(List<OrderItem> orderItem) {
-        this.orderItem = orderItem;
+    public void setOrderItems(List<OrderItem> orderItems) {
+        this.orderItems = orderItems;
     }
 
     public void updateStatus(OrderStatus orderStatus) {
         this.orderStatus = orderStatus;
     }
 
-//    public double calculateTotal() {
-//        return orderItems.stream()
-//                .mapToDouble(item -> item.getUnitPrice() * item.getQuantity())
-//                .sum();
-//    }
+
+    public int getTotalItemCount() {
+        return orderItems.stream()
+                .mapToInt(OrderItem::getQuantity)
+                .sum();
+    }
 }

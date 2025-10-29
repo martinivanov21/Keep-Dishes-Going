@@ -40,7 +40,17 @@ public class RestaurantJpaAdapter implements LoadRestaurantPort, UpdateRestauran
         RestaurantJpaEntity restaurantJpaEntity = mapToEntity(restaurant);
         RestaurantJpaEntity result = restaurants.save(restaurantJpaEntity);
 
-        return mapToDomain(result);
+        Restaurant savedRestaurant = mapToDomain(result);
+
+        if (result.getAddress() != null) {
+            savedRestaurant.raiseRestaurantCreatedEvent(
+                    result.getAddress().getStreet(),
+                    result.getAddress().getNumber(),
+                    result.getAddress().getCity()
+            );
+        }
+
+        return savedRestaurant;
     }
 
 
@@ -98,9 +108,9 @@ public class RestaurantJpaAdapter implements LoadRestaurantPort, UpdateRestauran
             entity.setOwner(owner);
         }
 
-        if (restaurant.getMenu() != null && restaurant.getMenu().getMenuId() != null) {
+        if (restaurant.getMenuId() != null) {
             MenuJpaEntity menu = new MenuJpaEntity();
-            menu.setMenuId(restaurant.getMenu().getMenuId().uuid());
+            menu.setMenuId(restaurant.getMenuId().uuid());
             entity.setMenu(menu);
         }
 
@@ -118,13 +128,14 @@ public class RestaurantJpaAdapter implements LoadRestaurantPort, UpdateRestauran
                 entity.getPicture(),
                 entity.getAddress() != null ? new AddressId(entity.getAddress().getAddressId()) : null,
                 entity.getOwner() != null ? new OwnerId(entity.getOwner().getOwnerId()) : null,
-                entity.getMenu() != null ? mapMenu(entity.getMenu()) : null,
+                entity.getMenu() != null ? new MenuId(entity.getMenu().getMenuId()) : null, // Just map to MenuId
                 entity.getWorkingHours().stream()
                         .map(this::mapScheduleHour)
                         .filter(Objects::nonNull)
                         .toList()
         );
     }
+
 
     private Menu mapMenu(MenuJpaEntity entity) {
         if (entity == null) return null;

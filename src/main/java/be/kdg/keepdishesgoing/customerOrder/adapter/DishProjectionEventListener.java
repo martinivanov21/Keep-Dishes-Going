@@ -40,12 +40,10 @@ public class DishProjectionEventListener {
         logger.info("Received DishPublishedEvent for dish: {}", event.dishId());
 
         try {
-            loadRestaurantPort.loadById(new RestaurantId(event.restaurantId()))
-                    .orElseThrow(() -> new IllegalStateException(
-                            "Restaurant not found in projection: " + event.restaurantId()));
 
             Dish dish = new Dish(
                     new DishId(event.dishId()),
+                    new MenuId(event.menuId()),
                     event.nameOfDish(),
                     event.description(),
                     event.price(),
@@ -54,11 +52,7 @@ public class DishProjectionEventListener {
                     FoodTag.valueOf(event.foodTag()),
                     DishType.valueOf(event.dishType()),
                     DishStatus.PUBLISHED,
-                    event.quantity(),
-                    new Menu(
-                            new MenuId(UUID.randomUUID()),
-                            new RestaurantId(event.restaurantId())
-                    )
+                    event.quantity()
             );
 
             saveDishPort.saveDish(dish);

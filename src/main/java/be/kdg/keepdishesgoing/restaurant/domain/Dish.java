@@ -146,7 +146,7 @@ public class Dish {
     private void raisePublishedEvent() {
         DishPublishedEvent event = new DishPublishedEvent(
                 this.dishId.uuid(),
-                this.menu.getRestaurantId().uuid(),
+                this.menu.getMenuId().uuid(),
                 this.liveVersion.getNameOfDish(),
                 this.liveVersion.getDescription(),
                 this.liveVersion.getPrice(),

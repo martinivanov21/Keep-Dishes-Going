@@ -20,6 +20,7 @@ public class DishMapperProjection {
         }
         return new Dish(
                 new DishId(entity.getDishId()),
+                new MenuId(entity.getMenu().getMenuId()),
                 entity.getNameOfDish(),
                 entity.getDescription(),
                 entity.getPrice(),
@@ -28,8 +29,7 @@ public class DishMapperProjection {
                 entity.getFoodTag(),
                 entity.getDishType(),
                 entity.getDishStatus(),
-                entity.getQuantity(),
-                menu
+                entity.getQuantity()
         );
     }
 

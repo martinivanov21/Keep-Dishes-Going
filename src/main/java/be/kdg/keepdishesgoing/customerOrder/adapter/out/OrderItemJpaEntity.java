@@ -2,6 +2,7 @@ package be.kdg.keepdishesgoing.customerOrder.adapter.out;
 
 import jakarta.persistence.*;
 
+import java.math.BigDecimal;
 import java.util.UUID;
 
 
@@ -14,6 +15,10 @@ public class OrderItemJpaEntity {
     private UUID orderItemId;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "customer_order_id", nullable = false)
+    private CustomerOrderJpaEntity customerOrder;
+
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "basket_id", nullable = false)
     private BasketJpaEntity basket;
 
@@ -24,7 +29,7 @@ public class OrderItemJpaEntity {
     private String dishName;
 
     @Column(name = "unit_price", nullable = false)
-    private double unitPrice;
+    private BigDecimal unitPrice;
 
     @Column(nullable = false)
     private int quantity;
@@ -33,6 +38,14 @@ public class OrderItemJpaEntity {
     private String pictureUrl;
 
     public OrderItemJpaEntity() {
+    }
+
+    public CustomerOrderJpaEntity getCustomerOrder() {
+        return customerOrder;
+    }
+
+    public void setCustomerOrder(CustomerOrderJpaEntity customerOrder) {
+        this.customerOrder = customerOrder;
     }
 
     public UUID getOrderItemId() {
@@ -67,11 +80,11 @@ public class OrderItemJpaEntity {
         this.dishName = dishName;
     }
 
-    public double getUnitPrice() {
+    public BigDecimal getUnitPrice() {
         return unitPrice;
     }
 
-    public void setUnitPrice(double unitPrice) {
+    public void setUnitPrice(BigDecimal unitPrice) {
         this.unitPrice = unitPrice;
     }
 

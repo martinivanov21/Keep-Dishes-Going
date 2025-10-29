@@ -11,41 +11,78 @@ import java.util.stream.Stream;
 public class Restaurant {
     private RestaurantId restaurantId;
     private String restaurantName;
-    private Address deliveryAddress;
     private Cuisine cuisine;
     private String pictureUrl;
     private List<ScheduleHour> workingHours;
     private PriceRange priceRange;
     private BigDecimal averagePrice;
     private int guesstimatedDeliveryTimeMinutes;
-    private List<Dish> publishedDishes;
+    private MenuId menuId;
+    private OpeningStatus openingStatus;
 
+    private String deliveryStreet;
+    private int deliveryNumber;
+    private String deliveryCity;
 
-
-    public Restaurant(RestaurantId restaurantId, String restaurantName, Address deliveryAddress, Cuisine cuisine,
+    public Restaurant(RestaurantId restaurantId, String restaurantName, Cuisine cuisine,
                       String pictureUrl, List<ScheduleHour> workingHours, PriceRange priceRange,
-                      BigDecimal averagePrice, int guesstimatedDeliveryTimeMinutes, List<Dish> publishedDishes) {
+                      BigDecimal averagePrice, int guesstimatedDeliveryTimeMinutes, MenuId menuId,
+                      OpeningStatus openingStatus, String deliveryStreet, int deliveryNumber, String deliveryCity) {
         this.restaurantId = restaurantId;
         this.restaurantName = restaurantName;
-        this.deliveryAddress = deliveryAddress;
         this.cuisine = cuisine;
         this.pictureUrl = pictureUrl;
         this.workingHours = workingHours;
         this.priceRange = priceRange;
         this.averagePrice = averagePrice;
         this.guesstimatedDeliveryTimeMinutes = guesstimatedDeliveryTimeMinutes;
-        this.publishedDishes = publishedDishes;
+        this.menuId = menuId;
+        this.openingStatus = openingStatus;
+        this.deliveryStreet = deliveryStreet;
+        this.deliveryNumber = deliveryNumber;
+        this.deliveryCity = deliveryCity;
     }
 
-    public List<Dish> getPublishedDishes() {
-        return publishedDishes;
+    public MenuId getMenuId() {
+        return menuId;
     }
 
-    public void setPublishedDishes(List<Dish> publishedDishes) {
-        this.publishedDishes = publishedDishes;
+    public void setMenuId(MenuId menuId) {
+        this.menuId = menuId;
     }
 
 
+    public String getDeliveryStreet() {
+        return deliveryStreet;
+    }
+
+    public void setDeliveryStreet(String deliveryStreet) {
+        this.deliveryStreet = deliveryStreet;
+    }
+
+    public int getDeliveryNumber() {
+        return deliveryNumber;
+    }
+
+    public void setDeliveryNumber(int deliveryNumber) {
+        this.deliveryNumber = deliveryNumber;
+    }
+
+    public String getDeliveryCity() {
+        return deliveryCity;
+    }
+
+    public void setDeliveryCity(String deliveryCity) {
+        this.deliveryCity = deliveryCity;
+    }
+
+    public OpeningStatus getOpeningStatus() {
+        return openingStatus;
+    }
+
+    public void setOpeningStatus(OpeningStatus openingStatus) {
+        this.openingStatus = openingStatus;
+    }
 
     public BigDecimal getAveragePrice() {
         return averagePrice;
@@ -77,14 +114,6 @@ public class Restaurant {
 
     public void setRestaurantName(String restaurantName) {
         this.restaurantName = restaurantName;
-    }
-
-    public Address getDeliveryAddress() {
-        return deliveryAddress;
-    }
-
-    public void setDeliveryAddress(Address deliveryAddress) {
-        this.deliveryAddress = deliveryAddress;
     }
 
     public Cuisine getCuisine() {
@@ -119,6 +148,7 @@ public class Restaurant {
     public void setPriceRange(PriceRange priceRange) {
         this.priceRange = priceRange;
     }
+
 
 }
 
