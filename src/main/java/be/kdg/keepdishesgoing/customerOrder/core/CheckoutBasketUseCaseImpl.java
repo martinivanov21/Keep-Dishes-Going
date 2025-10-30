@@ -20,17 +20,19 @@ public class CheckoutBasketUseCaseImpl implements CheckoutBasketUseCase {
     private final SaveCustomerOrderPort saveOrderPort;
     private final LoadDishPort loadDishPort;
     private final LoadRestaurantPort loadRestaurantPort;
+    private final DeleteBasketPort deleteBasketPort;
 
     public CheckoutBasketUseCaseImpl(LoadBasketPort loadBasketPort, SaveBasketPort saveBasketPort, SaveCustomerOrderPort saveOrderPort, LoadDishPort loadDishPort,
-                                     LoadRestaurantPort loadRestaurantPort) {
+                                     LoadRestaurantPort loadRestaurantPort, DeleteBasketPort deleteBasketPort) {
         this.loadBasketPort = loadBasketPort;
         this.saveBasketPort = saveBasketPort;
         this.saveOrderPort = saveOrderPort;
         this.loadDishPort = loadDishPort;
         this.loadRestaurantPort = loadRestaurantPort;
+        this.deleteBasketPort = deleteBasketPort;
     }
 
-        private void validateDishesAvailability(Basket basket) {
+    private void validateDishesAvailability(Basket basket) {
         List<String> unavailableDishes = new ArrayList<>();
 
         for (OrderItem item : basket.getItems()) {
@@ -55,20 +57,20 @@ public class CheckoutBasketUseCaseImpl implements CheckoutBasketUseCase {
     @Override
     @Transactional
     public CustomerOrder checkout(CheckoutBasketCommand command) {
-        // Load basket
         Basket basket = loadBasketPort.loadById(new BasketId(command.basketId()))
                 .orElseThrow(() -> new IllegalArgumentException("Basket not found"));
 
-        // Validate all dishes are still available
+        if (basket.getItems().isEmpty()) {
+            throw new IllegalStateException("Basket is empty");
+        }
+
         validateDishesAvailability(basket);
 
-        // Get restaurant delivery time
         Restaurant restaurant = loadRestaurantPort.loadById(basket.getRestaurantId())
                 .orElseThrow(() -> new IllegalStateException("Restaurant not found"));
 
         int estimatedTime = restaurant.getGuesstimatedDeliveryTimeMinutes();
 
-        // Checkout
         CustomerOrder order = basket.checkout(
                 command.request().customerName(),
                 command.request().customerEmail(),
@@ -78,9 +80,9 @@ public class CheckoutBasketUseCaseImpl implements CheckoutBasketUseCase {
                 estimatedTime
         );
 
-        // Save order and updated basket
         CustomerOrder savedOrder = saveOrderPort.save(order);
         saveBasketPort.save(basket);
+        deleteBasketPort.delete(basket.getBasketId());
 
 
         return savedOrder;

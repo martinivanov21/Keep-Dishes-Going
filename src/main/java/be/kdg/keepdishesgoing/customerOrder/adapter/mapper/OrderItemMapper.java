@@ -15,6 +15,7 @@ public class OrderItemMapper {
         OrderItemJpaEntity entity = new OrderItemJpaEntity();
         entity.setOrderItemId(item.getOrderItemId().uuid());
         entity.setCustomerOrder(orderEntity);
+        entity.setBasket(null);
         entity.setDishId(item.getDishId().uuid());
         entity.setDishName(item.getDishName());
         entity.setUnitPrice(item.getUnitPrice());

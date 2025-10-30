@@ -174,7 +174,14 @@ public class Basket {
         CustomerOrder order = new CustomerOrder(
                 new CustomerOrderId(UUID.randomUUID()),
                 this.restaurantId,
-                new ArrayList<>(this.items),
+                this.items.stream().map(oi -> new OrderItem(
+                        OrderItemId.create(),
+                        oi.getDishId(),
+                        oi.getDishName(),
+                        oi.getUnitPrice(),
+                        oi.getQuantity(),
+                        oi.getPictureUrl()
+                )).toList(),
                 customerName,
                 customerEmail,
                 this.getTotalPrice(),
@@ -187,6 +194,8 @@ public class Basket {
         );
 
         this.status = OrderStatus.PENDING;
+        this.items.clear();
+        unlockRestaurant();
         touch();
 
         return order;
