@@ -7,6 +7,7 @@ import be.kdg.keepdishesgoing.customerOrder.domain.Basket;
 import be.kdg.keepdishesgoing.customerOrder.domain.CustomerOrder;
 import be.kdg.keepdishesgoing.customerOrder.port.in.*;
 import be.kdg.keepdishesgoing.customerOrder.port.out.LoadDishPort;
+import jakarta.annotation.security.PermitAll;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -19,6 +20,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api/customer-order/basket")
 @CrossOrigin(origins = "http://localhost:5173" )
+@PermitAll
 public class BasketController {
 
     private static final Logger logger = LoggerFactory.getLogger(BasketController.class);

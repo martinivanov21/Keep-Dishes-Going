@@ -8,6 +8,7 @@ import be.kdg.keepdishesgoing.customerOrder.domain.CustomerOrderId;
 import be.kdg.keepdishesgoing.customerOrder.domain.OrderStatus;
 import be.kdg.keepdishesgoing.customerOrder.port.out.LoadCustomerOrderPort;
 import be.kdg.keepdishesgoing.customerOrder.port.out.UpdateCustomerOrderPort;
+import jakarta.annotation.security.PermitAll;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,6 +20,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api/customer-order/orders")
 @CrossOrigin(origins = "http://localhost:5173")
+@PermitAll
 public class CustomerOrderController {
 
     private final LoadCustomerOrderPort loadCustomerOrderPort;

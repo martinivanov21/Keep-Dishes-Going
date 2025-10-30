@@ -2,6 +2,7 @@ package be.kdg.keepdishesgoing.common.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -27,6 +28,12 @@ public class SecurityConfig {
                 .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/unsecured", "/secured/public", "/actuator/health").permitAll()
+                        .requestMatchers("/api/customer-order/**").permitAll()
+                        .requestMatchers("/api/restaurants-customer/**").permitAll()
+                        .requestMatchers("/api/addresses/**").hasRole("OWNER")
+                        .requestMatchers("/api/cuisines/**").hasRole("OWNER")
+                        .requestMatchers("/api/restaurants/**").hasRole("OWNER")
+                        .requestMatchers("/api/restaurants/**").hasRole("OWNER")
                         .anyRequest().authenticated()
                 )
                 .oauth2ResourceServer(oauth -> oauth
@@ -49,7 +56,7 @@ public class SecurityConfig {
             @Override public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**")
                         .allowedOrigins("http://localhost:5173")
-                        .allowedMethods("GET","POST","PUT","DELETE","OPTIONS")
+                        .allowedMethods("GET","POST","PUT","PATCH","DELETE","OPTIONS")
                         .allowedHeaders("*")
                         .allowCredentials(true);
             }
