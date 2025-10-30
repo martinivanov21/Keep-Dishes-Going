@@ -27,12 +27,15 @@ public class BasketMapper {
     }
 
     public Basket toDomain(BasketJpaEntity entity) {
-        List<OrderItem> orderItems = entity.getItems() != null
-                ? entity.getItems().stream()
-                .filter(item -> item.getBasket() != null)
-                .map(orderItemMapper::orderItemToDomain)
-                .toList()
-                : new ArrayList<>();
+        List<OrderItem> orderItems = new ArrayList<>();
+
+        if (entity.getItems() != null) {
+            orderItems = entity.getItems().stream()
+                    .filter(item -> item.getBasket() != null)
+                    .map(orderItemMapper::orderItemToDomain)
+                    .collect(java.util.stream.Collectors.toCollection(ArrayList::new));
+
+        }
 
         return new Basket(
                 new BasketId(entity.getBasketId()),
@@ -53,12 +56,21 @@ public class BasketMapper {
         entity.setCreatedAt(basket.getCreatedAt());
         entity.setUpdatedAt(basket.getUpdatedAt());
 
+        List<OrderItemJpaEntity> itemEntities = new ArrayList<>();
         if (basket.getItems() != null && !basket.getItems().isEmpty()) {
-            List<OrderItemJpaEntity> itemEntities = basket.getItems().stream()
-                    .map(item -> orderItemMapper.toEntity(item, entity))
-                    .toList();
-            entity.setItems(itemEntities);
+            for (OrderItem item : basket.getItems()) {
+                OrderItemJpaEntity itemEntity = new OrderItemJpaEntity();
+                itemEntity.setOrderItemId(item.getOrderItemId().uuid());
+                itemEntity.setBasket(entity);
+                itemEntity.setDishId(item.getDishId().uuid());
+                itemEntity.setDishName(item.getDishName());
+                itemEntity.setUnitPrice(item.getUnitPrice());
+                itemEntity.setQuantity(item.getQuantity());
+                itemEntity.setPictureUrl(item.getPictureUrl());
+                itemEntities.add(itemEntity);
+            }
         }
+        entity.setItems(itemEntities);
 
         return entity;
     }

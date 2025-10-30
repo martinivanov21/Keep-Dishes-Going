@@ -37,7 +37,7 @@ public class OrderItemMapper {
     public OrderItemJpaEntity toEntity(OrderItem item, BasketJpaEntity basketEntity) {
         OrderItemJpaEntity entity = new OrderItemJpaEntity();
         entity.setOrderItemId(item.getOrderItemId().uuid());
-        entity.setBasket(basketEntity);  // Set basket reference
+        entity.setBasket(basketEntity);
         entity.setDishId(item.getDishId().uuid());
         entity.setDishName(item.getDishName());
         entity.setUnitPrice(item.getUnitPrice());

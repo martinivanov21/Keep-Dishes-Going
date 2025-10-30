@@ -18,7 +18,6 @@ public class RestaurantCustomerOrderJpaEntity {
 
     private String restaurantName;
 
-
     @Enumerated(EnumType.STRING)
     private Cuisine cuisine;
 

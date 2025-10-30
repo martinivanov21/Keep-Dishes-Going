@@ -9,6 +9,7 @@ import be.kdg.keepdishesgoing.customerOrder.domain.*;
 import be.kdg.keepdishesgoing.customerOrder.port.out.LoadRestaurantPort;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Component
@@ -49,7 +50,6 @@ public class CustomerOrderMapper {
 
         entity.setCustomerOrderId(order.getCustomerOrderId().uuid());
 
-        // Set restaurant reference
         RestaurantCustomerOrderJpaEntity restaurantRef = new RestaurantCustomerOrderJpaEntity();
         restaurantRef.setRestaurantId(order.getRestaurantId().uuid());
         entity.setRestaurant(restaurantRef);
@@ -64,9 +64,11 @@ public class CustomerOrderMapper {
         entity.setSubmittedTime(order.getSubmittedTime());
         entity.setOrderStatus(order.getOrderStatus());
 
-        List<OrderItemJpaEntity> itemEntities = order.getOrderItems().stream()
-                .map(item -> orderItemMapper.orderItemToEntity(item, entity))
-                .toList();
+        List<OrderItemJpaEntity> itemEntities = new ArrayList<>();
+        for (OrderItem item : order.getOrderItems()) {
+            OrderItemJpaEntity itemEntity = orderItemMapper.orderItemToEntity(item, entity);
+            itemEntities.add(itemEntity);
+        }
         entity.setOrderItems(itemEntities);
 
         return entity;

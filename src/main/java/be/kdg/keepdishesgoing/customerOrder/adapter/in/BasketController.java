@@ -18,6 +18,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/customer-order/basket")
+@CrossOrigin(origins = "http://localhost:5173" )
 public class BasketController {
 
     private static final Logger logger = LoggerFactory.getLogger(BasketController.class);

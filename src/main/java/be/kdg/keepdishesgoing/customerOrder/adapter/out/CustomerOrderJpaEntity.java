@@ -42,7 +42,7 @@ public class CustomerOrderJpaEntity {
 
     private String customerEmail;
 
-    @OneToMany(mappedBy = "customerOrder", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "customerOrder", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OrderItemJpaEntity> orderItems = new ArrayList<>();
 
     public CustomerOrderJpaEntity() {

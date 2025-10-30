@@ -8,6 +8,8 @@ import be.kdg.keepdishesgoing.customerOrder.adapter.out.MenuCustomerOrderJpaEnti
 import be.kdg.keepdishesgoing.customerOrder.adapter.out.RestaurantCustomerOrderJpaEntity;
 import be.kdg.keepdishesgoing.customerOrder.adapter.out.WorkingHourCustomerEmbeddable;
 import be.kdg.keepdishesgoing.customerOrder.domain.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
@@ -18,6 +20,8 @@ import java.util.UUID;
 
 @Component
 public class RestaurantMapper {
+
+    private static final Logger logger = LoggerFactory.getLogger(RestaurantMapper.class);
 
     public Restaurant toDomain(RestaurantCustomerOrderJpaEntity entity) {
         List<WorkingHour> hours = entity.getWorkingHours().stream()
@@ -103,6 +107,7 @@ public class RestaurantMapper {
     }
 
     public RestaurantBrowseDto mapToRestaurantBrowseDto(Restaurant restaurant) {
+
         return new RestaurantBrowseDto(
                 restaurant.getRestaurantId().uuid(),
                 restaurant.getRestaurantName(),
@@ -116,7 +121,8 @@ public class RestaurantMapper {
                                 wh.getDayOfWeek().name(),
                                 wh.getOpeningTime().toString(),
                                 wh.getClosingTime().toString()
-                        )).toList()
+                        )).toList(),
+                restaurant.getOpeningStatus().name()
         );
     }
 

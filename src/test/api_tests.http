@@ -55,21 +55,21 @@ Content-Type: application/json
 
 
 ###
-POST http://localhost:8080/api/restaurants/a268252f-dafd-4cd4-8681-994ea8be9dc3/dishes/create-draft
+POST http://localhost:8080/api/restaurants/5f394775-0b4d-4eda-9077-f901ba0fc6bf/dishes/create-draft
 Accept: application/json
 Content-Type: application/json
 
 
 {
-  "typeOfDish": "DESERT",
-  "foodTag": "LACTOSE",
-  "preparationTime": "5",
-  "price": 14.99,
-  "picture": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQAY3ZkwqjK40z2fexYy97huWAwD6Ds6wBubg&s",
-  "description": "Fine dining ice cream testing",
-  "nameOfDish": "Kiss of Nature",
-  "menuId": "318dd04c-cd24-4e56-af48-6b780a9bfc72",
-  "quantity": 11
+  "typeOfDish": "STARTER",
+  "foodTag": "VEGAN",
+  "preparationTime": "4",
+  "price": 6,
+  "picture": "https://www.allrecipes.com/thmb/LQWQ_vSSy9yhNiAWIjbi398pcT4=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/24239-vietnamese-fresh-spring-rolls-VAT-001-2x1-8c856b0a411b47829fa99082901637ee.jpg",
+  "description": "fresh herbs like basil or cilantro, lettuce, cucumbers, sometimes fresh garlic, chives, rice vermicelli, all wrapped in moistened rice paper.",
+  "nameOfDish": "Spring rolls",
+  "menuId": "4d9457cb-5f5c-4b2a-8519-e87d55f93c24",
+  "quantity": 16
 
 }
 
@@ -77,7 +77,7 @@ Content-Type: application/json
 ###
 
 
-POST http://localhost:8080/api/restaurants/a268252f-dafd-4cd4-8681-994ea8be9dc3/dishes/122db980-c508-406d-80a6-2c4448765b09/publish
+POST http://localhost:8080/api/restaurants/5f394775-0b4d-4eda-9077-f901ba0fc6bf/dishes/929353cc-d0c5-4bb2-b9f7-29e19d4c71ec/publish
 Accept: application/json
 Content-Type: application/json
 
