@@ -1,18 +1,23 @@
 package be.kdg.keepdishesgoing.restaurant.adapter.in;
 
 import be.kdg.keepdishesgoing.restaurant.adapter.in.request.CreateRestaurantRequest;
+import be.kdg.keepdishesgoing.restaurant.adapter.in.request.UpdateRestaurantRequest;
 import be.kdg.keepdishesgoing.restaurant.adapter.in.response.MenuDto;
 import be.kdg.keepdishesgoing.restaurant.adapter.in.response.RestaurantDto;
-import be.kdg.keepdishesgoing.restaurant.adapter.in.response.ScheduleHourDto;
 import be.kdg.keepdishesgoing.restaurant.adapter.in.response.WorkingHourDto;
-import be.kdg.keepdishesgoing.restaurant.adapter.out.embeded.WorkingHourEmbeddable;
+import be.kdg.keepdishesgoing.restaurant.adapter.mapper.RestaurantOwnerMapper;
 import be.kdg.keepdishesgoing.restaurant.domain.*;
 import be.kdg.keepdishesgoing.restaurant.port.in.*;
 import be.kdg.keepdishesgoing.restaurant.port.in.dish.MakeDishOutOfStockCommand;
 import be.kdg.keepdishesgoing.restaurant.port.in.dish.MakeDishOutOfStockUseCase;
+import be.kdg.keepdishesgoing.restaurant.port.out.restaurant.LoadRestaurantPort;
+import be.kdg.keepdishesgoing.restaurant.port.out.restaurant.UpdateRestaurantPort;
 import jakarta.transaction.Transactional;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -22,26 +27,65 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 
+
 @RestController
 @RequestMapping("/api/restaurants")
+@PreAuthorize("hasRole('OWNER')")
 public class RestaurantController {
 
-    private final FindAllRestaurantPort findAllRestaurantPort;
+    private final LoadRestaurantPort loadRestaurantPort;
+    private final UpdateRestaurantUseCase updateRestaurantUseCase;
     private final MakeDishOutOfStockUseCase makeDishOutOfStockUseCase;
     private final CreateRestaurantUseCase createRestaurantUseCase;
+    private final RestaurantOwnerMapper mapper;
 
 
-    public RestaurantController(FindAllRestaurantPort findAllRestaurantPort,
-                                MakeDishOutOfStockUseCase makeDishOutOfStockUseCase, CreateRestaurantUseCase createRestaurantUseCase) {
-        this.findAllRestaurantPort = findAllRestaurantPort;
+    public RestaurantController(LoadRestaurantPort loadRestaurantPort, UpdateRestaurantUseCase updateRestaurantUseCase,
+                                MakeDishOutOfStockUseCase makeDishOutOfStockUseCase, CreateRestaurantUseCase createRestaurantUseCase, RestaurantOwnerMapper mapper) {
+        this.loadRestaurantPort = loadRestaurantPort;
+        this.updateRestaurantUseCase = updateRestaurantUseCase;
         this.makeDishOutOfStockUseCase = makeDishOutOfStockUseCase;
         this.createRestaurantUseCase = createRestaurantUseCase;
+        this.mapper = mapper;
     }
+
+
+    @GetMapping("/{ownerId}/restaurant")
+    @PreAuthorize("#ownerId.toString() == (authentication.token.claims['owner_id'] ?: authentication.token.subject)")
+    public ResponseEntity<RestaurantDto> getRestaurant(@PathVariable UUID ownerId) {
+        var restaurant = loadRestaurantPort.loadBy(new OwnerId(ownerId))
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "No restaurant for this owner."));
+        return ResponseEntity.ok(mapper.toDto(restaurant));
+    }
+
+    @PutMapping("/{ownerId}/restaurant")
+    @Transactional
+    @PreAuthorize("#ownerId.toString() == (authentication.token.claims['owner_id'] ?: authentication.token.subject)")
+    public ResponseEntity<RestaurantDto> updateRestaurant(@PathVariable UUID ownerId,
+                                                          @RequestBody UpdateRestaurantRequest req) {
+        var saved = updateRestaurantUseCase.update(new UpdateRestaurantCommand(
+                ownerId,
+                req.nameOfRestaurant(),
+                req.cuisine(),
+                req.openingStatus(),
+                req.defaultPreparationTime(),
+                req.contactEmail(),
+                req.picture(),
+                req.workingHours()
+        ));
+        return ResponseEntity.ok(mapper.toDto(saved));
+    }
+
+
 
 
     @PostMapping("/create")
     @Transactional
-    public ResponseEntity<RestaurantDto> createRestaurant(@RequestBody CreateRestaurantRequest request) {
+    public ResponseEntity<RestaurantDto> createRestaurant(@AuthenticationPrincipal Jwt jwt,
+                                                          @RequestBody CreateRestaurantRequest request) {
+        UUID ownerUuid = jwt.getClaimAsString("owner_id") != null
+                ? UUID.fromString(jwt.getClaimAsString("owner_id"))
+                : UUID.fromString(jwt.getSubject());
 
         List<WorkingHour> hours = new ArrayList<>();
         if (request.workingHours() != null) {
@@ -66,7 +110,7 @@ public class RestaurantController {
                 request.contactEmail(),
                 request.picture(),
                 request.addressId() != null ? new AddressId(UUID.fromString(request.addressId())) : null,
-                request.ownerId() != null ? new OwnerId(UUID.fromString(request.ownerId())) : null,
+                new OwnerId(ownerUuid),
                 request.menuId() != null ? new MenuId(request.menuId().uuid()) : null,
                 hours
         );
@@ -101,7 +145,7 @@ public class RestaurantController {
 
     @GetMapping()
     public ResponseEntity<List<RestaurantDto>> findAll() {
-        List<RestaurantDto> restaurantDtos = this.findAllRestaurantPort.findAll().stream()
+        List<RestaurantDto> restaurantDtos = loadRestaurantPort.loadAll().stream()
                 .map(r -> new RestaurantDto(
                         r.getRestaurantId().uuid(),
                         r.getNameOfRestaurant(),
@@ -126,16 +170,6 @@ public class RestaurantController {
         return ResponseEntity.ok(restaurantDtos);
     }
 
-    @PostMapping("/{restaurantId}/dishes/{dishId}/out-of-stock")
-    public ResponseEntity<Void> makeDishOutOfStock(
-            @PathVariable UUID restaurantId,
-            @PathVariable UUID dishId,
-            @RequestParam UUID ownerId) {
 
-        var command = new MakeDishOutOfStockCommand(restaurantId, dishId, ownerId);
-        makeDishOutOfStockUseCase.makeDishOutOfStock(command);
-
-        return ResponseEntity.noContent().build();
-    }
 
 }

@@ -15,7 +15,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.UUID;
@@ -30,16 +33,18 @@ public class DishController {
     private final PublishDishUseCase publishDishUseCase;
     private final UnpublishDishUseCase unpublishDishUseCase;
     private final UpdateDishVersionUseCase updateDishVersionUseCase;
+    private final MakeDishOutOfStockUseCase makeDishOutOfStockUseCase;
     private final LoadDishPort loadDishPort;
     private final DishMapper dishMapper;
     private final UpdateDishDraftUseCase updateDishDraftUseCase;
 
     public DishController(CreateDishDraftUseCase createDishDraftUseCase, PublishDishUseCase publishDishUseCase,
-                          UnpublishDishUseCase unpublishDishUseCase, UpdateDishVersionUseCase updateDishVersionUseCase, LoadDishPort loadDishPort, DishMapper dishMapper, UpdateDishDraftUseCase updateDishDraftUseCase) {
+                          UnpublishDishUseCase unpublishDishUseCase, UpdateDishVersionUseCase updateDishVersionUseCase, MakeDishOutOfStockUseCase makeDishOutOfStockUseCase, LoadDishPort loadDishPort, DishMapper dishMapper, UpdateDishDraftUseCase updateDishDraftUseCase) {
         this.createDishDraftUseCase = createDishDraftUseCase;
         this.publishDishUseCase = publishDishUseCase;
         this.unpublishDishUseCase = unpublishDishUseCase;
         this.updateDishVersionUseCase = updateDishVersionUseCase;
+        this.makeDishOutOfStockUseCase = makeDishOutOfStockUseCase;
         this.loadDishPort = loadDishPort;
         this.dishMapper = dishMapper;
         this.updateDishDraftUseCase = updateDishDraftUseCase;
@@ -148,6 +153,19 @@ public class DishController {
         return ResponseEntity.ok(dtos);
 
     }
+
+    @PostMapping("/{dishId}/out-of-stock")
+    public ResponseEntity<Void> makeDishOutOfStock(@PathVariable UUID restaurantId,
+                                                   @PathVariable UUID dishId) {
+
+        var command = new MakeDishOutOfStockCommand(restaurantId, dishId);
+        makeDishOutOfStockUseCase.makeDishOutOfStock(command);
+
+        return ResponseEntity.noContent().build();
+
+    }
+
+
 
 
 }

@@ -7,6 +7,7 @@ import be.kdg.keepdishesgoing.restaurant.domain.OwnerId;
 import be.kdg.keepdishesgoing.restaurant.port.in.CreateOwnerCommand;
 import be.kdg.keepdishesgoing.restaurant.port.in.CreateOwnerUseCase;
 import be.kdg.keepdishesgoing.restaurant.port.in.FindAllOwnerPort;
+import be.kdg.keepdishesgoing.restaurant.port.out.owner.LoadOwnerPort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -20,30 +21,19 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/owners")
+@PreAuthorize("hasRole('OWNER')")
 public class OwnerController {
 
     private final CreateOwnerUseCase createOwnerUseCase;
     private final FindAllOwnerPort findAllOwnerPort;
+    private final LoadOwnerPort loadOwnerPort;
 
 
-    public OwnerController(CreateOwnerUseCase createOwnerUseCase, FindAllOwnerPort findAllOwnerPort) {
+
+    public OwnerController(CreateOwnerUseCase createOwnerUseCase, FindAllOwnerPort findAllOwnerPort, LoadOwnerPort loadOwnerPort) {
         this.createOwnerUseCase = createOwnerUseCase;
         this.findAllOwnerPort = findAllOwnerPort;
-    }
-
-    @GetMapping("/{ownerId}")
-    @PreAuthorize("hasRole('owner')")
-    public ResponseEntity<OwnerDto> addOwner(@AuthenticationPrincipal Jwt jwt, @PathVariable UUID ownerId) {
-        String email = jwt.getClaimAsString("email");
-        Owner owner = findAllOwnerPort.findByEmail(email)
-                .orElseThrow( () ->  new ResponseStatusException(HttpStatus.NOT_FOUND, "Owner not found"));
-
-        return ResponseEntity.ok(new OwnerDto(
-                owner.getOwnerId().uuid(),
-                owner.getFirstName(),
-                owner.getLastName(),
-                owner.getEmail()
-        ));
+        this.loadOwnerPort = loadOwnerPort;
     }
 
     @PostMapping("/create")
@@ -72,6 +62,23 @@ public class OwnerController {
                         owner.getFirstName(),owner.getLastName(),owner.getEmail()))
                 .toList();
         return ResponseEntity.ok(ownerDtos);
+    }
+
+    @GetMapping("/{ownerId}")
+    @PreAuthorize("hasRole('OWNER') and #ownerId.toString() == authentication.token.claims['owner_id']")
+    public ResponseEntity<OwnerDto> getOwner(
+            @AuthenticationPrincipal Jwt jwt,
+            @PathVariable UUID ownerId) {
+
+        var owner = loadOwnerPort.loadOwnerById(new OwnerId(ownerId))
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Owner not found"));
+
+        return ResponseEntity.ok(new OwnerDto(
+                owner.getOwnerId().uuid(),
+                owner.getFirstName(),
+                owner.getLastName(),
+                owner.getEmail()
+        ));
     }
 
 }
