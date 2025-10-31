@@ -12,6 +12,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 
 @Repository
@@ -63,5 +64,17 @@ public class OwnerJpaAdapter implements LoadOwnerPort, FindAllOwnerPort, SaveOwn
         OwnerJpaEntity entity = mapToEntity(owner);
         OwnerJpaEntity saved = ownerJpaRepository.save(entity);
         return mapToDomain(saved);
+    }
+
+    @Transactional
+    public void ensureOwnerExists(UUID ownerUuid, String email) {
+        if (ownerJpaRepository.existsById(ownerUuid)) {
+            ownerJpaRepository.findById(ownerUuid).ifPresent(e -> {
+                if ((e.getEmail() == null || e.getEmail().isBlank()) && email != null) {
+                    e.setEmail(email);
+                    ownerJpaRepository.save(e);
+                }
+            });
+        }
     }
 }

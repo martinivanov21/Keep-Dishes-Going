@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class FindAllAddressUseCaseImpl implements FindAllAddressUseCase {
@@ -21,5 +22,10 @@ public class FindAllAddressUseCaseImpl implements FindAllAddressUseCase {
     @Override
     public List<Address> findAll() {
         return loadAddressPort.loadAll();
+    }
+
+    @Override
+    public Optional<Address> findById(UUID addressId) {
+        return loadAddressPort.loadById(AddressId.of(addressId.toString()));
     }
 }

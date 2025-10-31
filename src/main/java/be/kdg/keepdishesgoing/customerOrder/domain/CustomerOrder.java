@@ -1,6 +1,9 @@
 package be.kdg.keepdishesgoing.customerOrder.domain;
 
 
+import be.kdg.keepdishesgoing.common.events.*;
+import be.kdg.keepdishesgoing.customerOrder.adapter.in.response.OrderItemDto;
+
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -24,6 +27,70 @@ public class CustomerOrder {
     private String deliveryStreet;
     private int deliveryStreetNumber;
     private String deliveryCity;
+
+    private final List<DomainEvent> eventStore = new ArrayList<>();
+    private final List<DomainEvent> uncommitted = new ArrayList<>();
+
+    private void raise(DomainEvent ev) { uncommitted.add(ev); }
+
+    public void submit() {
+        this.orderStatus = OrderStatus.ACCEPTED;
+        this.submittedTime = LocalDateTime.now();
+        this.totalPrice = recalcTotal();
+
+        var items = orderItems.stream().map(i -> new OrderItemDto(
+
+                i.getDishId().uuid(), i.getDishName(), i.getUnitPrice(), i.getQuantity(),
+                i.getUnitPrice().multiply(BigDecimal.valueOf(i.getQuantity())),i.getPictureUrl()
+        )).toList();
+
+        raise(new CustomerOrderSubmittedEvent(
+                customerOrderId.uuid(),
+                restaurantId.uuid(),
+                customerName, customerEmail,
+                deliveryStreet, deliveryStreetNumber, deliveryCity,
+                totalPrice, estimateTime, submittedTime,
+                items,
+                LocalDateTime.now()
+        ));
+    }
+
+    public void changeItemQuantity(UUID dishId, int newQty) {
+        var item = this.orderItems.stream()
+                .filter(i -> i.getDishId().uuid().equals(dishId))
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("Dish not in order"));
+        item.setQuantity(newQty);
+        var lineTotal = item.getUnitPrice().multiply(BigDecimal.valueOf(newQty));
+        this.totalPrice = recalcTotal();
+        raise(new CustomerOrderItemQuantityChangeEvent(
+                customerOrderId.uuid(), restaurantId.uuid(), dishId,
+                newQty, lineTotal, totalPrice, LocalDateTime.now()
+        ));
+    }
+
+    public void accept(int finalEstimatedTime) {
+        this.orderStatus = OrderStatus.ACCEPTED;
+        this.estimateTime = finalEstimatedTime;
+        raise(new CustomerOrderAcceptedEvent(
+                customerOrderId.uuid(), restaurantId.uuid(), finalEstimatedTime, LocalDateTime.now()
+        ));
+    }
+
+    public void decline(String reason) {
+        this.orderStatus = OrderStatus.REJECTED;
+//        raise(new CustomerOrderDeclinedEvent(
+//                customerOrderId.uuid(), restaurantId.uuid(), LocalDateTime.now()
+//        ));
+    }
+
+    private BigDecimal recalcTotal() {
+        return orderItems.stream()
+                .map(i -> i.getUnitPrice().multiply(BigDecimal.valueOf(i.getQuantity())))
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
+
+    public List<DomainEvent> getUncommittedEvents() { return uncommitted; }
 
 
     public CustomerOrder(CustomerOrderId customerOrderId, RestaurantId restaurantId, List<OrderItem> orderItems,

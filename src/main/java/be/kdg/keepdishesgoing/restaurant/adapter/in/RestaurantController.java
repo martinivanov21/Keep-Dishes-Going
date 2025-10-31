@@ -6,6 +6,7 @@ import be.kdg.keepdishesgoing.restaurant.adapter.in.response.MenuDto;
 import be.kdg.keepdishesgoing.restaurant.adapter.in.response.RestaurantDto;
 import be.kdg.keepdishesgoing.restaurant.adapter.in.response.WorkingHourDto;
 import be.kdg.keepdishesgoing.restaurant.adapter.mapper.RestaurantOwnerMapper;
+import be.kdg.keepdishesgoing.restaurant.adapter.out.owner.OwnerJpaAdapter;
 import be.kdg.keepdishesgoing.restaurant.domain.*;
 import be.kdg.keepdishesgoing.restaurant.port.in.*;
 import be.kdg.keepdishesgoing.restaurant.port.in.dish.MakeDishOutOfStockCommand;
@@ -13,6 +14,8 @@ import be.kdg.keepdishesgoing.restaurant.port.in.dish.MakeDishOutOfStockUseCase;
 import be.kdg.keepdishesgoing.restaurant.port.out.restaurant.LoadRestaurantPort;
 import be.kdg.keepdishesgoing.restaurant.port.out.restaurant.UpdateRestaurantPort;
 import jakarta.transaction.Transactional;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -33,20 +36,23 @@ import java.util.UUID;
 @PreAuthorize("hasRole('OWNER')")
 public class RestaurantController {
 
+    private static final Logger logger = LoggerFactory.getLogger(RestaurantController.class);
     private final LoadRestaurantPort loadRestaurantPort;
     private final UpdateRestaurantUseCase updateRestaurantUseCase;
     private final MakeDishOutOfStockUseCase makeDishOutOfStockUseCase;
     private final CreateRestaurantUseCase createRestaurantUseCase;
     private final RestaurantOwnerMapper mapper;
+    private final OwnerJpaAdapter ownerProvisioningService;
 
 
     public RestaurantController(LoadRestaurantPort loadRestaurantPort, UpdateRestaurantUseCase updateRestaurantUseCase,
-                                MakeDishOutOfStockUseCase makeDishOutOfStockUseCase, CreateRestaurantUseCase createRestaurantUseCase, RestaurantOwnerMapper mapper) {
+                                MakeDishOutOfStockUseCase makeDishOutOfStockUseCase, CreateRestaurantUseCase createRestaurantUseCase, RestaurantOwnerMapper mapper, OwnerJpaAdapter ownerProvisioningService) {
         this.loadRestaurantPort = loadRestaurantPort;
         this.updateRestaurantUseCase = updateRestaurantUseCase;
         this.makeDishOutOfStockUseCase = makeDishOutOfStockUseCase;
         this.createRestaurantUseCase = createRestaurantUseCase;
         this.mapper = mapper;
+        this.ownerProvisioningService = ownerProvisioningService;
     }
 
 
@@ -86,6 +92,13 @@ public class RestaurantController {
         UUID ownerUuid = jwt.getClaimAsString("owner_id") != null
                 ? UUID.fromString(jwt.getClaimAsString("owner_id"))
                 : UUID.fromString(jwt.getSubject());
+
+        String email = jwt.getClaimAsString("email");
+
+        ownerProvisioningService.ensureOwnerExists(ownerUuid, email);
+
+
+        logger.info("createRestaurant ownerUuid={}", ownerUuid);
 
         List<WorkingHour> hours = new ArrayList<>();
         if (request.workingHours() != null) {

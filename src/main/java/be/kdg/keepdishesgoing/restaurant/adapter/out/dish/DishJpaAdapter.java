@@ -1,6 +1,7 @@
 package be.kdg.keepdishesgoing.restaurant.adapter.out.dish;
 
 import be.kdg.keepdishesgoing.restaurant.adapter.out.menu.MenuJpaEntity;
+import be.kdg.keepdishesgoing.restaurant.adapter.out.menu.MenuJpaRepository;
 import be.kdg.keepdishesgoing.restaurant.domain.*;
 import be.kdg.keepdishesgoing.restaurant.port.out.dish.DeleteDishPort;
 import be.kdg.keepdishesgoing.restaurant.port.out.dish.LoadDishPort;
@@ -13,15 +14,18 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Repository
 public class DishJpaAdapter implements UpdateDishPort, LoadDishPort, DeleteDishPort, SaveDishPort {
 
     private static final Logger logger = LoggerFactory.getLogger(DishJpaAdapter.class);
     private final DishJpaRepository dishJpaRepository;
+    private final MenuJpaRepository menuJpaRepository;
 
-    public DishJpaAdapter(DishJpaRepository dishJpaRepository) {
+    public DishJpaAdapter(DishJpaRepository dishJpaRepository, MenuJpaRepository menuJpaRepository) {
         this.dishJpaRepository = dishJpaRepository;
+        this.menuJpaRepository = menuJpaRepository;
     }
 
     @Override
@@ -125,9 +129,12 @@ public class DishJpaAdapter implements UpdateDishPort, LoadDishPort, DeleteDishP
 
     private MenuJpaEntity mapMenuToEntity(Menu menu) {
         if (menu == null) return null;
+        UUID id = menu.getMenuId().uuid();
+
+        menuJpaRepository.getReferenceById(id);
 
         MenuJpaEntity entity = new MenuJpaEntity();
-        entity.setMenuId(menu.getMenuId().uuid());
+        entity.setMenuId(MenuId.of(id).uuid());
         return entity;
     }
 

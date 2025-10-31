@@ -15,6 +15,11 @@ public class Owner {
         this.email = email;
     }
 
+    public Owner(OwnerId ownerId, String email) {
+        this.ownerId = ownerId;
+        this.email = email;
+    }
+
     public OwnerId getOwnerId() {
         return ownerId;
     }

@@ -47,6 +47,7 @@ public class RestaurantProjectionEventListener {
 
         Cuisine cuisine = Cuisine.valueOf(event.cuisine());
         MenuId menuId = (event.menuId() != null) ? MenuId.of(event.menuId().toString()) : null;
+        OpeningStatus status = OpeningStatus.valueOf(event.openingStatus());
 
         Restaurant restaurant = new Restaurant(
                 RestaurantId.of(event.restaurantId()),
@@ -58,7 +59,7 @@ public class RestaurantProjectionEventListener {
                 BigDecimal.ZERO,
                 event.defaultPreparationTime(),
                 menuId,
-                OpeningStatus.OPEN,
+                status,
                 event.deliveryStreet(),
                 event.deliveryNumber(),
                 event.deliveryCity()

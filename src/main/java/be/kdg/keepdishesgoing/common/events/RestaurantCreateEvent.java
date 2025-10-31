@@ -22,6 +22,7 @@ public record RestaurantCreateEvent(
         int deliveryNumber,
         String deliveryCity,
 
+        String openingStatus,
         List<WorkingHourDto> workingHours,
         UUID menuId,
         LocalDateTime eventPit

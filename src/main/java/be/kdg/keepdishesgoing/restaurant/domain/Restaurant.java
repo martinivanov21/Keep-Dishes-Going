@@ -60,6 +60,7 @@ public class Restaurant {
                 address != null ? address.getStreet() : "",
                 address != null ? address.getNumber() : 0,
                 address != null ? address.getCity() : "",
+                openingStatus.name(),
                 workingHours.stream()
                         .map(wh -> new WorkingHourDto(
                                 wh.getDayOfWeek().toString(),
@@ -98,6 +99,7 @@ public class Restaurant {
                 street,
                 number,
                 city,
+                openingStatus.name(),
                 workingHours.stream()
                         .map(wh -> new WorkingHourDto(
                                 wh.getDayOfWeek().name(),

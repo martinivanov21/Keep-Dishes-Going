@@ -4,14 +4,18 @@ import be.kdg.keepdishesgoing.restaurant.adapter.in.request.CreateAddressRequest
 import be.kdg.keepdishesgoing.restaurant.adapter.in.response.AddressDto;
 import be.kdg.keepdishesgoing.restaurant.domain.Address;
 import be.kdg.keepdishesgoing.restaurant.domain.AddressId;
+import be.kdg.keepdishesgoing.restaurant.domain.OwnerId;
 import be.kdg.keepdishesgoing.restaurant.port.in.CreateAddressCommand;
 import be.kdg.keepdishesgoing.restaurant.port.in.CreateAddressUseCase;
 import be.kdg.keepdishesgoing.restaurant.port.in.FindAllAddressUseCase;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/addresses")
@@ -71,5 +75,22 @@ public class AddressController {
                 ).toList();
 
         return ResponseEntity.ok(addressDtos);
+    }
+
+    @GetMapping("/{addressId}")
+    public ResponseEntity<AddressDto> getAddress(@PathVariable UUID addressId) {
+        var address = findAllAddressUseCase.findById((AddressId.of(addressId.toString())).uuid())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "No restaurant for this owner."));
+
+       AddressDto addressDto = new AddressDto(
+                address.getAddressId().uuid(),
+                address.getStreet(),
+                address.getNumber(),
+                address.getPostalCode(),
+                address.getCity(),
+                address.getCountry()
+        );
+
+        return ResponseEntity.ok(addressDto);
     }
 }

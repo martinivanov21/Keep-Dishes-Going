@@ -39,6 +39,10 @@ dependencies {
     testImplementation ("org.springframework.security:spring-security-test")
     implementation("org.springframework.boot:spring-boot-starter-oauth2-resource-server")
     implementation("org.springframework.boot:spring-boot-starter-security")
+    implementation("org.springframework.boot:spring-boot-starter-amqp")
+    testImplementation("org.springframework.amqp:spring-rabbit-test")
+    implementation("org.springframework.modulith:spring-modulith-events-amqp")
+
 }
 
 dependencyManagement {

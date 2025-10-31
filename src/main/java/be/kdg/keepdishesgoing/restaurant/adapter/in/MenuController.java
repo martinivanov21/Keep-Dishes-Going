@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/restaurant/{restaurantId}/menus")
+@RequestMapping("/api/restaurants/{restaurantId}/menus")
 public class MenuController {
 
     private final CreateMenuUseCase createMenuUseCase;
