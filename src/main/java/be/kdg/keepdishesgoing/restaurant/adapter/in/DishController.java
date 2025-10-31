@@ -98,16 +98,15 @@ public class DishController {
     }
 
     @PostMapping("/{dishId}/unpublish")
-    public ResponseEntity<DishDto> unpublishDish( @PathVariable UUID restaurantId,
-                                                @PathVariable UUID dishId) {
-        logger.info("Unpublishing Dish {}", dishId);
+    public ResponseEntity<DishDto> unpublishDish(@PathVariable UUID restaurantId,
+                                                 @PathVariable UUID dishId) {
+        logger.info("Unpublishing dish {} for restaurant {}", dishId, restaurantId);
 
-        UnpublishDishCommand command = new UnpublishDishCommand( new DishId(dishId));
-        Dish unpublishDish = unpublishDishUseCase.unpublishDish(command);
+        var result = unpublishDishUseCase.unpublishDish(
+                new UnpublishDishCommand(RestaurantId.of(restaurantId).uuid(), new DishId(dishId))
+        );
 
-        DishDto dto = dishMapper.mapToDishDto(unpublishDish);
-
-        return ResponseEntity.ok(dto);
+        return ResponseEntity.ok(dishMapper.mapToDishDto(result));
     }
 
     @PutMapping("/{dishId}/draft")
@@ -164,6 +163,8 @@ public class DishController {
         return ResponseEntity.noContent().build();
 
     }
+
+
 
 
 
